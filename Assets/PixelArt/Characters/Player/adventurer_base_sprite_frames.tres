@@ -1,0 +1,170 @@
+[gd_resource type="SpriteFrames" load_steps=18 format=3]
+
+[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/PixelArt/Characters/Player/adventurer_base_32x48.png" id="1_sheet"]
+
+[sub_resource type="AtlasTexture" id="Atlas_down_idle"]
+atlas = ExtResource("1_sheet")
+region = Rect2(0, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_down_walk_a"]
+atlas = ExtResource("1_sheet")
+region = Rect2(32, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_down_walk_pass"]
+atlas = ExtResource("1_sheet")
+region = Rect2(64, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_down_walk_b"]
+atlas = ExtResource("1_sheet")
+region = Rect2(96, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_up_idle"]
+atlas = ExtResource("1_sheet")
+region = Rect2(0, 48, 32, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_up_walk_a"]
+atlas = ExtResource("1_sheet")
+region = Rect2(32, 48, 32, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_up_walk_pass"]
+atlas = ExtResource("1_sheet")
+region = Rect2(64, 48, 32, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_up_walk_b"]
+atlas = ExtResource("1_sheet")
+region = Rect2(96, 48, 32, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_left_idle"]
+atlas = ExtResource("1_sheet")
+region = Rect2(0, 96, 32, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_left_walk_a"]
+atlas = ExtResource("1_sheet")
+region = Rect2(32, 96, 32, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_left_walk_pass"]
+atlas = ExtResource("1_sheet")
+region = Rect2(64, 96, 32, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_left_walk_b"]
+atlas = ExtResource("1_sheet")
+region = Rect2(96, 96, 32, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_right_idle"]
+atlas = ExtResource("1_sheet")
+region = Rect2(0, 144, 32, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_right_walk_a"]
+atlas = ExtResource("1_sheet")
+region = Rect2(32, 144, 32, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_right_walk_pass"]
+atlas = ExtResource("1_sheet")
+region = Rect2(64, 144, 32, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_right_walk_b"]
+atlas = ExtResource("1_sheet")
+region = Rect2(96, 144, 32, 48)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_down_idle")
+}],
+"loop": true,
+"name": &"idle_down",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_up_idle")
+}],
+"loop": true,
+"name": &"idle_up",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_left_idle")
+}],
+"loop": true,
+"name": &"idle_left",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_right_idle")
+}],
+"loop": true,
+"name": &"idle_right",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_down_walk_a")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_down_walk_pass")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_down_walk_b")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_down_walk_pass")
+}],
+"loop": true,
+"name": &"walk_down",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_up_walk_a")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_up_walk_pass")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_up_walk_b")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_up_walk_pass")
+}],
+"loop": true,
+"name": &"walk_up",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_left_walk_a")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_left_walk_pass")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_left_walk_b")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_left_walk_pass")
+}],
+"loop": true,
+"name": &"walk_left",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_right_walk_a")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_right_walk_pass")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_right_walk_b")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_right_walk_pass")
+}],
+"loop": true,
+"name": &"walk_right",
+"speed": 7.0
+}]

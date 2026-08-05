@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://djy4klp5fm7wm" path="res://Project Chronicle/Scripts/Components/equipment_component.gd" id="7_equipment"]
 [ext_resource type="Script" path="res://Project Chronicle/Scripts/Presentation/character_visual_controller.gd" id="8_visuals"]
 [ext_resource type="Script" path="res://Project Chronicle/Scripts/Presentation/camera_presentation.gd" id="9_camera"]
+[ext_resource type="SpriteFrames" path="res://Project Chronicle/Assets/PixelArt/Characters/Player/adventurer_base_sprite_frames.tres" id="10_adventurer"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5nclj"]
 size = Vector2(24, 24)
@@ -30,11 +31,14 @@ color = Color(0.9891885, 0.16677955, 0.45810562, 1)
 
 [node name="PlayerSprite" type="AnimatedSprite2D" parent="Visuals" unique_id=958699716]
 visible = false
+position = Vector2(0, -12)
+sprite_frames = ExtResource("10_adventurer")
+animation = &"idle_right"
 
 [node name="VisualController" type="Node" parent="Visuals"]
 script = ExtResource("8_visuals")
 sprite_path = NodePath("../PlayerSprite")
-locomotion_animation = &"run"
+locomotion_animation = &"walk"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=808069002]
 shape = SubResource("RectangleShape2D_5nclj")
