@@ -17,3 +17,6 @@ color = Color(0.5813724, 0.77414274, 7.70092e-07, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=342897169]
 shape = SubResource("RectangleShape2D_5nclj")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1850757092]
+limit_enabled = false
