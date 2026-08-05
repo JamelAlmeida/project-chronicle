@@ -15,6 +15,8 @@ var _reposition_direction := Vector2.RIGHT
 
 
 func _enemy_ready() -> void:
+	enemy_id = "goblin_scout"
+	xp_reward = 45
 	move_speed = 110.0
 	max_health = 18
 	health = max_health

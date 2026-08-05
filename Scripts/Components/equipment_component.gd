@@ -94,10 +94,10 @@ func restore_equipped_state(equipped_state: Dictionary) -> void:
 		if item_id.is_empty():
 			if not get_equipped_id(slot_key).is_empty():
 				_equipped[slot_key] = ""
-				_stats.remove_modifier(slot_key)
+				_stats.remove_equipment_modifier(slot_key)
 				equipment_changed.emit(slot_key, "")
 			continue
-		_set_slot(slot_key, item_id)
+		_set_slot(slot_key, item_id, false)
 
 
 func _resolve_slot_for_equip(equipment: EquipmentData) -> String:
@@ -126,15 +126,19 @@ func _resolve_slot_for_equip(equipment: EquipmentData) -> String:
 			return ""
 
 
-func _set_slot(slot_key: String, item_id: String) -> void:
+func _set_slot(slot_key: String, item_id: String, emit_gameplay_event: bool = true) -> void:
 	_equipped[slot_key] = item_id
 	_apply_item_modifier(slot_key, item_id)
 	equipment_changed.emit(slot_key, item_id)
+	if emit_gameplay_event:
+		var events := get_node_or_null("/root/GameplayEvents")
+		if events != null:
+			events.item_equipped.emit(item_id, slot_key)
 
 
 func _clear_slot(slot_key: String) -> void:
 	_equipped[slot_key] = ""
-	_stats.remove_modifier(slot_key)
+	_stats.remove_equipment_modifier(slot_key)
 	equipment_changed.emit(slot_key, "")
 
 
@@ -143,11 +147,11 @@ func _apply_item_modifier(slot_key: String, item_id: String) -> void:
 	if _is_equipment(item):
 		var equipment: EquipmentData = item as EquipmentData
 		if equipment.stat_modifiers != null:
-			_stats.set_modifier(slot_key, equipment.stat_modifiers)
+			_stats.set_equipment_modifier(slot_key, equipment.stat_modifiers)
 		else:
-			_stats.remove_modifier(slot_key)
+			_stats.remove_equipment_modifier(slot_key)
 	else:
-		_stats.remove_modifier(slot_key)
+		_stats.remove_equipment_modifier(slot_key)
 
 
 func _is_equipment(item: ItemData) -> bool:

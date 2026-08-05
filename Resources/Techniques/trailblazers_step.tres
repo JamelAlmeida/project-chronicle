@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="TechniqueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Project Chronicle/Scripts/Techniques/technique_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+id = "trailblazers_step"
+display_name = "Trailblazer's Step"
+description = "A practiced dash travels 15% faster and recovers 15% sooner."
+technique_type = 1
+category = &"mobility"
+tags = PackedStringArray("mobility", "dash", "passive")
+unlock_source = "Quest: Gel for the Road"
+minimum_level = 2
+gameplay_handler = &"dash_enhancement"
+effect_value = 0.15

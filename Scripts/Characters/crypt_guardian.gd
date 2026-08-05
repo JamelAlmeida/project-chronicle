@@ -20,6 +20,8 @@ var _state_timer := 0.0
 
 
 func _enemy_ready() -> void:
+	enemy_id = "crypt_guardian"
+	xp_reward = 160
 	move_speed = 45.0
 	max_health = 120
 	health = max_health

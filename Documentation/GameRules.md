@@ -28,6 +28,14 @@ AI Enhances
 
 AI Never Replaces Gameplay
 
+## Progression Rule
+
+> **Levels give structure. The world gives reasons. Gear gives obsession. Builds give identity. Secrets give stories.**
+
+The planned Adventurer Era spans levels 1–40 across character, build, and world progression. Levels pace meaningful stat choices and Techniques; they do not replace exploration, authored rewards, gear pursuit, emergent identity, or world consequence. Activities should serve multiple purposes and communicate through extensible structured events rather than isolated one-off systems.
+
+The reusable XP/level, stat allocation, Technique, quest, event-hook, milestone, prototype UI, and Level 1–5 proof foundations are the current progression layer. Forty finished levels, final UI, hidden accomplishments, advanced combat presentation, and finished living-world art remain future work; documenting them does not expand the active milestone.
+
 ## Current Gameplay Foundation
 
 Project Chronicle is a **2D side-scrolling fantasy action RPG**. The player moves left and right, jumps through readable vertical spaces, uses a horizontal combat dash, and attacks in the direction the Adventurer faces. Chronicle is an action RPG first: traversal should feel responsive and forgiving rather than demand extreme platforming precision.

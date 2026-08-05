@@ -48,6 +48,7 @@ func handle_player_death() -> void:
 
 
 func on_zone_ready(zone: Node) -> void:
+	var previous_zone := current_zone
 	var zone_data: ZoneData = zone.get("zone_data") as ZoneData
 	current_zone = zone_data
 
@@ -62,12 +63,19 @@ func on_zone_ready(zone: Node) -> void:
 
 	if current_zone != null and current_zone.is_safe():
 		_secure_expedition_loot()
+		if previous_zone != null and not previous_zone.is_safe():
+			var return_events := get_node_or_null("/root/GameplayEvents")
+			if return_events != null:
+				return_events.expedition_survived.emit()
 		if _death_respawn_pending:
 			_death_respawn_pending = false
 			_fully_heal_player(player)
 
 	if current_zone != null:
 		zone_changed.emit(current_zone)
+		var events := get_node_or_null("/root/GameplayEvents")
+		if events != null:
+			events.location_discovered.emit(current_zone.zone_id)
 
 
 func _secure_expedition_loot() -> void:

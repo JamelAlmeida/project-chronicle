@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="TechniqueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Project Chronicle/Scripts/Techniques/technique_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+id = "arc_sweep"
+display_name = "Arc Sweep"
+description = "A broad active melee Technique that can strike several nearby enemies for increased damage."
+technique_type = 0
+category = &"melee"
+tags = PackedStringArray("melee", "active", "cleave", "multi_target")
+unlock_source = "Quest: The Elderwood Trial"
+minimum_level = 1
+gameplay_handler = &"arc_sweep"
+cooldown = 1.2
+effect_value = 1.35

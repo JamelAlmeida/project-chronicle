@@ -2,6 +2,8 @@ extends EnemyBase
 
 
 func _enemy_ready() -> void:
+	enemy_id = "slime"
+	xp_reward = 35
 	move_speed = 60.0
 	max_health = 30
 	health = max_health

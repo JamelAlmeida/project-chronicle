@@ -13,6 +13,8 @@ signal attack_finished
 var _cooldown_remaining := 0.0
 var _is_attacking := false
 var _hit_targets: Array[Node] = []
+var _damage_multiplier := 1.0
+var _active_technique_id := ""
 
 @onready var _collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var _visual: CanvasItem = $AttackVisual
@@ -32,9 +34,34 @@ func try_attack(facing: Vector2) -> bool:
 	if _is_attacking or _cooldown_remaining > 0.0:
 		return false
 
+	_damage_multiplier = 1.0
+	_active_technique_id = ""
+	scale = Vector2.ONE
 	var direction := Vector2.RIGHT
 	if facing.x < 0.0:
 		direction = Vector2.LEFT
+	_perform_attack(direction)
+	return true
+
+
+func try_technique(technique_id: String, facing: Vector2) -> bool:
+	if _is_attacking or _cooldown_remaining > 0.0:
+		return false
+	var techniques := get_node_or_null("/root/TechniqueManager")
+	if techniques == null:
+		return false
+	var technique: TechniqueData = techniques.get_technique(technique_id)
+	if (
+		technique == null
+		or technique.gameplay_handler != &"arc_sweep"
+		or not techniques.try_begin_active(technique_id)
+	):
+		return false
+
+	_damage_multiplier = maxf(technique.effect_value, 1.0)
+	_active_technique_id = technique_id
+	scale = Vector2(1.45, 1.2)
+	var direction := Vector2.LEFT if facing.x < 0.0 else Vector2.RIGHT
 	_perform_attack(direction)
 	return true
 
@@ -58,6 +85,13 @@ func _perform_attack(direction: Vector2) -> void:
 	_deactivate_hitbox()
 	_is_attacking = false
 	attack_finished.emit()
+	if not _active_technique_id.is_empty():
+		var events := get_node_or_null("/root/GameplayEvents")
+		if events != null:
+			events.technique_used.emit(_active_technique_id, _hit_targets.size())
+	_active_technique_id = ""
+	_damage_multiplier = 1.0
+	scale = Vector2.ONE
 
 
 func _get_attack_cooldown() -> float:
@@ -78,7 +112,7 @@ func _calculate_damage() -> int:
 	if stats == null:
 		return 10
 
-	var damage: float = stats.get_attack_damage()
+	var damage: float = stats.get_attack_damage() * _damage_multiplier
 	if randf() < stats.get_crit_chance():
 		damage *= 2.0
 
@@ -150,3 +184,6 @@ func _on_body_entered(body: Node) -> void:
 		knockback_direction = Vector2.RIGHT if rotation == 0.0 else Vector2.LEFT
 	body.take_damage(damage_dealt, knockback_direction * knockback_force)
 	_apply_lifesteal(damage_dealt)
+	var events := get_node_or_null("/root/GameplayEvents")
+	if events != null:
+		events.damage_dealt.emit(damage_dealt, body, _active_technique_id if not _active_technique_id.is_empty() else "melee")

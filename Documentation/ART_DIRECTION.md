@@ -259,6 +259,12 @@ Environment detail should create story, hierarchy, navigation, and mood.
 - Let architecture, remains, repairs, camps, tracks, and resource use imply events without exposition.
 - Preserve strong negative space around combat areas, interactables, and important loot.
 
+### Finished living-world target
+
+Finished maps should feel like **living fantasy places**, not static platform layouts. Their architecture should be capable of supporting layered parallax; moving clouds and distant environmental motion; swaying foliage and animated grass/flowers; drifting leaves, particles, fog, mist, waterfalls, insects, birds, and small ambient creatures; restrained glowing mushrooms or magic; animated props and appropriate background NPC/world activity; environmental lighting changes; strong landmarks; foreground framing; and subtle screen-space atmosphere. These layers should create depth and life without obscuring routes, hazards, enemies, loot, or combat effects.
+
+This is a future visual target, **not part of the current implementation scope**. Add it incrementally only after gameplay readability and the current benchmark needs are secure.
+
 ---
 
 ## User Interface
@@ -276,6 +282,8 @@ Chronicle's UI combines elegant dark-fantasy presentation, satisfying RPG gear r
 - Highly readable typography
 
 The equipment screen should make players want to collect things. Item silhouettes, equipped appearance, comparison information, and meaningful properties should remain easy to understand.
+
+The planned interface may draw on the information clarity of MMO RPGs while remaining original and appropriate to a single-player side-scrolling game. A future character panel should make level, XP, meaningful core stats, equipment, Techniques, titles, milestone progress, and build comparisons easy to scan. It must not reproduce another game's UI layout. The current progression panel is a functional prototype; the finished panel is **not part of the current implementation scope**.
 
 ### Avoid
 
@@ -301,10 +309,16 @@ Combat presentation should eventually support:
 - Loot sparkle
 - Spell effects
 - Enemy telegraphs
+- Readable multi-hit, area-of-effect, and multi-target feedback
+- Enemy-pack clarity
+- Critical-hit, status, and build-synergy feedback
+- Rapidly stacking damage numbers with clear timing and hierarchy
 
 Effects must communicate timing, direction, force, damage, and danger. They must never obscure enemy telegraphs, hazards, projectiles, or the player's position.
 
 Use short-lived, shaped effects with deliberate color and value separation. Strong effects should be reserved for strong events so ordinary attacks do not exhaust the visual range.
+
+These advanced combat visuals are a later target and are **not part of the current implementation scope**.
 
 ---
 

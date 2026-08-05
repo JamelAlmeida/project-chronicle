@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="TechniqueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Project Chronicle/Scripts/Techniques/technique_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+id = "resolute_breath"
+display_name = "Resolute Breath"
+description = "Hard-won composure grants 20 maximum health."
+technique_type = 1
+category = &"survival"
+tags = PackedStringArray("survival", "passive", "health")
+unlock_source = "Level milestone"
+minimum_level = 4
+gameplay_handler = &"flat_max_health"
+effect_value = 20.0

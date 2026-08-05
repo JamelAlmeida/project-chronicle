@@ -93,6 +93,10 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
+	if Input.is_action_just_pressed("technique_primary") and not _dodge.is_dodging():
+		var technique_id: String = _technique_manager().get_equipped_active(0)
+		if not technique_id.is_empty():
+			_melee_attack.try_technique(technique_id, _facing.get_direction())
 	if Input.is_action_just_pressed("attack") and not _dodge.is_dodging():
 		_melee_attack.try_attack(_facing.get_direction())
 	_update_presentation(delta)
@@ -102,14 +106,22 @@ func take_damage(amount: int, knockback: Vector2 = Vector2.ZERO) -> bool:
 	if _is_dead:
 		return false
 
-	if not _health.take_damage(amount):
+	var armor := maxf(_stats.get_armor(), 0.0)
+	var mitigated_amount := maxi(int(round(float(amount) * 100.0 / (100.0 + armor))), 1)
+	if not _health.take_damage(mitigated_amount):
+		var avoided_events := get_node_or_null("/root/GameplayEvents")
+		if avoided_events != null:
+			avoided_events.damage_avoided.emit(&"invulnerable")
 		return false
 
 	if knockback.length_squared() > 0.0:
 		_knockback_velocity = knockback
 
-	_combat_feedback().spawn_damage_number(global_position, amount, Color(1.0, 0.35, 0.35))
+	_combat_feedback().spawn_damage_number(global_position, mitigated_amount, Color(1.0, 0.35, 0.35))
 	_combat_feedback().spawn_damage_particles(global_position)
+	var events := get_node_or_null("/root/GameplayEvents")
+	if events != null:
+		events.damage_taken.emit(mitigated_amount, _health.current_health)
 	return true
 
 
@@ -205,3 +217,7 @@ func _combat_feedback():
 
 func _zone_manager():
 	return get_node("/root/ZoneManager")
+
+
+func _technique_manager():
+	return get_node("/root/TechniqueManager")

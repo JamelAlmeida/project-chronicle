@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="TechniqueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Project Chronicle/Scripts/Techniques/technique_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+id = "forceful_edge"
+display_name = "Forceful Edge"
+description = "Committed melee form adds 3 attack damage."
+technique_type = 1
+category = &"melee"
+tags = PackedStringArray("melee", "passive", "physical")
+unlock_source = "Level milestone"
+minimum_level = 2
+gameplay_handler = &"flat_attack_damage"
+effect_value = 3.0

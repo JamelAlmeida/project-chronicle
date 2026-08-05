@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ProgressionConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Project Chronicle/Scripts/Progression/progression_config.gd" id="1_config"]
+
+[resource]
+script = ExtResource("1_config")
+maximum_level = 100
+base_xp_requirement = 50
+linear_xp_growth = 18
+curved_xp_growth = 8.0
+curve_exponent = 1.45
+stat_points_per_level = 1
+milestone_levels = PackedInt32Array(10, 20, 30, 40)

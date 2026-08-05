@@ -29,6 +29,14 @@ The game is **not** intended to be:
 
 **A high-risk living fantasy RPG where every adventure can change both your character and the history of the world.**
 
+### Progression identity
+
+> **Levels give structure. The world gives reasons. Gear gives obsession. Builds give identity. Secrets give stories.**
+
+The **Adventurer Era spans levels 1–40** through three connected layers: character progression, build progression, and world progression. At level 10 the world noticeably opens; by level 20 build identity starts becoming clear; at level 30 specialization is pronounced; and level 40 ends the era as the world begins remembering the player as someone consequential. See [PROGRESSION_DESIGN.md](PROGRESSION_DESIGN.md) for stats, data-driven Techniques, multi-purpose activities, extensible events, quest chains and rewards, gear rarity, exploration scaling, planned UI, hidden progression architecture, and later combat expression.
+
+The reusable technical progression foundation and Level 1–5 proof are the current layer. Finished Level 1–40 content and its later world, UI, accomplishment, combat-presentation, and visual systems remain deliberately scoped for future milestones.
+
 ### Gameplay presentation
 
 Chronicle is presented from the side. Exploration unfolds across interconnected maps with solid terrain, layered platforms, drops, elevated routes, hidden paths, and landmarks that make each region memorable. Verticality should create optional discoveries and tactical choices without turning Chronicle into a precision-platforming game; it remains an action RPG first.
@@ -478,6 +486,8 @@ The immediate goal is first to establish a stable **side-scrolling gameplay foun
 The vertical slice should prove:
 
 > **"Is exploring, fighting, finding equipment, creating builds, taking risks, returning home, and seeing the world react genuinely fun?"**
+
+The current progression foundation supports the vertical slice; hidden accomplishment evaluation, final MMO-inspired UI, advanced multi-target presentation, finished Level 1–40 content, and living-world visuals do not expand this immediate implementation scope.
 
 ---
 

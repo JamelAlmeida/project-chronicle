@@ -45,7 +45,7 @@ func is_dodging() -> bool:
 func get_dodge_velocity() -> Vector2:
 	if not _is_dodging:
 		return Vector2.ZERO
-	return _dodge_direction * dodge_speed
+	return _dodge_direction * dodge_speed * (1.0 + _get_dash_enhancement())
 
 
 func get_iframes_active() -> bool:
@@ -60,5 +60,15 @@ func _start_dodge(direction: Vector2) -> void:
 	_is_dodging = true
 	_dodge_time_remaining = dodge_duration
 	_dodge_direction = direction
-	_cooldown_remaining = dodge_cooldown
+	_cooldown_remaining = dodge_cooldown * (1.0 - _get_dash_enhancement())
 	dodge_started.emit()
+	var events := get_node_or_null("/root/GameplayEvents")
+	if events != null:
+		events.dodge_used.emit()
+
+
+func _get_dash_enhancement() -> float:
+	var techniques := get_node_or_null("/root/TechniqueManager")
+	if techniques == null:
+		return 0.0
+	return clampf(techniques.get_effect_value(&"dash_enhancement"), 0.0, 0.75)

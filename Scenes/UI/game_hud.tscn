@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://ce7ivsgg7hxxa"]
+[gd_scene load_steps=7 format=3 uid="uid://ce7ivsgg7hxxa"]
 
 [ext_resource type="Script" path="res://Project Chronicle/Scripts/UI/game_hud.gd" id="1_hud"]
 
@@ -31,6 +31,14 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.82, 0.51, 0.22, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xp_fill"]
+bg_color = Color(0.24, 0.48, 0.67, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.55, 0.76, 0.9, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_banner"]
 bg_color = Color(0.045, 0.05, 0.055, 0.82)
@@ -82,6 +90,73 @@ theme_override_colors/font_outline_color = Color(0.05, 0.04, 0.03, 1)
 theme_override_constants/outline_size = 2
 theme_override_font_sizes/font_size = 13
 text = "Expedition Loot: 0"
+
+[node name="ProgressionPanel" type="Panel" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -348.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = 252.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud")
+
+[node name="MarginContainer" type="MarginContainer" parent="ProgressionPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ProgressionPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="LevelLabel" type="Label" parent="ProgressionPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.78, 0.38, 1)
+theme_override_font_sizes/font_size = 15
+text = "ADVENTURER — LEVEL 1"
+
+[node name="XPBar" type="ProgressBar" parent="ProgressionPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(280, 12)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_hp_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_xp_fill")
+max_value = 50.0
+show_percentage = false
+
+[node name="XPLabel" type="Label" parent="ProgressionPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.84, 0.94, 1)
+theme_override_font_sizes/font_size = 12
+text = "XP 0 / 50"
+
+[node name="StatsLabel" type="Label" parent="ProgressionPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.86, 0.84, 0.76, 1)
+theme_override_font_sizes/font_size = 12
+text = "Unspent Points: 0\n[1] STR 5  [2] DEX 5  [3] VIT 5  [4] INT 5"
+
+[node name="TechniquesLabel" type="Label" parent="ProgressionPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.68, 0.95, 1)
+theme_override_font_sizes/font_size = 12
+text = "Techniques [Q]\nNone unlocked"
+autowrap_mode = 2
+
+[node name="QuestsLabel" type="Label" parent="ProgressionPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.74, 0.88, 0.68, 1)
+theme_override_font_sizes/font_size = 12
+text = "Quests [F accept/turn in]\n[Available] The Elderwood Trial"
+autowrap_mode = 2
 
 [node name="ZoneBanner" type="Control" parent="."]
 anchors_preset = 5

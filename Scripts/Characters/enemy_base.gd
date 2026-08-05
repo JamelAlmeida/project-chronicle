@@ -4,6 +4,11 @@ extends CharacterBody2D
 const HIT_STUN_DURATION := 0.15
 const ATTACK_PRESENTATION_DURATION := 0.2
 
+@export_category("Progression")
+@export var enemy_id := "enemy"
+@export var xp_reward := 10
+
+@export_category("Combat")
 @export var move_speed := 60.0
 @export var max_health := 30
 @export var attack_damage := 15
@@ -139,6 +144,9 @@ func _on_defeated() -> void:
 		_visual_controller.spawn_detached_death_animation()
 	_combat_feedback().spawn_enemy_death_effect(global_position)
 	_drop_loot()
+	var events := get_node_or_null("/root/GameplayEvents")
+	if events != null:
+		events.enemy_defeated.emit(enemy_id, xp_reward, global_position)
 	queue_free()
 
 
