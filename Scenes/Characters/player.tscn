@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://q5572u81bmxr"]
+
+[ext_resource type="Script" uid="uid://iv7klbox6jpq" path="res://Project Chronicle/Scripts/Characters/player.gd" id="1_5py17"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5nclj"]
+size = Vector2(24, 24)
+
+[node name="Player" type="CharacterBody2D" unique_id=1203810760]
+script = ExtResource("1_5py17")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=341745235]
+offset_left = -12.0
+offset_top = -12.0
+offset_right = 12.0
+offset_bottom = 12.0
+color = Color(0.5813724, 0.77414274, 7.70092e-07, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=342897169]
+shape = SubResource("RectangleShape2D_5nclj")
