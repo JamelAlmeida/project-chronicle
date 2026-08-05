@@ -49,6 +49,13 @@ func _physics_process(delta: float) -> void:
 		_update_presentation(delta)
 		return
 
+	if _is_gameplay_input_blocked():
+		velocity.x = move_toward(velocity.x, 0.0, move_deceleration * delta)
+		_apply_gravity(delta)
+		move_and_slide()
+		_update_presentation(delta)
+		return
+
 	_health.set_external_invulnerability(_dodge.get_iframes_active())
 	_update_jump_timers(delta)
 
@@ -93,7 +100,10 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
-	if Input.is_action_just_pressed("technique_primary") and not _dodge.is_dodging():
+	if (
+		Input.is_action_just_pressed("technique_primary")
+		or Input.is_action_just_pressed("action_slot_1")
+	) and not _dodge.is_dodging():
 		var technique_id: String = _technique_manager().get_equipped_active(0)
 		if not technique_id.is_empty():
 			_melee_attack.try_technique(technique_id, _facing.get_direction())
@@ -131,6 +141,11 @@ func get_stats_component() -> StatsComponent:
 
 func get_equipment_component() -> EquipmentComponent:
 	return _equipment
+
+
+func _is_gameplay_input_blocked() -> bool:
+	var menu := get_tree().get_first_node_in_group("chronicle_menu")
+	return menu != null and bool(menu.call("is_panel_open"))
 
 
 func _update_horizontal_velocity(input_axis: float, delta: float) -> void:

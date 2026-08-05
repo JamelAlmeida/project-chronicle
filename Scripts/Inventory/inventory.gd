@@ -116,6 +116,32 @@ func get_expedition_summary() -> Array:
 	return summaries
 
 
+func get_inventory_summary() -> Array[Dictionary]:
+	var summaries: Array[Dictionary] = []
+	var item_ids: Dictionary = {}
+	for item_id: String in _secured.keys():
+		item_ids[item_id] = true
+	for item_id: String in _expedition.keys():
+		item_ids[item_id] = true
+	for item_id: String in item_ids.keys():
+		var secured_quantity := get_secured_quantity(item_id)
+		var expedition_quantity := get_expedition_quantity(item_id)
+		summaries.append({
+			"item_id": item_id,
+			"secured": secured_quantity,
+			"expedition": expedition_quantity,
+			"total": secured_quantity + expedition_quantity,
+		})
+	summaries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		var a_item: ItemData = _item_registry().get_item(str(a.get("item_id", "")))
+		var b_item: ItemData = _item_registry().get_item(str(b.get("item_id", "")))
+		var a_name := a_item.display_name if a_item != null else str(a.get("item_id", ""))
+		var b_name := b_item.display_name if b_item != null else str(b.get("item_id", ""))
+		return a_name.naturalnocasecmp_to(b_name) < 0
+	)
+	return summaries
+
+
 func clear() -> void:
 	_secured.clear()
 	_expedition.clear()

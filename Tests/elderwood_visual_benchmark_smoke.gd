@@ -90,8 +90,8 @@ func _test_hud_skin() -> void:
 	var hud := get_first_node_in_group("game_hud")
 	_expect(hud != null, "HUD is present")
 	if hud != null:
-		_expect(hud.has_node("HUDPanel"), "Charcoal and brass HUD panel is present")
-		_expect(hud.has_node("ZoneBanner/BannerPanel"), "Zone banner skin is present")
+		_expect(hud.has_node("BottomHUD"), "Charcoal and brass bottom HUD is present")
+		_expect(hud.has_node("ZoneBanner"), "Zone banner skin is present")
 
 
 func _test_loot_pickup() -> void:

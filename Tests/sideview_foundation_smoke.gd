@@ -15,7 +15,12 @@ func _run() -> void:
 	_expect(InputMap.has_action("jump"), "Jump input action exists")
 	_expect(_action_has_physical_key("attack", KEY_E), "E remains melee attack")
 	_expect(_action_has_physical_key("dodge", KEY_SPACE), "Space remains dodge")
-	_expect(_action_has_physical_key("toggle_equipment_debug", KEY_TAB), "Tab remains equipment UI")
+	_expect(_action_has_physical_key("toggle_character", KEY_C), "C opens Character UI")
+	_expect(_action_has_physical_key("toggle_inventory", KEY_I), "I opens Inventory UI")
+	_expect(_action_has_physical_key("toggle_techniques", KEY_K), "K opens Technique Book")
+	_expect(_action_has_physical_key("toggle_quest_log", KEY_J), "J opens Quest Log")
+	_expect(_action_has_physical_key("action_slot_1", KEY_1), "1 activates the first action slot")
+	_expect(_action_has_physical_key("target_cycle", KEY_TAB), "Tab is reserved for future targeting")
 
 	await _load_scene(HEARTHVALE)
 	var player := await _settle_player()
@@ -25,15 +30,15 @@ func _run() -> void:
 		return
 	_expect(player.is_on_floor(), "Player lands on solid terrain")
 	var equipment_ui := current_scene.get_node("EquipmentDebugPanel")
-	var tab_event := InputEventAction.new()
-	tab_event.action = &"toggle_equipment_debug"
-	tab_event.pressed = true
-	equipment_ui.call("_input", tab_event)
+	var character_event := InputEventAction.new()
+	character_event.action = &"toggle_character"
+	character_event.pressed = true
+	equipment_ui.call("_input", character_event)
 	_expect(
-		current_scene.get_node("EquipmentDebugPanel/PanelContainer").visible,
-		"Tab equipment UI handler still opens"
+		equipment_ui.call("is_panel_open", &"character"),
+		"Character panel opens through its input action"
 	)
-	equipment_ui.call("_input", tab_event)
+	equipment_ui.call("_input", character_event)
 
 	var start_x := player.global_position.x
 	Input.action_press("move_right")

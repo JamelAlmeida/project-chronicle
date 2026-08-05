@@ -67,9 +67,9 @@ The world should **not scale perfectly to the player**. Some regions, enemies, a
 
 ## Interface Direction
 
-A future MMO-inspired RPG interface should make long-term progression legible without copying another game's layout or overwhelming play. It may include a bottom action bar, Technique/spell icons, keybinds and cooldowns, XP and health/resource bars, a target frame, optional Tab targeting, bags, Character/Equipment, Technique Book, Quest Log, and later Titles/Badges.
+The MMO-inspired UI foundation makes progression legible without copying another game's layout or overwhelming play. It includes a bottom HUD/action-bar shell, visible keybinds and cooldown-ready Technique space, XP and health/resource presentation, compact quest tracking, and dedicated Character/Equipment, Inventory, Technique Book, and Quest Log panels.
 
-The Character/Equipment panel should eventually expose a full character preview and visible gear, slots, level/XP, base stats, gear bonuses, derived stats, special effects, titles/badges, and hover comparison. The current HUD is only a readable prototype; systems must continue exposing data cleanly for the finished UI.
+The Character panel exposes preview space, equipment slots, level/XP, core-stat base/bonus values, derived stats, unspent points, and clickable allocation. Inventory distinguishes secured and expedition loot and preserves equip/unequip flow. Final icon art, visible equipped-gear preview, comparisons, target frames, multiple action bars, and Titles/Badges remain later work. `Tab` is reserved for a future hybrid target cycle while combat stays spatial and action-based. See [UI_UX_DIRECTION.md](UI_UX_DIRECTION.md).
 
 ## Hidden Progression Architecture
 
@@ -83,6 +83,6 @@ Later progression may support multi-hit attacks, area-of-effect attacks, multipl
 
 ## Scope Boundary
 
-The current milestone implements the reusable XP/level, stat allocation, Technique, quest, event-hook, milestone, prototype UI, and Level 1–5 proof foundations. It does **not** implement forty finished levels, final balance/content, the hidden-accomplishment evaluator, milestone narratives/world memory, the final MMO UI, advanced combat presentation, or finished living-world visuals.
+The current milestone implements the reusable XP/level, stat allocation, Technique, quest, event-hook, milestone, MMO-style UI structure, and Level 1–5 proof foundations. It does **not** implement forty finished levels, final balance/content, the hidden-accomplishment evaluator, milestone narratives/world memory, final UI art or advanced hotbar systems, advanced combat presentation, or finished living-world visuals.
 
 Continue building one stable layer at a time. Single-player-first development, exploration value, meaningful choice, authored quality, and all existing originality rules remain controlling constraints.

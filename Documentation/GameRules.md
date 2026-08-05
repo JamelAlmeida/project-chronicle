@@ -34,7 +34,11 @@ AI Never Replaces Gameplay
 
 The planned Adventurer Era spans levels 1–40 across character, build, and world progression. Levels pace meaningful stat choices and Techniques; they do not replace exploration, authored rewards, gear pursuit, emergent identity, or world consequence. Activities should serve multiple purposes and communicate through extensible structured events rather than isolated one-off systems.
 
-The reusable XP/level, stat allocation, Technique, quest, event-hook, milestone, prototype UI, and Level 1–5 proof foundations are the current progression layer. Forty finished levels, final UI, hidden accomplishments, advanced combat presentation, and finished living-world art remain future work; documenting them does not expand the active milestone.
+The reusable XP/level, stat allocation, Technique, quest, event-hook, milestone, UI foundation, and Level 1–5 proof foundations are the current progression layer. Forty finished levels, final UI art, hidden accomplishments, advanced combat presentation, and finished living-world art remain future work; documenting them does not expand the active milestone.
+
+## Interface Rule
+
+Chronicle is a desktop action RPG. Its interface is bottom-anchored, readable, dark-fantasy in tone, and MMO-inspired in usefulness without copying another game's layout. Character, inventory, Technique, and quest information belong in deliberate panels—not permanent debug dumps. Reject mobile-gacha clutter, autoplay-style controls, noisy top-screen icon fields, and decoration that obscures play. See [UI_UX_DIRECTION.md](UI_UX_DIRECTION.md).
 
 ## Current Gameplay Foundation
 

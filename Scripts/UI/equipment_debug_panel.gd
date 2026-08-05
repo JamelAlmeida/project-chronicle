@@ -1,165 +1,538 @@
 extends CanvasLayer
 
-const TEST_ITEM_IDS: Array[String] = [
-	"rusted_sword",
-	"swift_katana",
-	"bloodfang_blade",
-	"crimson_leech_ring",
-]
+const UI := preload("res://Project Chronicle/Scripts/UI/chronicle_ui_theme.gd")
+const PANEL_TITLES := {
+	&"character": "CHARACTER & EQUIPMENT",
+	&"inventory": "INVENTORY",
+	&"techniques": "TECHNIQUE BOOK",
+	&"quests": "QUEST LOG",
+}
+const CORE_STAT_NAMES := {
+	&"strength": "Strength",
+	&"dexterity": "Dexterity",
+	&"vitality": "Vitality",
+	&"intellect": "Intellect",
+}
 
+var _overlay: Control
+var _window: PanelContainer
+var _title_label: Label
+var _content: VBoxContainer
+var _current_panel: StringName = &""
+var _player: Node
 var _equipment: EquipmentComponent
 var _stats: StatsComponent
-var _slot_value_labels: Dictionary = {}
-
-
-@onready var _panel: PanelContainer = $PanelContainer
-@onready var _slots_container: VBoxContainer = $PanelContainer/MarginContainer/VBoxContainer/SlotsContainer
-@onready var _equip_buttons: HBoxContainer = $PanelContainer/MarginContainer/VBoxContainer/EquipButtons
-@onready var _attack_damage_label: Label = $PanelContainer/MarginContainer/VBoxContainer/StatsContainer/AttackDamageValue
-@onready var _attack_speed_label: Label = $PanelContainer/MarginContainer/VBoxContainer/StatsContainer/AttackSpeedValue
-@onready var _crit_chance_label: Label = $PanelContainer/MarginContainer/VBoxContainer/StatsContainer/CritChanceValue
-@onready var _lifesteal_label: Label = $PanelContainer/MarginContainer/VBoxContainer/StatsContainer/LifestealValue
-@onready var _armor_label: Label = $PanelContainer/MarginContainer/VBoxContainer/StatsContainer/ArmorValue
-@onready var _move_speed_label: Label = $PanelContainer/MarginContainer/VBoxContainer/StatsContainer/MoveSpeedValue
+var _refresh_pending := false
 
 
 func _ready() -> void:
-	_panel.visible = false
+	add_to_group("chronicle_menu")
+	_build_interface()
 	await get_tree().process_frame
-	_build_equip_buttons()
 	_connect_to_player()
-	_build_slot_rows()
-	_refresh_all()
+	_connect_to_systems()
 
 
 func _input(event: InputEvent) -> void:
-	if not event.is_action_pressed("toggle_equipment_debug"):
+	var requested_panel: StringName = &""
+	if event.is_action_pressed("toggle_character"):
+		requested_panel = &"character"
+	elif event.is_action_pressed("toggle_inventory"):
+		requested_panel = &"inventory"
+	elif event.is_action_pressed("toggle_techniques"):
+		requested_panel = &"techniques"
+	elif event.is_action_pressed("toggle_quest_log"):
+		requested_panel = &"quests"
+	elif event.is_action_pressed("ui_cancel") and _overlay.visible:
+		close_panel()
+		get_viewport().set_input_as_handled()
 		return
-
-	_panel.visible = not _panel.visible
-	if _panel.visible:
-		_refresh_all()
-	else:
-		get_viewport().gui_release_focus()
-
+	if requested_panel.is_empty():
+		return
+	open_panel(requested_panel)
 	get_viewport().set_input_as_handled()
 
 
-func _connect_to_player() -> void:
-	var player: Node = get_tree().get_first_node_in_group("player")
-	if player == null:
+func open_panel(panel_id: StringName) -> void:
+	if not PANEL_TITLES.has(panel_id):
 		return
+	if _overlay.visible and _current_panel == panel_id:
+		close_panel()
+		return
+	_current_panel = panel_id
+	_title_label.text = str(PANEL_TITLES[panel_id])
+	_overlay.visible = true
+	_rebuild_content()
 
-	_equipment = player.get_node("EquipmentComponent") as EquipmentComponent
-	_stats = player.get_node("StatsComponent") as StatsComponent
+
+func close_panel() -> void:
+	_overlay.visible = false
+	_current_panel = &""
+	get_viewport().gui_release_focus()
+
+
+func is_panel_open(panel_id: StringName = &"") -> bool:
+	return _overlay.visible and (panel_id.is_empty() or _current_panel == panel_id)
+
+
+func _build_interface() -> void:
+	_overlay = Control.new()
+	_overlay.name = "MenuOverlay"
+	_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_overlay)
+
+	var shade := ColorRect.new()
+	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	shade.color = Color(0.01, 0.012, 0.014, 0.46)
+	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_overlay.add_child(shade)
+
+	_window = PanelContainer.new()
+	_window.name = "RootWindow"
+	_window.set_anchors_preset(Control.PRESET_CENTER)
+	_window.position = Vector2(-520.0, -275.0)
+	_window.size = Vector2(1040.0, 550.0)
+	_window.mouse_filter = Control.MOUSE_FILTER_STOP
+	_window.add_theme_stylebox_override("panel", UI.panel_style(UI.COLOR_PANEL))
+	_overlay.add_child(_window)
+
+	var root_box := VBoxContainer.new()
+	root_box.add_theme_constant_override("separation", 7)
+	_window.add_child(root_box)
+
+	var header := HBoxContainer.new()
+	root_box.add_child(header)
+	_title_label = UI.style_label(Label.new(), UI.COLOR_GOLD, 20)
+	_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(_title_label)
+	var identity := UI.style_label(Label.new(), UI.COLOR_MUTED, 12)
+	identity.text = "THE ADVENTURER"
+	header.add_child(identity)
+	var close_button := UI.style_button(Button.new())
+	close_button.text = "×"
+	close_button.custom_minimum_size = Vector2(38.0, 30.0)
+	close_button.pressed.connect(close_panel)
+	header.add_child(close_button)
+
+	var tabs := HBoxContainer.new()
+	tabs.add_theme_constant_override("separation", 5)
+	root_box.add_child(tabs)
+	tabs.add_child(_make_tab_button("Character [C]", &"character"))
+	tabs.add_child(_make_tab_button("Inventory [I]", &"inventory"))
+	tabs.add_child(_make_tab_button("Techniques [K]", &"techniques"))
+	tabs.add_child(_make_tab_button("Quest Log [J]", &"quests"))
+
+	root_box.add_child(UI.make_separator())
+	var scroll := ScrollContainer.new()
+	scroll.name = "ContentScroll"
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	root_box.add_child(scroll)
+	_content = VBoxContainer.new()
+	_content.name = "Content"
+	_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_content.add_theme_constant_override("separation", 8)
+	scroll.add_child(_content)
+	_overlay.visible = false
+
+
+func _make_tab_button(text: String, panel_id: StringName) -> Button:
+	var button := UI.style_button(Button.new())
+	button.text = text
+	button.custom_minimum_size = Vector2(160.0, 32.0)
+	button.pressed.connect(open_panel.bind(panel_id))
+	return button
+
+
+func _connect_to_player() -> void:
+	_player = get_tree().get_first_node_in_group("player")
+	if _player == null:
+		return
+	_equipment = _player.get_node("EquipmentComponent") as EquipmentComponent
+	_stats = _player.get_node("StatsComponent") as StatsComponent
 	if _equipment != null:
-		_equipment.equipment_changed.connect(_on_equipment_changed)
+		_equipment.equipment_changed.connect(func(_slot: String, _item: String): _refresh_if_open())
 	if _stats != null:
-		_stats.stats_changed.connect(_on_stats_changed)
+		_stats.stats_changed.connect(_refresh_if_open)
 
 
-func _build_equip_buttons() -> void:
-	for item_id: String in TEST_ITEM_IDS:
+func _connect_to_systems() -> void:
+	var inventory: Node = _inventory()
+	inventory.item_added.connect(func(_id: String, _added: int, _total: int): _refresh_if_open())
+	inventory.expedition_loot_changed.connect(_refresh_if_open)
+	inventory.secured_loot_changed.connect(_refresh_if_open)
+	var progression: Node = _progression()
+	progression.xp_gained.connect(func(_a: int, _b: int, _c: int): _refresh_if_open())
+	progression.level_up.connect(func(_a: int, _b: int): _refresh_if_open())
+	progression.stat_points_changed.connect(func(_a: int): _refresh_if_open())
+	var techniques: Node = _techniques()
+	techniques.techniques_changed.connect(_refresh_if_open)
+	var quests: Node = _quests()
+	quests.quest_state_changed.connect(func(_a: String, _b: int): _refresh_if_open())
+	quests.quest_objective_progressed.connect(
+		func(_a: String, _b: int, _c: int, _d: int): _refresh_if_open()
+	)
+
+
+func _refresh_if_open() -> void:
+	if not _overlay.visible or _refresh_pending:
+		return
+	_refresh_pending = true
+	call_deferred("_deferred_rebuild")
+
+
+func _deferred_rebuild() -> void:
+	_refresh_pending = false
+	if _overlay.visible:
+		_rebuild_content()
+
+
+func _rebuild_content() -> void:
+	for child: Node in _content.get_children():
+		child.free()
+	match _current_panel:
+		&"character":
+			_build_character_content()
+		&"inventory":
+			_build_inventory_content()
+		&"techniques":
+			_build_technique_content()
+		&"quests":
+			_build_quest_content()
+
+
+func _build_character_content() -> void:
+	if _equipment == null or _stats == null:
+		_content.add_child(_message_label("Character data is not available."))
+		return
+	var columns := HBoxContainer.new()
+	columns.add_theme_constant_override("separation", 10)
+	_content.add_child(columns)
+	columns.add_child(_build_identity_column())
+	columns.add_child(_build_equipment_column())
+	columns.add_child(_build_stats_column())
+
+
+func _build_identity_column() -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size.x = 215.0
+	panel.add_theme_stylebox_override("panel", UI.inset_style())
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 7)
+	panel.add_child(box)
+	var preview := UI.style_label(Label.new(), Color(0.68, 0.64, 0.54), 18, HORIZONTAL_ALIGNMENT_CENTER)
+	preview.text = "◇\nADVENTURER\nPREVIEW\n◇"
+	preview.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	preview.custom_minimum_size.y = 180.0
+	box.add_child(preview)
+	var name := UI.style_label(Label.new(), UI.COLOR_GOLD, 16, HORIZONTAL_ALIGNMENT_CENTER)
+	name.text = "THE ADVENTURER"
+	box.add_child(name)
+	var progression: Node = _progression()
+	var level := UI.style_label(Label.new(), UI.COLOR_TEXT, 13, HORIZONTAL_ALIGNMENT_CENTER)
+	level.text = "Level %d  ·  %d / %d XP" % [
+		progression.current_level,
+		progression.current_xp,
+		progression.get_xp_needed_for_next_level(),
+	]
+	box.add_child(level)
+	var note := UI.style_label(Label.new(), UI.COLOR_MUTED, 11, HORIZONTAL_ALIGNMENT_CENTER)
+	note.text = "Visible equipment preview reserved\nfor the later art integration pass."
+	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	box.add_child(note)
+	return panel
+
+
+func _build_equipment_column() -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size.x = 325.0
+	panel.add_theme_stylebox_override("panel", UI.inset_style())
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 4)
+	panel.add_child(box)
+	var heading := UI.style_label(Label.new(), UI.COLOR_GOLD, 15)
+	heading.text = "EQUIPMENT"
+	box.add_child(heading)
+	for slot_key: String in EquipmentComponent.SLOT_KEYS:
+		var row := HBoxContainer.new()
+		var slot := UI.style_label(Label.new(), UI.COLOR_MUTED, 12)
+		slot.custom_minimum_size.x = 70.0
+		slot.text = slot_key.capitalize()
+		row.add_child(slot)
+		var item_id := _equipment.get_equipped_id(slot_key)
+		var item: ItemData = _item_registry().get_item(item_id)
+		var value := UI.style_label(Label.new(), UI.COLOR_TEXT, 12)
+		value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		value.text = item.display_name if item != null else "— Empty —"
+		if item is EquipmentData:
+			value.tooltip_text = _equipment_tooltip(item as EquipmentData)
+		row.add_child(value)
+		var remove := UI.style_button(Button.new())
+		remove.text = "Unequip"
+		remove.custom_minimum_size.x = 72.0
+		remove.disabled = item_id.is_empty()
+		remove.pressed.connect(_on_unequip_pressed.bind(slot_key))
+		row.add_child(remove)
+		box.add_child(row)
+	return panel
+
+
+func _build_stats_column() -> Control:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", UI.inset_style())
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 5)
+	panel.add_child(box)
+	var points := UI.style_label(Label.new(), UI.COLOR_GOLD, 15)
+	points.text = "CORE ATTRIBUTES  ·  %d UNSPENT" % _progression().unspent_stat_points
+	box.add_child(points)
+	var core_grid := GridContainer.new()
+	core_grid.columns = 4
+	core_grid.add_theme_constant_override("h_separation", 8)
+	core_grid.add_theme_constant_override("v_separation", 4)
+	box.add_child(core_grid)
+	for stat_id: StringName in CharacterProgression.CORE_STATS:
+		_add_core_stat_row(core_grid, stat_id)
+	box.add_child(UI.make_separator())
+	var derived_heading := UI.style_label(Label.new(), UI.COLOR_GOLD, 14)
+	derived_heading.text = "COMBAT STATISTICS"
+	box.add_child(derived_heading)
+	var derived_grid := GridContainer.new()
+	derived_grid.columns = 2
+	derived_grid.add_theme_constant_override("h_separation", 18)
+	box.add_child(derived_grid)
+	_add_derived_stat(derived_grid, "Max Health", _stats.get_max_health(), "max_health")
+	_add_derived_stat(derived_grid, "Attack Damage", _stats.get_attack_damage(), "attack_damage")
+	_add_derived_stat(derived_grid, "Attack Speed", _stats.get_attack_speed(), "attack_speed", "%.2fx")
+	_add_derived_stat(derived_grid, "Critical Chance", _stats.get_crit_chance() * 100.0, "crit_chance", "%.1f%%")
+	_add_derived_stat(derived_grid, "Armor", _stats.get_armor(), "armor")
+	_add_derived_stat(derived_grid, "Lifesteal", _stats.get_lifesteal() * 100.0, "lifesteal", "%.1f%%")
+	_add_derived_stat(derived_grid, "Move Speed", _stats.get_move_speed(), "move_speed")
+	return panel
+
+
+func _add_core_stat_row(grid: GridContainer, stat_id: StringName) -> void:
+	var breakdown := _stats.get_stat_breakdown(String(stat_id))
+	var base_value := float(breakdown.get("base", 0.0))
+	var total := float(breakdown.get("total", 0.0))
+	var bonus := total - base_value
+	var name := UI.style_label(Label.new(), UI.COLOR_TEXT, 12)
+	name.text = str(CORE_STAT_NAMES[stat_id])
+	grid.add_child(name)
+	var value := UI.style_label(Label.new(), UI.COLOR_GOLD, 13, HORIZONTAL_ALIGNMENT_RIGHT)
+	value.text = "%d" % int(round(total))
+	grid.add_child(value)
+	var details := UI.style_label(Label.new(), UI.COLOR_MUTED, 10)
+	details.text = "Base %d  Bonus %+d" % [int(round(base_value)), int(round(bonus))]
+	details.tooltip_text = _breakdown_tooltip(breakdown)
+	grid.add_child(details)
+	var add_button := UI.style_button(Button.new(), Color(0.34, 0.50, 0.28))
+	add_button.text = "+"
+	add_button.custom_minimum_size = Vector2(32.0, 26.0)
+	add_button.disabled = _progression().unspent_stat_points <= 0
+	add_button.tooltip_text = "Spend one point in %s" % str(CORE_STAT_NAMES[stat_id])
+	add_button.pressed.connect(_on_allocate_stat.bind(stat_id))
+	grid.add_child(add_button)
+
+
+func _add_derived_stat(
+	grid: GridContainer,
+	display_name: String,
+	value: float,
+	stat_name: String,
+	format: String = "%.0f"
+) -> void:
+	var name := UI.style_label(Label.new(), UI.COLOR_MUTED, 12)
+	name.text = display_name
+	grid.add_child(name)
+	var value_label := UI.style_label(Label.new(), UI.COLOR_TEXT, 12, HORIZONTAL_ALIGNMENT_RIGHT)
+	value_label.text = format % value
+	value_label.tooltip_text = _breakdown_tooltip(_stats.get_stat_breakdown(stat_name))
+	grid.add_child(value_label)
+
+
+func _build_inventory_content() -> void:
+	var heading := UI.style_label(Label.new(), UI.COLOR_MUTED, 12)
+	heading.text = "Secured belongings and current expedition loot. Equipment can be equipped directly."
+	_content.add_child(heading)
+	var summaries: Array[Dictionary] = _inventory().get_inventory_summary()
+	if summaries.is_empty():
+		_content.add_child(_message_label("Your inventory is empty."))
+		return
+	for entry: Dictionary in summaries:
+		var item_id := str(entry.get("item_id", ""))
 		var item: ItemData = _item_registry().get_item(item_id)
 		if item == null:
 			continue
-
-		var button := Button.new()
-		button.text = "Equip %s" % item.display_name
-		button.focus_mode = Control.FOCUS_NONE
-		button.pressed.connect(_on_equip_pressed.bind(item_id))
-		_equip_buttons.add_child(button)
-
-
-func _build_slot_rows() -> void:
-	for child: Node in _slots_container.get_children():
-		child.queue_free()
-
-	_slot_value_labels.clear()
-
-	for slot_key: String in EquipmentComponent.SLOT_KEYS:
+		var row_panel := PanelContainer.new()
+		row_panel.add_theme_stylebox_override("panel", UI.inset_style())
+		_content.add_child(row_panel)
 		var row := HBoxContainer.new()
-		var name_label := Label.new()
-		name_label.text = "%s:" % slot_key.capitalize()
-		name_label.custom_minimum_size = Vector2(72, 0)
-		row.add_child(name_label)
+		row.add_theme_constant_override("separation", 10)
+		row_panel.add_child(row)
+		var icon := UI.style_label(Label.new(), UI.COLOR_GOLD, 18, HORIZONTAL_ALIGNMENT_CENTER)
+		icon.text = "◆"
+		icon.custom_minimum_size.x = 40.0
+		row.add_child(icon)
+		var description := VBoxContainer.new()
+		description.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(description)
+		var name := UI.style_label(Label.new(), UI.COLOR_TEXT, 14)
+		name.text = "%s  ×%d" % [item.display_name, int(entry.get("total", 0))]
+		description.add_child(name)
+		var detail := UI.style_label(Label.new(), UI.COLOR_MUTED, 11)
+		detail.text = "%s\nSecured %d  ·  Expedition %d" % [
+			item.description,
+			int(entry.get("secured", 0)),
+			int(entry.get("expedition", 0)),
+		]
+		detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		description.add_child(detail)
+		if _item_registry().is_equipment_item(item):
+			var equip := UI.style_button(Button.new(), Color(0.36, 0.48, 0.30))
+			equip.text = "Equip"
+			equip.custom_minimum_size = Vector2(84.0, 34.0)
+			equip.tooltip_text = _equipment_tooltip(item as EquipmentData)
+			equip.pressed.connect(_on_equip_pressed.bind(item_id))
+			row.add_child(equip)
 
-		var value_label := Label.new()
-		value_label.name = "%sValue" % slot_key
-		value_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		row.add_child(value_label)
-		_slot_value_labels[slot_key] = value_label
 
-		var unequip_button := Button.new()
-		unequip_button.text = "X"
-		unequip_button.focus_mode = Control.FOCUS_NONE
-		unequip_button.pressed.connect(_on_unequip_pressed.bind(slot_key))
-		row.add_child(unequip_button)
+func _build_technique_content() -> void:
+	var intro := UI.style_label(Label.new(), UI.COLOR_MUTED, 12)
+	intro.text = "Techniques shape an Adventurer through discoveries, teachers, quests, and milestones."
+	_content.add_child(intro)
+	var techniques: Array[TechniqueData] = _techniques().get_unlocked_techniques()
+	if techniques.is_empty():
+		_content.add_child(_message_label("No Techniques have been unlocked."))
+		return
+	for technique: TechniqueData in techniques:
+		var panel := PanelContainer.new()
+		var accent := UI.COLOR_TECHNIQUE if technique.is_active() else Color(0.40, 0.46, 0.32)
+		panel.add_theme_stylebox_override("panel", UI.inset_style(accent))
+		_content.add_child(panel)
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 10)
+		panel.add_child(row)
+		var glyph := UI.style_label(Label.new(), accent.lightened(0.35), 22, HORIZONTAL_ALIGNMENT_CENTER)
+		glyph.text = "✦" if technique.is_active() else "◇"
+		glyph.custom_minimum_size.x = 44.0
+		row.add_child(glyph)
+		var text_box := VBoxContainer.new()
+		text_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(text_box)
+		var name := UI.style_label(Label.new(), UI.COLOR_GOLD, 15)
+		name.text = "%s  ·  %s" % [
+			technique.display_name,
+			"ACTIVE" if technique.is_active() else "PASSIVE",
+		]
+		text_box.add_child(name)
+		var description := UI.style_label(Label.new(), UI.COLOR_TEXT, 12)
+		description.text = technique.description
+		description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		text_box.add_child(description)
+		var source := UI.style_label(Label.new(), UI.COLOR_MUTED, 10)
+		source.text = "Unlocked: %s  ·  Level %d%s" % [
+			technique.unlock_source,
+			technique.minimum_level,
+			"  ·  %.1fs cooldown" % technique.cooldown if technique.is_active() else "",
+		]
+		text_box.add_child(source)
+		var state := UI.style_label(Label.new(), Color(0.66, 0.88, 0.58), 12)
+		state.custom_minimum_size.x = 105.0
+		state.text = "EQUIPPED" if _techniques().is_equipped(technique.id) else "OWNED"
+		row.add_child(state)
 
-		_slots_container.add_child(row)
+
+func _build_quest_content() -> void:
+	var intro := UI.style_label(Label.new(), UI.COLOR_MUTED, 12)
+	intro.text = "Press F to accept or turn in the next available quest opportunity."
+	_content.add_child(intro)
+	var quest_ids: PackedStringArray = _quests().get_known_quest_ids()
+	if quest_ids.is_empty():
+		_content.add_child(_message_label("No known quests."))
+		return
+	for quest_id: String in quest_ids:
+		var quest: QuestData = _quests().get_quest(quest_id)
+		if quest == null:
+			continue
+		var panel := PanelContainer.new()
+		panel.add_theme_stylebox_override("panel", UI.inset_style(UI.COLOR_QUEST))
+		_content.add_child(panel)
+		var box := VBoxContainer.new()
+		box.add_theme_constant_override("separation", 4)
+		panel.add_child(box)
+		var heading := UI.style_label(Label.new(), Color(0.74, 0.88, 0.66), 15)
+		heading.text = "%s  ·  %s" % [quest.title, _quests().get_state_name(quest_id).to_upper()]
+		box.add_child(heading)
+		var description := UI.style_label(Label.new(), UI.COLOR_TEXT, 12)
+		description.text = quest.description
+		description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		box.add_child(description)
+		var objective_lines: PackedStringArray = _quests().get_objective_lines(quest_id)
+		var objectives := UI.style_label(Label.new(), UI.COLOR_GOLD, 11)
+		objectives.text = "\n".join(objective_lines) if not objective_lines.is_empty() else "Objectives reveal when accepted."
+		box.add_child(objectives)
+
+
+func _message_label(text: String) -> Label:
+	var label := UI.style_label(Label.new(), UI.COLOR_MUTED, 14, HORIZONTAL_ALIGNMENT_CENTER)
+	label.text = text
+	label.custom_minimum_size.y = 80.0
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	return label
+
+
+func _on_allocate_stat(stat_id: StringName) -> void:
+	if _progression().allocate_stat(stat_id):
+		_notify("Allocated 1 %s" % str(CORE_STAT_NAMES[stat_id]), Color(0.60, 0.90, 0.62))
+	else:
+		_notify("No stat point available", Color(0.88, 0.64, 0.38))
+	_refresh_if_open()
 
 
 func _on_equip_pressed(item_id: String) -> void:
-	if _equipment == null:
-		return
-
-	if not _inventory().has_item(item_id, 1):
-		_inventory().add_item(item_id, 1)
-
-	_equipment.equip_from_inventory(item_id)
-	_refresh_all()
+	if _equipment != null and _equipment.equip_from_inventory(item_id):
+		var item: ItemData = _item_registry().get_item(item_id)
+		_notify("Equipped %s" % item.display_name, UI.COLOR_GOLD)
+		_refresh_if_open()
 
 
 func _on_unequip_pressed(slot_key: String) -> void:
-	if _equipment == null:
-		return
-
-	_equipment.unequip(slot_key)
-	_refresh_all()
+	if _equipment != null and _equipment.unequip(slot_key):
+		_notify("Unequipped %s slot" % slot_key.capitalize(), UI.COLOR_TEXT)
+		_refresh_if_open()
 
 
-func _on_equipment_changed(_slot_key: String, _item_id: String) -> void:
-	_refresh_all()
+func _notify(text: String, color: Color) -> void:
+	var hud := get_tree().get_first_node_in_group("game_hud")
+	if hud != null:
+		hud.call("show_status_message", text, color)
 
 
-func _on_stats_changed() -> void:
-	_refresh_stats()
+func _breakdown_tooltip(breakdown: Dictionary) -> String:
+	return "Base %.1f\nAllocated %.1f\nEquipment %.1f\nEffects %.1f\nLevel %.1f" % [
+		float(breakdown.get("base", 0.0)),
+		float(breakdown.get("allocated", 0.0)),
+		float(breakdown.get("equipment", 0.0)),
+		float(breakdown.get("effects", 0.0)),
+		float(breakdown.get("level", 0.0)),
+	]
 
 
-func _refresh_all() -> void:
-	_refresh_slots()
-	_refresh_stats()
-
-
-func _refresh_slots() -> void:
-	if _equipment == null:
-		return
-
-	for slot_key: String in EquipmentComponent.SLOT_KEYS:
-		var value_label: Label = _slot_value_labels.get(slot_key) as Label
-		if value_label == null:
-			continue
-
-		var item_id: String = _equipment.get_equipped_id(slot_key)
-		if item_id.is_empty():
-			value_label.text = "(empty)"
-			continue
-
-		var item: ItemData = _item_registry().get_item(item_id)
-		var display_name: String = item.display_name if item != null else item_id
-		value_label.text = display_name
-
-
-func _refresh_stats() -> void:
-	if _stats == null:
-		return
-
-	_attack_damage_label.text = str(int(round(_stats.get_attack_damage())))
-	_attack_speed_label.text = "%.2fx" % _stats.get_attack_speed()
-	_crit_chance_label.text = "%.0f%%" % (_stats.get_crit_chance() * 100.0)
-	_lifesteal_label.text = "%.0f%%" % (_stats.get_lifesteal() * 100.0)
-	_armor_label.text = str(int(round(_stats.get_armor())))
-	_move_speed_label.text = str(int(round(_stats.get_move_speed())))
+func _equipment_tooltip(item: EquipmentData) -> String:
+	var lines: PackedStringArray = [item.description]
+	if item.stat_modifiers != null:
+		for stat_name: String in [
+			"strength", "dexterity", "vitality", "intellect", "max_health",
+			"attack_damage", "attack_speed", "armor", "crit_chance", "lifesteal", "move_speed",
+		]:
+			var value := item.stat_modifiers.get_stat(stat_name)
+			if not is_zero_approx(value):
+				var sign_text := "+" if value > 0.0 else ""
+				lines.append("%s %s%.2f" % [stat_name.capitalize(), sign_text, value])
+	return "\n".join(lines)
 
 
 func _inventory():
@@ -168,3 +541,15 @@ func _inventory():
 
 func _item_registry():
 	return get_node("/root/ItemRegistry")
+
+
+func _progression():
+	return get_node("/root/CharacterProgression")
+
+
+func _techniques():
+	return get_node("/root/TechniqueManager")
+
+
+func _quests():
+	return get_node("/root/QuestManager")

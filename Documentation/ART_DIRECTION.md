@@ -283,7 +283,7 @@ Chronicle's UI combines elegant dark-fantasy presentation, satisfying RPG gear r
 
 The equipment screen should make players want to collect things. Item silhouettes, equipped appearance, comparison information, and meaningful properties should remain easy to understand.
 
-The planned interface may draw on the information clarity of MMO RPGs while remaining original and appropriate to a single-player side-scrolling game. A future character panel should make level, XP, meaningful core stats, equipment, Techniques, titles, milestone progress, and build comparisons easy to scan. It must not reproduce another game's UI layout. The current progression panel is a functional prototype; the finished panel is **not part of the current implementation scope**.
+The interface draws on the information clarity of MMO RPGs while remaining original and appropriate to a single-player side-scrolling game. Its foundation anchors health, reserved resources, actions, panel access, and XP along the bottom; uses a compact quest tracker; and provides dedicated Character/Equipment, Inventory, Technique Book, and Quest Log panels. The Character panel makes level, XP, core-stat base/bonus values, derived stats, equipment, and stat allocation easy to scan. Final icons, character-preview art, ornament, motion, comparison presentation, and additional build systems are **not part of the current implementation scope**. See [UI_UX_DIRECTION.md](UI_UX_DIRECTION.md).
 
 ### Avoid
 

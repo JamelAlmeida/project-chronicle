@@ -124,6 +124,31 @@ func get_visible_quest_lines() -> PackedStringArray:
 	return lines
 
 
+func get_known_quest_ids() -> PackedStringArray:
+	var quest_ids: PackedStringArray = []
+	for quest_id: String in _registry:
+		if get_state(quest_id) != QuestState.UNAVAILABLE:
+			quest_ids.append(quest_id)
+	return quest_ids
+
+
+func get_objective_lines(quest_id: String) -> PackedStringArray:
+	var lines: PackedStringArray = []
+	var quest := get_quest(quest_id)
+	if quest == null:
+		return lines
+	var progress: Array = _progress.get(quest_id, [])
+	for index in range(quest.objectives.size()):
+		var objective: QuestObjectiveData = quest.objectives[index]
+		var current := int(progress[index]) if index < progress.size() else 0
+		var suffix := " (Optional)" if objective.optional else ""
+		lines.append(
+			"%s%s  %d/%d"
+			% [objective.description, suffix, current, objective.required_amount]
+		)
+	return lines
+
+
 func reset_quests() -> void:
 	_progress.clear()
 	for quest_id: String in _registry:

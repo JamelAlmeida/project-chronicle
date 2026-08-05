@@ -426,6 +426,10 @@ Desired feeling:
 
 The atmosphere may evoke the contemplative feeling of fantasy journeys such as *Frieren*, while remaining completely original.
 
+### Interface identity
+
+Chronicle's desktop interface keeps the play field clear while making builds easy to understand. Health, reserved resources, actions, panel access, and XP are anchored along the bottom; compact quest tracking remains available during play; and Character, Inventory, Technique Book, and Quest Log panels carry detailed progression information. The current structural foundation is documented in [UI_UX_DIRECTION.md](UI_UX_DIRECTION.md). Final icons, ornament, animation, comparison tooling, target frames, and combat-number spectacle remain later passes.
+
 ---
 
 ## Emotional Pillars
@@ -487,7 +491,7 @@ The vertical slice should prove:
 
 > **"Is exploring, fighting, finding equipment, creating builds, taking risks, returning home, and seeing the world react genuinely fun?"**
 
-The current progression foundation supports the vertical slice; hidden accomplishment evaluation, final MMO-inspired UI, advanced multi-target presentation, finished Level 1–40 content, and living-world visuals do not expand this immediate implementation scope.
+The current progression and MMO-inspired UI foundations support the vertical slice; final UI art and advanced hotbar systems, hidden accomplishment evaluation, advanced multi-target presentation, finished Level 1–40 content, and living-world visuals do not expand this immediate implementation scope.
 
 ---
 

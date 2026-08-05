@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="QuestData" load_steps=5 format=3]
+[gd_resource type="Resource" script_class="QuestData" format=3 uid="uid://otekpkm0xlsc"]
 
-[ext_resource type="Script" path="res://Project Chronicle/Scripts/Quests/quest_data.gd" id="1_quest"]
-[ext_resource type="Script" path="res://Project Chronicle/Scripts/Quests/quest_objective_data.gd" id="2_objective"]
-[ext_resource type="Script" path="res://Project Chronicle/Scripts/Quests/quest_reward_data.gd" id="3_reward"]
+[ext_resource type="Script" uid="uid://bp36f7fs6hjw" path="res://Project Chronicle/Scripts/Quests/quest_data.gd" id="1_quest"]
+[ext_resource type="Script" uid="uid://xnymtbxtbovm" path="res://Project Chronicle/Scripts/Quests/quest_objective_data.gd" id="2_objective"]
+[ext_resource type="Script" uid="uid://twkir1g4mabw" path="res://Project Chronicle/Scripts/Quests/quest_reward_data.gd" id="3_reward"]
 
 [sub_resource type="Resource" id="Objective_collect"]
 script = ExtResource("2_objective")
@@ -14,7 +14,6 @@ description = "Collect Slime Gel"
 [sub_resource type="Resource" id="Reward_gel"]
 script = ExtResource("3_reward")
 xp = 100
-technique_ids = PackedStringArray("trailblazers_step")
 
 [resource]
 script = ExtResource("1_quest")
@@ -24,5 +23,4 @@ description = "Gather useful reagents while learning that every expedition can s
 quest_giver_id = "hearthvale_adventurers_board"
 objectives = Array[ExtResource("2_objective")]([SubResource("Objective_collect")])
 rewards = SubResource("Reward_gel")
-prerequisite_quest_ids = PackedStringArray("elderwood_trial")
 recommended_level = 2

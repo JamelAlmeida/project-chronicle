@@ -1,0 +1,116 @@
+extends SceneTree
+
+const HEARTHVALE := "res://Project Chronicle/Scenes/World/Zones/hearthvale_sideview_entry.tscn"
+
+var _failures: PackedStringArray = []
+
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+
+func _run() -> void:
+	_inventory().clear()
+	_progression().reset_progression()
+	_techniques().reset_techniques()
+	_quests().reset_quests()
+	var error := change_scene_to_file(HEARTHVALE)
+	_expect(error == OK, "UI proof scene loads")
+	if error != OK:
+		_finish()
+		return
+	await scene_changed
+	await process_frame
+	await process_frame
+
+	var hud := current_scene.get_node("GameHUD")
+	var menu := current_scene.get_node("EquipmentDebugPanel")
+	var player := get_first_node_in_group("player")
+	_expect(hud.has_node("BottomHUD"), "Bottom HUD is present")
+	_expect(hud.find_child("ActionBar", true, false) != null, "Action bar shell is present")
+	_expect(hud.has_node("QuestTracker"), "Quest tracker is present")
+	_expect(not hud.has_node("ProgressionPanel"), "Old progression debug block is absent")
+
+	var stats: StatsComponent = player.get_node("StatsComponent")
+	var baseline_damage := stats.get_attack_damage()
+	_progression().unspent_stat_points = 1
+	_progression().stat_points_changed.emit(1)
+	menu.call("open_panel", &"character")
+	_expect(menu.call("is_panel_open", &"character"), "Character panel opens")
+	_expect(player.call("_is_gameplay_input_blocked"), "Open panels block direct gameplay input")
+	var strength_button := _find_button_by_tooltip(menu, "Spend one point in Strength")
+	_expect(strength_button != null, "Strength allocation control is clickable")
+	if strength_button != null:
+		strength_button.emit_signal("pressed")
+	_expect(_progression().unspent_stat_points == 0, "Clickable allocation spends one point")
+	_expect(_progression().get_allocated_points(&"strength") == 1, "Clickable allocation updates Strength")
+	_expect(stats.get_attack_damage() > baseline_damage, "Clickable allocation updates derived stats")
+
+	_inventory().add_item("swift_katana", 1)
+	menu.call("open_panel", &"inventory")
+	_expect(menu.call("is_panel_open", &"inventory"), "Inventory panel opens")
+	var equip_button := _find_button_by_text(menu, "Equip")
+	_expect(equip_button != null, "Inventory exposes equipment action")
+	if equip_button != null:
+		equip_button.emit_signal("pressed")
+	var equipment: EquipmentComponent = player.get_node("EquipmentComponent")
+	_expect(equipment.get_equipped_id("weapon") == "swift_katana", "Inventory equip flow remains functional")
+
+	menu.call("open_panel", &"techniques")
+	_expect(menu.call("is_panel_open", &"techniques"), "Technique Book opens")
+	menu.call("open_panel", &"quests")
+	_expect(menu.call("is_panel_open", &"quests"), "Quest Log opens")
+	menu.call("close_panel")
+	_expect(not player.call("_is_gameplay_input_blocked"), "Closing panels restores gameplay input")
+	_finish()
+
+
+func _find_button_by_tooltip(root_node: Node, tooltip: String) -> Button:
+	if root_node is Button and (root_node as Button).tooltip_text == tooltip:
+		return root_node as Button
+	for child: Node in root_node.get_children():
+		var result := _find_button_by_tooltip(child, tooltip)
+		if result != null:
+			return result
+	return null
+
+
+func _find_button_by_text(root_node: Node, text: String) -> Button:
+	if root_node is Button and (root_node as Button).text == text:
+		return root_node as Button
+	for child: Node in root_node.get_children():
+		var result := _find_button_by_text(child, text)
+		if result != null:
+			return result
+	return null
+
+
+func _expect(condition: bool, label: String) -> void:
+	if not condition:
+		_failures.append(label)
+
+
+func _finish() -> void:
+	if _failures.is_empty():
+		print("UI FOUNDATION SMOKE: PASS")
+		quit(0)
+		return
+	for failure: String in _failures:
+		push_error("UI FOUNDATION SMOKE: %s" % failure)
+	quit(1)
+
+
+func _inventory():
+	return root.get_node("Inventory")
+
+
+func _progression():
+	return root.get_node("CharacterProgression")
+
+
+func _techniques():
+	return root.get_node("TechniqueManager")
+
+
+func _quests():
+	return root.get_node("QuestManager")
