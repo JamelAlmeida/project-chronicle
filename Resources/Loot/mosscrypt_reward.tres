@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="LootTable" format=3 uid="uid://lootmosscrypt"]
+
+[ext_resource type="Script" path="res://Project Chronicle/Scripts/World/loot_table.gd" id="1_table"]
+[ext_resource type="Script" path="res://Project Chronicle/Scripts/World/loot_table_entry.gd" id="2_entry"]
+
+[sub_resource type="Resource" id="LootEntry_blade"]
+script = ExtResource("2_entry")
+item_id = "bloodfang_blade"
+quantity = 1
+
+[sub_resource type="Resource" id="LootEntry_ring"]
+script = ExtResource("2_entry")
+item_id = "crimson_leech_ring"
+quantity = 1
+
+[resource]
+script = ExtResource("1_table")
+entries = [SubResource("LootEntry_blade"), SubResource("LootEntry_ring")]

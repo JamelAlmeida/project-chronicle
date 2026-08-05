@@ -1,22 +1,75 @@
 [gd_scene format=3 uid="uid://q5572u81bmxr"]
 
 [ext_resource type="Script" uid="uid://iv7klbox6jpq" path="res://Project Chronicle/Scripts/Characters/player.gd" id="1_5py17"]
+[ext_resource type="Script" uid="uid://5c2swai8ee68" path="res://Project Chronicle/Scripts/Combat/melee_attack.gd" id="2_melee"]
+[ext_resource type="Script" uid="uid://cv5prmg6bi1lv" path="res://Project Chronicle/Scripts/Components/health_component.gd" id="3_health"]
+[ext_resource type="Script" uid="uid://b4qcwh63pka5m" path="res://Project Chronicle/Scripts/Components/facing_component.gd" id="4_facing"]
+[ext_resource type="Script" uid="uid://dqw1ntg2q5ga" path="res://Project Chronicle/Scripts/Components/dodge_component.gd" id="5_dodge"]
+[ext_resource type="Script" uid="uid://bgxjpv6ab5w7t" path="res://Project Chronicle/Scripts/Components/stats_component.gd" id="6_stats"]
+[ext_resource type="Script" uid="uid://djy4klp5fm7wm" path="res://Project Chronicle/Scripts/Components/equipment_component.gd" id="7_equipment"]
+[ext_resource type="Script" path="res://Project Chronicle/Scripts/Presentation/character_visual_controller.gd" id="8_visuals"]
+[ext_resource type="Script" path="res://Project Chronicle/Scripts/Presentation/camera_presentation.gd" id="9_camera"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5nclj"]
 size = Vector2(24, 24)
 
-[node name="Player" type="CharacterBody2D" unique_id=1203810760]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_melee"]
+size = Vector2(36, 28)
+
+[node name="Player" type="CharacterBody2D" unique_id=1547554470]
 script = ExtResource("1_5py17")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=341745235]
+[node name="Visuals" type="Node2D" parent="." unique_id=939597102]
+
+[node name="PlaceholderVisual" type="ColorRect" parent="Visuals" unique_id=377743816]
 offset_left = -12.0
 offset_top = -12.0
 offset_right = 12.0
 offset_bottom = 12.0
-color = Color(0.5813724, 0.77414274, 7.70092e-07, 1)
+color = Color(0.9891885, 0.16677955, 0.45810562, 1)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=342897169]
+[node name="PlayerSprite" type="AnimatedSprite2D" parent="Visuals" unique_id=958699716]
+visible = false
+
+[node name="VisualController" type="Node" parent="Visuals"]
+script = ExtResource("8_visuals")
+sprite_path = NodePath("../PlayerSprite")
+locomotion_animation = &"run"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=808069002]
 shape = SubResource("RectangleShape2D_5nclj")
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1850757092]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1746604908]
 limit_enabled = false
+script = ExtResource("9_camera")
+
+[node name="StatsComponent" type="Node" parent="." unique_id=794604977]
+script = ExtResource("6_stats")
+
+[node name="EquipmentComponent" type="Node" parent="." unique_id=998016481]
+script = ExtResource("7_equipment")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=1134285818]
+script = ExtResource("3_health")
+
+[node name="FacingComponent" type="Node" parent="." unique_id=231955582]
+script = ExtResource("4_facing")
+
+[node name="DodgeComponent" type="Node" parent="." unique_id=674735506]
+script = ExtResource("5_dodge")
+
+[node name="MeleeAttack" type="Area2D" parent="." unique_id=63063372]
+collision_layer = 0
+script = ExtResource("2_melee")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MeleeAttack" unique_id=536713670]
+position = Vector2(30, 0)
+shape = SubResource("RectangleShape2D_melee")
+
+[node name="AttackVisual" type="ColorRect" parent="MeleeAttack" unique_id=603113246]
+visible = false
+offset_left = 12.0
+offset_top = -14.0
+offset_right = 48.0
+offset_bottom = 14.0
+color = Color(1, 1, 1, 0.35)

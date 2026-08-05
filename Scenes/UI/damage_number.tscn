@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dmgnumproto01"]
+
+[ext_resource type="Script" path="res://Project Chronicle/Scripts/UI/damage_number.gd" id="1_dmg"]
+
+[node name="DamageNumber" type="Node2D"]
+script = ExtResource("1_dmg")

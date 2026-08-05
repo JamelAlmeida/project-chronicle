@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://lootchest01"]
+
+[ext_resource type="Script" path="res://Project Chronicle/Scripts/World/loot_chest.gd" id="1_chest"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_chest"]
+size = Vector2(36, 28)
+
+[node name="LootChest" type="Area2D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_chest")
+
+[node name="ClosedVisual" type="ColorRect" parent="."]
+offset_left = -18.0
+offset_top = -14.0
+offset_right = 18.0
+offset_bottom = 14.0
+color = Color(0.72, 0.48, 0.18, 1)
+
+[node name="OpenedVisual" type="ColorRect" parent="."]
+visible = false
+offset_left = -18.0
+offset_top = -10.0
+offset_right = 18.0
+offset_bottom = 14.0
+color = Color(0.45, 0.28, 0.12, 1)
+
+[node name="PromptLabel" type="Label" parent="."]
+offset_left = -48.0
+offset_top = -36.0
+offset_right = 48.0
+offset_bottom = -16.0
+theme_override_font_sizes/font_size = 11
+text = "Open Chest [F]"
+horizontal_alignment = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_chest")

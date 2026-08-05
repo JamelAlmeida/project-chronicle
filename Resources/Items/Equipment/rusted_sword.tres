@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://dcemte5wfd5iw"]
+
+[ext_resource type="Script" uid="uid://du4u8yncpygro" path="res://Project Chronicle/Scripts/Items/equipment_data.gd" id="1_equip"]
+[ext_resource type="Script" uid="uid://d1i3c6lnlipjo" path="res://Project Chronicle/Scripts/Items/stat_block.gd" id="2_stat"]
+
+[sub_resource type="Resource" id="StatBlock_rusted"]
+script = ExtResource("2_stat")
+
+[resource]
+script = ExtResource("1_equip")
+stat_modifiers = SubResource("StatBlock_rusted")
+id = "rusted_sword"
+display_name = "Rusted Sword"
+description = "A worn but reliable blade. Balanced for basic melee combat."
+item_type = 2
+max_stack = 1

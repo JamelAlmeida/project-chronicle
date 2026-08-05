@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://csdy3g484ebqb"]
+
+[ext_resource type="Script" uid="uid://du4u8yncpygro" path="res://Project Chronicle/Scripts/Items/equipment_data.gd" id="1_equip"]
+[ext_resource type="Script" uid="uid://d1i3c6lnlipjo" path="res://Project Chronicle/Scripts/Items/stat_block.gd" id="2_stat"]
+
+[sub_resource type="Resource" id="StatBlock_katana"]
+script = ExtResource("2_stat")
+attack_damage = -2.0
+attack_speed = 0.25
+crit_chance = 0.05
+
+[resource]
+script = ExtResource("1_equip")
+rarity = 1
+stat_modifiers = SubResource("StatBlock_katana")
+weapon_attack_cooldown = 0.32
+id = "swift_katana"
+display_name = "Swift Katana"
+description = "A light blade favoring speed and precision over raw power."
+item_type = 2
+max_stack = 1

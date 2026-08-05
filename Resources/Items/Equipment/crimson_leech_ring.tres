@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://0qs2j4rcs184"]
+
+[ext_resource type="Script" uid="uid://du4u8yncpygro" path="res://Project Chronicle/Scripts/Items/equipment_data.gd" id="1_equip"]
+[ext_resource type="Script" uid="uid://d1i3c6lnlipjo" path="res://Project Chronicle/Scripts/Items/stat_block.gd" id="2_stat"]
+
+[sub_resource type="Resource" id="StatBlock_ring"]
+script = ExtResource("2_stat")
+lifesteal = 0.05
+
+[resource]
+script = ExtResource("1_equip")
+equipment_slot = 6
+rarity = 2
+stat_modifiers = SubResource("StatBlock_ring")
+id = "crimson_leech_ring"
+display_name = "Crimson Leech Ring"
+description = "A ring that siphons vitality from nearby bloodshed."
+item_type = 4
+max_stack = 1

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ZoneData" load_steps=2 format=3 uid="uid://zonemosscrypt"]
+
+[ext_resource type="Script" path="res://Project Chronicle/Scripts/World/zone_data.gd" id="1_zone"]
+
+[resource]
+script = ExtResource("1_zone")
+zone_id = "mosscrypt"
+display_name = "Mosscrypt"
+zone_type = 2
+danger_rating = 2
+danger_label = "Danger II"
+biome = "crypt"
+recommended_threat = 2
+possible_enemy_groups = PackedStringArray("crypt_slimes", "goblin_scouts", "crypt_guardian")
+possible_loot_groups = PackedStringArray("crypt_relics", "rare_gear")
+seed_value = 3003
+scene_path = "res://Project Chronicle/Scenes/World/Zones/mosscrypt.tscn"

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ZoneData" load_steps=2 format=3 uid="uid://zonehearthvale"]
+
+[ext_resource type="Script" path="res://Project Chronicle/Scripts/World/zone_data.gd" id="1_zone"]
+
+[resource]
+script = ExtResource("1_zone")
+zone_id = "hearthvale"
+display_name = "Hearthvale"
+zone_type = 0
+danger_rating = 0
+danger_label = "Safe Haven"
+biome = "settlement"
+recommended_threat = 0
+possible_enemy_groups = PackedStringArray()
+possible_loot_groups = PackedStringArray("settlement_goods")
+seed_value = 1001
+scene_path = "res://Project Chronicle/Scenes/World/Zones/hearthvale.tscn"

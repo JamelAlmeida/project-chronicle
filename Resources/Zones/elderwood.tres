@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ZoneData" load_steps=2 format=3 uid="uid://zoneelderwood"]
+
+[ext_resource type="Script" path="res://Project Chronicle/Scripts/World/zone_data.gd" id="1_zone"]
+
+[resource]
+script = ExtResource("1_zone")
+zone_id = "elderwood"
+display_name = "Elderwood"
+zone_type = 1
+danger_rating = 1
+danger_label = "Danger I"
+biome = "forest"
+recommended_threat = 1
+possible_enemy_groups = PackedStringArray("slimes", "goblin_scouts")
+possible_loot_groups = PackedStringArray("forest_materials", "common_gear")
+seed_value = 2002
+scene_path = "res://Project Chronicle/Scenes/World/Zones/elderwood.tscn"

@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://25xt1imq062e"]
+
+[ext_resource type="Script" uid="uid://du4u8yncpygro" path="res://Project Chronicle/Scripts/Items/equipment_data.gd" id="1_equip"]
+[ext_resource type="Script" uid="uid://d1i3c6lnlipjo" path="res://Project Chronicle/Scripts/Items/stat_block.gd" id="2_stat"]
+
+[sub_resource type="Resource" id="StatBlock_bloodfang"]
+script = ExtResource("2_stat")
+attack_damage = 2.0
+lifesteal = 0.08
+
+[resource]
+script = ExtResource("1_equip")
+rarity = 2
+stat_modifiers = SubResource("StatBlock_bloodfang")
+id = "bloodfang_blade"
+display_name = "Bloodfang Blade"
+description = "A vicious blade that drinks from wounds it inflicts."
+item_type = 2
+max_stack = 1
