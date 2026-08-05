@@ -1,0 +1,107 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://Project Chronicle/Scripts/World/zone.gd" id="1_zone"]
+[ext_resource type="Resource" path="res://Project Chronicle/Resources/Zones/mosscrypt.tres" id="2_data"]
+[ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/Characters/player.tscn" id="3_player"]
+[ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/UI/game_hud.tscn" id="4_hud"]
+[ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/UI/equipment_debug_panel.tscn" id="5_debug"]
+[ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/World/zone_transition.tscn" id="6_transition"]
+
+[sub_resource type="RectangleShape2D" id="GroundShape"]
+size = Vector2(900, 100)
+
+[sub_resource type="RectangleShape2D" id="WallShape"]
+size = Vector2(32, 720)
+
+[node name="MosscryptSideviewEntry" type="Node2D"]
+script = ExtResource("1_zone")
+zone_data = ExtResource("2_data")
+
+[node name="DistantBackground" type="Parallax2D" parent="."]
+z_index = -20
+scroll_scale = Vector2(0.35, 0.25)
+
+[node name="Cavern" type="ColorRect" parent="DistantBackground"]
+offset_left = -300.0
+offset_top = -160.0
+offset_right = 1300.0
+offset_bottom = 720.0
+color = Color(0.07, 0.085, 0.085, 1)
+
+[node name="BuriedArch" type="Polygon2D" parent="DistantBackground"]
+polygon = PackedVector2Array(250, 620, 250, 310, 300, 250, 450, 220, 600, 250, 650, 310, 650, 620, 590, 620, 590, 330, 550, 290, 350, 290, 310, 330, 310, 620)
+color = Color(0.14, 0.16, 0.15, 1)
+
+[node name="GameplayLayer" type="Node2D" parent="."]
+
+[node name="Ground" type="StaticBody2D" parent="GameplayLayer"]
+position = Vector2(450, 670)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="GameplayLayer/Ground"]
+offset_left = -450.0
+offset_top = -50.0
+offset_right = 450.0
+offset_bottom = 50.0
+color = Color(0.12, 0.14, 0.12, 1)
+
+[node name="Top" type="ColorRect" parent="GameplayLayer/Ground"]
+offset_left = -450.0
+offset_top = -50.0
+offset_right = 450.0
+offset_bottom = -40.0
+color = Color(0.24, 0.28, 0.22, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayLayer/Ground"]
+shape = SubResource("GroundShape")
+
+[node name="RightWall" type="StaticBody2D" parent="GameplayLayer"]
+position = Vector2(916, 360)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayLayer/RightWall"]
+shape = SubResource("WallShape")
+
+[node name="MilestoneLabel" type="Label" parent="GameplayLayer"]
+offset_left = 250.0
+offset_top = 90.0
+offset_right = 700.0
+offset_bottom = 145.0
+theme_override_colors/font_color = Color(0.55, 0.65, 0.52, 1)
+theme_override_font_sizes/font_size = 17
+text = "MOSSCRYPT THRESHOLD\nFull side-view rebuild follows in a later milestone."
+horizontal_alignment = 1
+
+[node name="SpawnPoints" type="Node2D" parent="."]
+
+[node name="default" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(170, 620)
+
+[node name="from_elderwood" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(170, 620)
+
+[node name="Player" parent="GameplayLayer" instance=ExtResource("3_player")]
+position = Vector2(170, 620)
+
+[node name="Camera2D" parent="GameplayLayer/Player" index="2"]
+limit_left = 0
+limit_top = -100
+limit_right = 900
+limit_bottom = 720
+limit_enabled = true
+
+[node name="ToElderwood" parent="GameplayLayer" instance=ExtResource("6_transition")]
+position = Vector2(30, 575)
+target_scene = "res://Project Chronicle/Scenes/World/Zones/elderwood.tscn"
+target_spawn_id = "from_mosscrypt"
+
+[node name="Label" parent="GameplayLayer/ToElderwood"]
+text = "Return to Elderwood"
+
+[node name="GameHUD" parent="." instance=ExtResource("4_hud")]
+
+[node name="EquipmentDebugPanel" parent="." instance=ExtResource("5_debug")]
+
+[editable path="GameplayLayer/Player"]

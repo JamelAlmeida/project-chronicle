@@ -1,8 +1,8 @@
 extends SceneTree
 
-const HEARTHVALE := "res://Project Chronicle/Scenes/World/Zones/hearthvale.tscn"
+const HEARTHVALE := "res://Project Chronicle/Scenes/World/Zones/hearthvale_sideview_entry.tscn"
 const ELDERWOOD := "res://Project Chronicle/Scenes/World/Zones/elderwood.tscn"
-const MOSSCRYPT := "res://Project Chronicle/Scenes/World/Zones/mosscrypt.tscn"
+const MOSSCRYPT := "res://Project Chronicle/Scenes/World/Zones/mosscrypt_sideview_entry.tscn"
 
 var _failures: PackedStringArray = []
 
@@ -16,7 +16,7 @@ func _run() -> void:
 	_expect(_action_has_physical_key("dodge", KEY_SPACE), "Space remains mapped to dodge")
 
 	await _load_scene(HEARTHVALE)
-	await _test_player_controls("Hearthvale")
+	await _test_player_controls("Hearthvale side-view entry")
 
 	_zone_manager().transition_to(ELDERWOOD, "from_hearthvale")
 	await scene_changed
@@ -24,16 +24,13 @@ func _run() -> void:
 	_expect(current_scene.name == "Elderwood", "Hearthvale to Elderwood transition")
 	await _test_player_controls("Elderwood")
 	await _test_enemy_damage_death_and_loot("Slime")
-	await _test_enemy_damage_death_and_loot("GoblinScout")
 	_test_inventory_and_equipment()
 
 	_zone_manager().transition_to(MOSSCRYPT, "from_elderwood")
 	await scene_changed
 	await process_frame
-	_expect(current_scene.name == "Mosscrypt", "Elderwood to Mosscrypt transition")
-	await _test_player_controls("Mosscrypt")
-	_expect(get_nodes_in_group("enemies").size() >= 1, "Mosscrypt enemies spawned")
-	await _test_enemy_damage_death_and_loot("CryptGuardian")
+	_expect(current_scene.name == "MosscryptSideviewEntry", "Elderwood to Mosscrypt threshold transition")
+	await _test_player_controls("Mosscrypt side-view threshold")
 
 	var player := get_first_node_in_group("player")
 	_expect(player != null, "Mosscrypt player spawned")
@@ -52,17 +49,14 @@ func _run() -> void:
 		_zone_manager().transition_to(HEARTHVALE, "from_elderwood")
 		await scene_changed
 		await process_frame
-		_expect(current_scene.name == "Hearthvale", "Elderwood to Hearthvale transition")
+		_expect(current_scene.name == "HearthvaleSideviewEntry", "Elderwood to Hearthvale transition")
 
 		_zone_manager().transition_to(ELDERWOOD, "from_hearthvale")
 		await scene_changed
 		await process_frame
-		_zone_manager().transition_to(MOSSCRYPT, "from_elderwood")
-		await scene_changed
-		await process_frame
 
 		player = get_first_node_in_group("player")
-		_expect(player != null, "Player persists through complete zone round trip")
+		_expect(player != null, "Player persists through side-view zone round trip")
 		if player == null:
 			_finish()
 			return
@@ -71,7 +65,7 @@ func _run() -> void:
 		player.take_damage(1)
 		await scene_changed
 		await process_frame
-		_expect(current_scene.name == "Hearthvale", "Player death returns to Hearthvale")
+		_expect(current_scene.name == "HearthvaleSideviewEntry", "Player death returns to safe Hearthvale")
 
 
 	_finish()

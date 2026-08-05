@@ -8,7 +8,7 @@ This direction supports the principles in [PROJECT_VISION.md](PROJECT_VISION.md)
 
 ## Visual Identity
 
-Project Chronicle is an original top-down / three-quarter-view fantasy pixel-art action RPG.
+Project Chronicle is an original side-view fantasy pixel-art action RPG.
 
 Its visual philosophy draws broad inspiration from three sources:
 
@@ -51,12 +51,12 @@ The game should look charming enough to invite exploration, but dangerous enough
 ### Technical target
 
 - Modern, handcrafted-looking pixel art
-- 32×32 base world tiles
-- Humanoids approximately 32×48 pixels
+- Flexible environment modules guided by gameplay readability rather than a mandatory tile size
+- Humanoids approximately 32×48 pixels as a guideline, not an absolute restriction
 - Crisp nearest-neighbor rendering
-- Top-down / three-quarter perspective
+- Side-view character and world presentation
 - Detailed but readable silhouettes
-- Rich environment layering
+- Detailed layered backgrounds with clear distant, mid-background, gameplay, foreground, and atmospheric depth
 - Restrained lighting and magic
 - Strong equipment silhouettes
 
@@ -210,8 +210,8 @@ Elderwood is Chronicle's first visual benchmark and the preferred setting for it
 Desired look:
 
 - Ancient temperate fantasy forest
-- Rich grass variation
-- Winding dirt trails
+- Side-scrolling trails with solid ground, roots, ledges, and readable elevation changes
+- Optional elevated routes that reward curiosity without demanding precision-platformer execution
 - Huge old trees
 - Moss-covered stones
 - Broken ruins
@@ -358,7 +358,7 @@ The first polished benchmark scene is set in **Elderwood** and contains:
 - Loot pickup
 - Polished basic HUD
 
-This scene is the vertical visual proof for character scale, perspective, environment density, combat readability, item appeal, effects restraint, and UI cohesion.
+This scene is the visual proof for side-view character scale, layered environmental depth, vertical exploration, combat readability, item appeal, effects restraint, and UI cohesion.
 
 Once it achieves strong visual cohesion, its quality and visual language become the benchmark for expanding the rest of Chronicle. New work should meet that standard rather than merely increasing asset quantity.
 

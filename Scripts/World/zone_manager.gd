@@ -4,7 +4,7 @@ signal zone_changed(zone_data: ZoneData)
 signal loot_secured(item_summaries: Array)
 signal expedition_loot_lost(item_summaries: Array)
 
-const HEARTHVALE_SCENE := "res://Project Chronicle/Scenes/World/Zones/hearthvale.tscn"
+const HEARTHVALE_SCENE := "res://Project Chronicle/Scenes/World/Zones/hearthvale_sideview_entry.tscn"
 const DEFAULT_SPAWN_ID := "default"
 
 var current_zone: ZoneData

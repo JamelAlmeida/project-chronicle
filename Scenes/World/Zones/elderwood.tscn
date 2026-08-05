@@ -1,272 +1,274 @@
 [gd_scene load_steps=13 format=3 uid="uid://zoneelderwood01"]
 
 [ext_resource type="Script" path="res://Project Chronicle/Scripts/World/zone.gd" id="1_zone"]
-[ext_resource type="Resource" uid="uid://zoneelderwood" path="res://Project Chronicle/Resources/Zones/elderwood.tres" id="2_data"]
-[ext_resource type="PackedScene" uid="uid://q5572u81bmxr" path="res://Project Chronicle/Scenes/Characters/player.tscn" id="3_player"]
-[ext_resource type="PackedScene" uid="uid://ce7ivsgg7hxxa" path="res://Project Chronicle/Scenes/UI/game_hud.tscn" id="4_hud"]
-[ext_resource type="PackedScene" uid="uid://equipdebugpanel" path="res://Project Chronicle/Scenes/UI/equipment_debug_panel.tscn" id="5_debug"]
-[ext_resource type="PackedScene" uid="uid://zonetrans01" path="res://Project Chronicle/Scenes/World/zone_transition.tscn" id="6_transition"]
-[ext_resource type="PackedScene" uid="uid://gugfggdvihpy" path="res://Project Chronicle/Scenes/Characters/Slime.tscn" id="7_slime"]
-[ext_resource type="PackedScene" uid="uid://goblinscout01" path="res://Project Chronicle/Scenes/Characters/goblin_scout.tscn" id="8_goblin"]
-[ext_resource type="PackedScene" uid="uid://lootpickup01" path="res://Project Chronicle/Scenes/World/loot_pickup.tscn" id="9_loot"]
-[ext_resource type="Script" path="res://Project Chronicle/Scripts/Presentation/elderwood_art_dressing.gd" id="10_elderwood_art"]
+[ext_resource type="Resource" path="res://Project Chronicle/Resources/Zones/elderwood.tres" id="2_data"]
+[ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/Characters/player.tscn" id="3_player"]
+[ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/UI/game_hud.tscn" id="4_hud"]
+[ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/UI/equipment_debug_panel.tscn" id="5_debug"]
+[ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/World/zone_transition.tscn" id="6_transition"]
+[ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/Characters/Slime.tscn" id="7_slime"]
+[ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/World/loot_pickup.tscn" id="8_loot"]
 
-[sub_resource type="RectangleShape2D" id="WallH"]
-size = Vector2(1300, 32)
+[sub_resource type="RectangleShape2D" id="GroundShape"]
+size = Vector2(2400, 100)
 
-[sub_resource type="RectangleShape2D" id="WallV"]
-size = Vector2(32, 900)
+[sub_resource type="RectangleShape2D" id="PlatformWide"]
+size = Vector2(220, 14)
 
-[sub_resource type="RectangleShape2D" id="TreeShape"]
-size = Vector2(36, 36)
+[sub_resource type="RectangleShape2D" id="PlatformMedium"]
+size = Vector2(180, 14)
+
+[sub_resource type="RectangleShape2D" id="SideWall"]
+size = Vector2(32, 760)
 
 [node name="Elderwood" type="Node2D"]
 script = ExtResource("1_zone")
 zone_data = ExtResource("2_data")
 
-[node name="GroundLayer" type="Node2D" parent="."]
-z_index = -100
+[node name="DistantBackground" type="Parallax2D" parent="."]
+z_index = -40
+scroll_scale = Vector2(0.18, 0.12)
 
-[node name="Ground" type="ColorRect" parent="GroundLayer"]
-offset_left = -100.0
-offset_top = -100.0
+[node name="Sky" type="ColorRect" parent="DistantBackground"]
+offset_left = -400.0
+offset_top = -220.0
+offset_right = 3000.0
+offset_bottom = 760.0
+color = Color(0.105, 0.17, 0.19, 1)
+
+[node name="DistantCanopy" type="Polygon2D" parent="DistantBackground"]
+polygon = PackedVector2Array(-300, 280, 0, 170, 250, 230, 520, 130, 820, 220, 1120, 120, 1410, 220, 1700, 145, 2040, 235, 2360, 130, 2750, 240, 3000, 300, 3000, 720, -300, 720)
+color = Color(0.075, 0.13, 0.12, 1)
+
+[node name="MidBackground" type="Parallax2D" parent="."]
+z_index = -25
+scroll_scale = Vector2(0.5, 0.35)
+
+[node name="ForestDepth" type="Polygon2D" parent="MidBackground"]
+polygon = PackedVector2Array(-200, 620, -120, 210, -60, 210, 0, 620, 180, 620, 235, 150, 300, 150, 360, 620, 570, 620, 620, 230, 682, 230, 740, 620, 960, 620, 1010, 175, 1080, 175, 1140, 620, 1370, 620, 1420, 245, 1490, 245, 1550, 620, 1800, 620, 1860, 155, 1940, 155, 2010, 620, 2250, 620, 2300, 220, 2370, 220, 2450, 620)
+color = Color(0.09, 0.205, 0.14, 1)
+
+[node name="GameplayLayer" type="Node2D" parent="."]
+
+[node name="Terrain" type="Node2D" parent="GameplayLayer"]
+
+[node name="MainGround" type="StaticBody2D" parent="GameplayLayer/Terrain"]
+position = Vector2(1200, 670)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="GameplayLayer/Terrain/MainGround"]
+offset_left = -1200.0
+offset_top = -50.0
 offset_right = 1200.0
-offset_bottom = 900.0
-color = Color(0.08, 0.2, 0.08, 1)
+offset_bottom = 50.0
+color = Color(0.105, 0.235, 0.105, 1)
 
-[node name="PathsFloorsLayer" type="Node2D" parent="."]
-z_index = -90
+[node name="Topsoil" type="ColorRect" parent="GameplayLayer/Terrain/MainGround"]
+offset_left = -1200.0
+offset_top = -50.0
+offset_right = 1200.0
+offset_bottom = -40.0
+color = Color(0.31, 0.47, 0.19, 1)
 
-[node name="PathWest" type="ColorRect" parent="PathsFloorsLayer"]
-offset_left = 0.0
-offset_top = 360.0
-offset_right = 420.0
-offset_bottom = 440.0
-color = Color(0.22, 0.28, 0.14, 1)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayLayer/Terrain/MainGround"]
+shape = SubResource("GroundShape")
 
-[node name="PathEast" type="ColorRect" parent="PathsFloorsLayer"]
-offset_left = 420.0
-offset_top = 360.0
-offset_right = 1100.0
-offset_bottom = 440.0
-color = Color(0.22, 0.28, 0.14, 1)
+[node name="LeftBoundary" type="StaticBody2D" parent="GameplayLayer/Terrain"]
+position = Vector2(-16, 360)
+collision_layer = 2
+collision_mask = 0
 
-[node name="PathNorth" type="ColorRect" parent="PathsFloorsLayer"]
-offset_left = 700.0
-offset_top = 80.0
-offset_right = 780.0
-offset_bottom = 400.0
-color = Color(0.22, 0.28, 0.14, 1)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayLayer/Terrain/LeftBoundary"]
+shape = SubResource("SideWall")
 
-[node name="CollisionLayer" type="Node2D" parent="."]
+[node name="RightBoundary" type="StaticBody2D" parent="GameplayLayer/Terrain"]
+position = Vector2(2416, 360)
+collision_layer = 2
+collision_mask = 0
 
-[node name="Boundaries" type="Node2D" parent="CollisionLayer"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayLayer/Terrain/RightBoundary"]
+shape = SubResource("SideWall")
 
-[node name="TopWall" type="StaticBody2D" parent="CollisionLayer/Boundaries"]
-position = Vector2(550, -16)
+[node name="EntryRise" type="StaticBody2D" parent="GameplayLayer/Terrain"]
+position = Vector2(470, 592)
+collision_layer = 2
+collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionLayer/Boundaries/TopWall"]
-shape = SubResource("WallH")
+[node name="Visual" type="ColorRect" parent="GameplayLayer/Terrain/EntryRise"]
+offset_left = -110.0
+offset_top = -7.0
+offset_right = 110.0
+offset_bottom = 28.0
+color = Color(0.18, 0.32, 0.12, 1)
 
-[node name="BottomWall" type="StaticBody2D" parent="CollisionLayer/Boundaries"]
-position = Vector2(550, 816)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayLayer/Terrain/EntryRise"]
+shape = SubResource("PlatformWide")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionLayer/Boundaries/BottomWall"]
-shape = SubResource("WallH")
+[node name="OptionalRoute" type="Node2D" parent="GameplayLayer/Terrain"]
 
-[node name="LeftWall" type="StaticBody2D" parent="CollisionLayer/Boundaries"]
-position = Vector2(-16, 400)
+[node name="LowerOneWay" type="StaticBody2D" parent="GameplayLayer/Terrain/OptionalRoute"]
+position = Vector2(980, 560)
+collision_layer = 2
+collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionLayer/Boundaries/LeftWall"]
-shape = SubResource("WallV")
+[node name="Visual" type="ColorRect" parent="GameplayLayer/Terrain/OptionalRoute/LowerOneWay"]
+offset_left = -110.0
+offset_top = -7.0
+offset_right = 110.0
+offset_bottom = 7.0
+color = Color(0.3, 0.38, 0.16, 1)
 
-[node name="RightWall" type="StaticBody2D" parent="CollisionLayer/Boundaries"]
-position = Vector2(1116, 400)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayLayer/Terrain/OptionalRoute/LowerOneWay"]
+shape = SubResource("PlatformWide")
+one_way_collision = true
+one_way_collision_margin = 6.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionLayer/Boundaries/RightWall"]
-shape = SubResource("WallV")
+[node name="MiddleOneWay" type="StaticBody2D" parent="GameplayLayer/Terrain/OptionalRoute"]
+position = Vector2(1200, 505)
+collision_layer = 2
+collision_mask = 0
 
-[node name="DepthSorted" type="Node2D" parent="."]
-y_sort_enabled = true
+[node name="Visual" type="ColorRect" parent="GameplayLayer/Terrain/OptionalRoute/MiddleOneWay"]
+offset_left = -90.0
+offset_top = -7.0
+offset_right = 90.0
+offset_bottom = 7.0
+color = Color(0.28, 0.37, 0.15, 1)
 
-[node name="ArtDressing" type="Node" parent="DepthSorted"]
-script = ExtResource("10_elderwood_art")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayLayer/Terrain/OptionalRoute/MiddleOneWay"]
+shape = SubResource("PlatformMedium")
+one_way_collision = true
+one_way_collision_margin = 6.0
 
-[node name="TerrainLayer" type="Node2D" parent="DepthSorted"]
-y_sort_enabled = true
+[node name="HighOneWay" type="StaticBody2D" parent="GameplayLayer/Terrain/OptionalRoute"]
+position = Vector2(1410, 450)
+collision_layer = 2
+collision_mask = 0
 
-[node name="Obstacles" type="Node2D" parent="DepthSorted/TerrainLayer"]
-y_sort_enabled = true
+[node name="Visual" type="ColorRect" parent="GameplayLayer/Terrain/OptionalRoute/HighOneWay"]
+offset_left = -90.0
+offset_top = -7.0
+offset_right = 90.0
+offset_bottom = 7.0
+color = Color(0.25, 0.34, 0.14, 1)
 
-[node name="Tree1" type="StaticBody2D" parent="DepthSorted/TerrainLayer/Obstacles"]
-position = Vector2(260, 220)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayLayer/Terrain/OptionalRoute/HighOneWay"]
+shape = SubResource("PlatformMedium")
+one_way_collision = true
+one_way_collision_margin = 6.0
 
-[node name="Visual" type="ColorRect" parent="DepthSorted/TerrainLayer/Obstacles/Tree1"]
-offset_left = -18.0
-offset_top = -18.0
-offset_right = 18.0
-offset_bottom = 18.0
-color = Color(0.12, 0.35, 0.14, 1)
+[node name="RootBridge" type="StaticBody2D" parent="GameplayLayer/Terrain"]
+position = Vector2(1690, 535)
+rotation = -0.07
+collision_layer = 2
+collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DepthSorted/TerrainLayer/Obstacles/Tree1"]
-shape = SubResource("TreeShape")
+[node name="Visual" type="ColorRect" parent="GameplayLayer/Terrain/RootBridge"]
+offset_left = -110.0
+offset_top = -7.0
+offset_right = 110.0
+offset_bottom = 7.0
+color = Color(0.27, 0.18, 0.09, 1)
 
-[node name="Tree2" type="StaticBody2D" parent="DepthSorted/TerrainLayer/Obstacles"]
-position = Vector2(480, 180)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayLayer/Terrain/RootBridge"]
+shape = SubResource("PlatformWide")
+one_way_collision = true
+one_way_collision_margin = 6.0
 
-[node name="Visual" type="ColorRect" parent="DepthSorted/TerrainLayer/Obstacles/Tree2"]
-offset_left = -18.0
-offset_top = -18.0
-offset_right = 18.0
-offset_bottom = 18.0
-color = Color(0.12, 0.35, 0.14, 1)
+[node name="Landmarks" type="Node2D" parent="GameplayLayer"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DepthSorted/TerrainLayer/Obstacles/Tree2"]
-shape = SubResource("TreeShape")
+[node name="HearthvaleWaystone" type="Polygon2D" parent="GameplayLayer/Landmarks"]
+position = Vector2(180, 620)
+polygon = PackedVector2Array(-18, 0, -15, -72, -7, -90, 7, -90, 15, -72, 18, 0)
+color = Color(0.38, 0.39, 0.32, 1)
 
-[node name="Tree3" type="StaticBody2D" parent="DepthSorted/TerrainLayer/Obstacles"]
-position = Vector2(620, 560)
+[node name="AncientTree" type="Polygon2D" parent="GameplayLayer/Landmarks"]
+position = Vector2(1870, 620)
+polygon = PackedVector2Array(-62, 0, -45, -210, -92, -310, -25, -282, 0, -370, 28, -282, 105, -320, 48, -205, 65, 0)
+color = Color(0.18, 0.105, 0.055, 1)
 
-[node name="Visual" type="ColorRect" parent="DepthSorted/TerrainLayer/Obstacles/Tree3"]
-offset_left = -18.0
-offset_top = -18.0
-offset_right = 18.0
-offset_bottom = 18.0
-color = Color(0.12, 0.35, 0.14, 1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DepthSorted/TerrainLayer/Obstacles/Tree3"]
-shape = SubResource("TreeShape")
-
-[node name="Tree4" type="StaticBody2D" parent="DepthSorted/TerrainLayer/Obstacles"]
-position = Vector2(860, 260)
-
-[node name="Visual" type="ColorRect" parent="DepthSorted/TerrainLayer/Obstacles/Tree4"]
-offset_left = -18.0
-offset_top = -18.0
-offset_right = 18.0
-offset_bottom = 18.0
-color = Color(0.12, 0.35, 0.14, 1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DepthSorted/TerrainLayer/Obstacles/Tree4"]
-shape = SubResource("TreeShape")
-
-[node name="Rock1" type="StaticBody2D" parent="DepthSorted/TerrainLayer/Obstacles"]
-position = Vector2(340, 520)
-
-[node name="Visual" type="ColorRect" parent="DepthSorted/TerrainLayer/Obstacles/Rock1"]
-offset_left = -16.0
-offset_top = -12.0
-offset_right = 16.0
-offset_bottom = 12.0
-color = Color(0.35, 0.35, 0.32, 1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DepthSorted/TerrainLayer/Obstacles/Rock1"]
-shape = SubResource("TreeShape")
-
-[node name="Rock2" type="StaticBody2D" parent="DepthSorted/TerrainLayer/Obstacles"]
-position = Vector2(940, 520)
-
-[node name="Visual" type="ColorRect" parent="DepthSorted/TerrainLayer/Obstacles/Rock2"]
-offset_left = -16.0
-offset_top = -12.0
-offset_right = 16.0
-offset_bottom = 12.0
-color = Color(0.35, 0.35, 0.32, 1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DepthSorted/TerrainLayer/Obstacles/Rock2"]
-shape = SubResource("TreeShape")
-
-[node name="PropsLayer" type="Node2D" parent="DepthSorted"]
-y_sort_enabled = true
-
-[node name="FoliageDecorationsLayer" type="Node2D" parent="DepthSorted"]
-y_sort_enabled = true
-
-[node name="InteractablesLayer" type="Node2D" parent="DepthSorted"]
-y_sort_enabled = true
-
-[node name="EnemiesLayer" type="Node2D" parent="DepthSorted"]
-y_sort_enabled = true
-
-[node name="ForegroundOverheadLayer" type="Node2D" parent="."]
-z_index = 100
-
-[node name="Sign" type="Label" parent="ForegroundOverheadLayer"]
-offset_left = 430.0
-offset_top = 40.0
-offset_right = 670.0
-offset_bottom = 70.0
-theme_override_font_sizes/font_size = 18
-text = "ELDERWOOD"
-horizontal_alignment = 1
+[node name="RuinArch" type="Polygon2D" parent="GameplayLayer/Landmarks"]
+position = Vector2(2170, 620)
+polygon = PackedVector2Array(-90, 0, -90, -130, -72, -155, -25, -170, 25, -170, 72, -155, 90, -130, 90, 0, 62, 0, 62, -120, 35, -140, -35, -140, -62, -120, -62, 0)
+color = Color(0.27, 0.29, 0.24, 1)
 
 [node name="SpawnPoints" type="Node2D" parent="."]
 
 [node name="default" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(120, 400)
+position = Vector2(140, 620)
 
 [node name="from_hearthvale" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(120, 400)
+position = Vector2(140, 620)
 
 [node name="from_mosscrypt" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(740, 140)
+position = Vector2(2260, 620)
 
-[node name="ToHearthvale" parent="DepthSorted/InteractablesLayer" instance=ExtResource("6_transition")]
-position = Vector2(40, 400)
-target_scene = "res://Project Chronicle/Scenes/World/Zones/hearthvale.tscn"
-target_spawn_id = "from_elderwood"
+[node name="Actors" type="Node2D" parent="GameplayLayer"]
 
-[node name="Label" parent="DepthSorted/InteractablesLayer/ToHearthvale"]
-text = "To Hearthvale"
+[node name="Player" parent="GameplayLayer/Actors" instance=ExtResource("3_player")]
+position = Vector2(140, 620)
 
-[node name="ToMosscrypt" parent="DepthSorted/InteractablesLayer" instance=ExtResource("6_transition")]
-position = Vector2(740, 60)
-target_scene = "res://Project Chronicle/Scenes/World/Zones/mosscrypt.tscn"
-target_spawn_id = "from_elderwood"
+[node name="Camera2D" parent="GameplayLayer/Actors/Player" index="2"]
+limit_left = 0
+limit_top = -120
+limit_right = 2400
+limit_bottom = 720
+limit_enabled = true
 
-[node name="Label" parent="DepthSorted/InteractablesLayer/ToMosscrypt"]
-text = "To Mosscrypt"
+[node name="SlimeEntry" parent="GameplayLayer/Actors" instance=ExtResource("7_slime")]
+position = Vector2(760, 620)
 
-[node name="Enemies" type="Node2D" parent="DepthSorted/EnemiesLayer"]
-y_sort_enabled = true
+[node name="SlimeTrail" parent="GameplayLayer/Actors" instance=ExtResource("7_slime")]
+position = Vector2(1320, 620)
 
-[node name="Slime1" parent="DepthSorted/EnemiesLayer/Enemies" instance=ExtResource("7_slime")]
-position = Vector2(300, 280)
+[node name="SlimeDanger" parent="GameplayLayer/Actors" instance=ExtResource("7_slime")]
+position = Vector2(2020, 620)
 
-[node name="Slime2" parent="DepthSorted/EnemiesLayer/Enemies" instance=ExtResource("7_slime")]
-position = Vector2(520, 480)
-
-[node name="Slime3" parent="DepthSorted/EnemiesLayer/Enemies" instance=ExtResource("7_slime")]
-position = Vector2(780, 360)
-
-[node name="Slime4" parent="DepthSorted/EnemiesLayer/Enemies" instance=ExtResource("7_slime")]
-position = Vector2(960, 200)
-
-[node name="Goblin1" parent="DepthSorted/EnemiesLayer/Enemies" instance=ExtResource("8_goblin")]
-position = Vector2(420, 300)
-
-[node name="Goblin2" parent="DepthSorted/EnemiesLayer/Enemies" instance=ExtResource("8_goblin")]
-position = Vector2(880, 480)
-
-[node name="LootOpportunities" type="Node2D" parent="DepthSorted/InteractablesLayer"]
-
-[node name="LootPickup" parent="DepthSorted/InteractablesLayer/LootOpportunities" instance=ExtResource("9_loot")]
-position = Vector2(600, 620)
+[node name="ElevatedLoot" parent="GameplayLayer" instance=ExtResource("8_loot")]
+position = Vector2(1410, 420)
 item_id = "slime_gel"
 quantity = 2
 
-[node name="Player" parent="DepthSorted" instance=ExtResource("3_player")]
-position = Vector2(120, 400)
+[node name="ToHearthvale" parent="GameplayLayer" instance=ExtResource("6_transition")]
+position = Vector2(30, 575)
+target_scene = "res://Project Chronicle/Scenes/World/Zones/hearthvale_sideview_entry.tscn"
+target_spawn_id = "from_elderwood"
 
-[node name="Camera2D" parent="DepthSorted/Player" index="2"]
-limit_left = 0
-limit_top = 0
-limit_right = 1100
-limit_bottom = 800
-limit_enabled = true
+[node name="Label" parent="GameplayLayer/ToHearthvale"]
+text = "Hearthvale"
+
+[node name="ToMosscrypt" parent="GameplayLayer" instance=ExtResource("6_transition")]
+position = Vector2(2370, 575)
+target_scene = "res://Project Chronicle/Scenes/World/Zones/mosscrypt_sideview_entry.tscn"
+target_spawn_id = "from_elderwood"
+
+[node name="Label" parent="GameplayLayer/ToMosscrypt"]
+text = "Mosscrypt Trail"
+
+[node name="ForegroundLayer" type="Node2D" parent="."]
+z_index = 30
+
+[node name="LeftLeaves" type="Polygon2D" parent="ForegroundLayer"]
+polygon = PackedVector2Array(0, 0, 180, 0, 100, 90, 0, 140)
+color = Color(0.035, 0.09, 0.055, 0.8)
+
+[node name="RightLeaves" type="Polygon2D" parent="ForegroundLayer"]
+polygon = PackedVector2Array(2220, 0, 2400, 0, 2400, 150, 2300, 95)
+color = Color(0.035, 0.09, 0.055, 0.8)
+
+[node name="AtmosphericOverlays" type="Node2D" parent="."]
+z_index = 20
+
+[node name="MistBand" type="ColorRect" parent="AtmosphericOverlays"]
+offset_left = 0.0
+offset_top = 570.0
+offset_right = 2400.0
+offset_bottom = 620.0
+color = Color(0.55, 0.68, 0.58, 0.06)
 
 [node name="GameHUD" parent="." instance=ExtResource("4_hud")]
 
 [node name="EquipmentDebugPanel" parent="." instance=ExtResource("5_debug")]
 
-[editable path="DepthSorted/Player"]
+[editable path="GameplayLayer/Actors/Player"]

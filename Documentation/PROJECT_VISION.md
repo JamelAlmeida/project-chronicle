@@ -14,7 +14,7 @@ This vision builds on and preserves the principles in [GameRules.md](GameRules.m
 
 ## What Project Chronicle Is
 
-Project Chronicle is a **single-player-first**, top-down **2D pixel-art fantasy action RPG** built in **Godot 4**.
+Project Chronicle is a **single-player-first, 2D side-scrolling fantasy action RPG** built in **Godot 4.7.1**.
 
 Multiplayer is a possible future expansion but must **never** dictate current architecture or slow development of the single-player game.
 
@@ -28,6 +28,12 @@ The game is **not** intended to be:
 ### Core identity
 
 **A high-risk living fantasy RPG where every adventure can change both your character and the history of the world.**
+
+### Gameplay presentation
+
+Chronicle is presented from the side. Exploration unfolds across interconnected maps with solid terrain, layered platforms, drops, elevated routes, hidden paths, and landmarks that make each region memorable. Verticality should create optional discoveries and tactical choices without turning Chronicle into a precision-platforming game; it remains an action RPG first.
+
+The Adventurer must have a readable side-view silhouette. Weapons, armor, and unusual equipment should eventually change that silhouette so accomplishments and build identity are visible in play.
 
 ---
 
@@ -401,6 +407,9 @@ The game uses **2D pixel art**.
 
 Desired feeling:
 
+- Side-view characters and layered side-scrolling environments
+- Interconnected maps with readable vertical exploration
+- Visible equipment as a major expression of progression and emergent identity
 - Old-world fantasy, mysterious, beautiful, occasionally melancholic
 - Cozy civilization contrasted with dangerous wilderness
 - Ancient ruins, forests, mountains, caves, magical environments
@@ -452,7 +461,7 @@ Approximate order:
 
 **Do not attempt to build the complete dream immediately.**
 
-The immediate goal is a **polished vertical slice** containing approximately:
+The immediate goal is first to establish a stable **side-scrolling gameplay foundation**, then build it into a polished vertical slice containing approximately:
 
 - One small settlement
 - Wilderness

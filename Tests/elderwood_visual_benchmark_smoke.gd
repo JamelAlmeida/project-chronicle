@@ -1,7 +1,6 @@
 extends SceneTree
 
 const ELDERWOOD := "res://Project Chronicle/Scenes/World/Zones/elderwood.tscn"
-const MOSSCRYPT := "res://Project Chronicle/Scenes/World/Zones/mosscrypt.tscn"
 
 var _failures: PackedStringArray = []
 
@@ -16,17 +15,11 @@ func _run() -> void:
 	if current_scene != null:
 		_test_elderwood_dressing()
 		_test_enemy_art("Slime")
-		_test_enemy_art("GoblinScout")
 		_test_player_attack_art()
 		_test_hud_skin()
 		_test_loot_pickup()
 
 	_test_item_icons()
-
-	await _load_scene(MOSSCRYPT)
-	_expect(current_scene != null and current_scene.name == "Mosscrypt", "Mosscrypt loads")
-	if current_scene != null:
-		_test_enemy_art("CryptGuardian")
 
 	if _failures.is_empty():
 		print("ELDERWOOD VISUAL BENCHMARK SMOKE: PASS")
@@ -48,19 +41,19 @@ func _load_scene(path: String) -> void:
 
 
 func _test_elderwood_dressing() -> void:
-	var ground := current_scene.get_node("GroundLayer/Ground") as CanvasItem
-	var path_west := current_scene.get_node("PathsFloorsLayer/PathWest") as CanvasItem
-	_expect(not ground.visible, "Generated grass replaces ground fallback")
-	_expect(not path_west.visible, "Generated trail replaces path fallback")
-	_expect(current_scene.get_node("GroundLayer").get_child_count() >= 5, "Grass variations are layered")
-	_expect(current_scene.get_node("PathsFloorsLayer").get_child_count() >= 10, "Authored winding trail is dressed")
-
-	var depth_sorted := current_scene.get_node("DepthSorted") as Node2D
-	_expect(depth_sorted.y_sort_enabled, "Elderwood depth sorting remains enabled")
-	var props := current_scene.get_node("DepthSorted/PropsLayer")
-	var foliage := current_scene.get_node("DepthSorted/FoliageDecorationsLayer")
-	_expect(props.get_child_count() >= 20, "Authored tree and ruin clusters are present")
-	_expect(foliage.get_child_count() >= 7, "Quiet-area natural clusters are present")
+	_expect(current_scene.has_node("DistantBackground"), "Distant parallax background is present")
+	_expect(current_scene.has_node("MidBackground"), "Mid-background parallax is present")
+	_expect(current_scene.has_node("GameplayLayer"), "Gameplay layer is present")
+	_expect(current_scene.has_node("ForegroundLayer"), "Foreground layer is present")
+	_expect(current_scene.has_node("AtmosphericOverlays"), "Atmospheric overlay layer is present")
+	_expect(
+		current_scene.get_node(
+			"GameplayLayer/Terrain/OptionalRoute/LowerOneWay/CollisionShape2D"
+		).one_way_collision,
+		"Optional elevated route uses one-way collision"
+	)
+	_expect(current_scene.has_node("GameplayLayer/Landmarks/AncientTree"), "Ancient tree landmark is present")
+	_expect(current_scene.has_node("GameplayLayer/Landmarks/RuinArch"), "Mosscrypt-side ruin landmark is present")
 
 
 func _test_enemy_art(expected_name: String) -> void:

@@ -14,7 +14,7 @@ func _ready() -> void:
 	body_exited.connect(_on_body_exited)
 	monitoring = true
 	monitorable = false
-	collision_layer = 0
+	collision_layer = 32
 	collision_mask = 1
 
 

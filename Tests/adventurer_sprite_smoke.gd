@@ -24,33 +24,30 @@ func _run() -> void:
 		sprite.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST,
 		"Player sprite uses nearest-neighbor filtering"
 	)
-	_expect(sprite.position == Vector2(0.0, -12.0), "Player sprite is grounded on collision origin")
+	_expect(sprite.position == Vector2(0.0, -24.0), "Player sprite is grounded on side-view feet")
 
-	var directions := {
-		"down": Vector2.DOWN,
-		"up": Vector2.UP,
-		"left": Vector2.LEFT,
-		"right": Vector2.RIGHT,
-	}
-	for direction_name: String in directions:
-		var direction: Vector2 = directions[direction_name]
-		var idle_animation := StringName("idle_%s" % direction_name)
-		var walk_animation := StringName("walk_%s" % direction_name)
-		var attack_animation := StringName("melee_attack_%s" % direction_name)
-		_expect(sprite.sprite_frames.has_animation(idle_animation), "%s exists" % idle_animation)
-		_expect(sprite.sprite_frames.has_animation(walk_animation), "%s exists" % walk_animation)
-		_expect(sprite.sprite_frames.has_animation(attack_animation), "%s exists" % attack_animation)
+	var idle_animation := &"idle_right"
+	var walk_animation := &"walk_right"
+	var attack_animation := &"melee_attack_right"
+	_expect(sprite.sprite_frames.has_animation(idle_animation), "Side-view idle exists")
+	_expect(sprite.sprite_frames.has_animation(walk_animation), "Side-view walk exists")
+	_expect(sprite.sprite_frames.has_animation(attack_animation), "Side-view melee attack exists")
 
-		controller.update_presentation(false, false, false, false, Vector2.ZERO, direction)
-		_expect(sprite.animation == idle_animation, "%s selected from facing" % idle_animation)
+	controller.update_presentation(false, false, false, false, Vector2.ZERO, Vector2.RIGHT)
+	_expect(sprite.animation == idle_animation and not sprite.flip_h, "Right idle is selected")
 
-		controller.update_presentation(false, false, false, false, direction * 100.0, direction)
-		_expect(sprite.animation == walk_animation, "%s selected from movement" % walk_animation)
-		_expect_walk_frames_are_aligned(sprite.sprite_frames, walk_animation)
+	controller.update_presentation(false, false, false, false, Vector2.RIGHT * 100.0, Vector2.RIGHT)
+	_expect(sprite.animation == walk_animation and not sprite.flip_h, "Right walk is selected")
+	_expect_walk_frames_are_aligned(sprite.sprite_frames, walk_animation)
 
-		controller.update_presentation(false, false, false, true, Vector2.ZERO, direction)
-		_expect(sprite.animation == attack_animation, "%s selected during attack" % attack_animation)
-		_expect_attack_frames_are_aligned(sprite.sprite_frames, attack_animation)
+	controller.update_presentation(false, false, false, true, Vector2.ZERO, Vector2.RIGHT)
+	_expect(sprite.animation == attack_animation and not sprite.flip_h, "Right attack is selected")
+	_expect_attack_frames_are_aligned(sprite.sprite_frames, attack_animation)
+
+	controller.update_presentation(false, false, false, false, Vector2.ZERO, Vector2.LEFT)
+	_expect(sprite.animation == idle_animation and sprite.flip_h, "Left idle mirrors side-view art")
+	controller.update_presentation(false, false, false, true, Vector2.ZERO, Vector2.LEFT)
+	_expect(sprite.animation == attack_animation and sprite.flip_h, "Left attack mirrors side-view art")
 
 	player.queue_free()
 	await process_frame

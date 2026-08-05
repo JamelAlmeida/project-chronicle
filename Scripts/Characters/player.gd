@@ -3,6 +3,16 @@ extends CharacterBody2D
 const KNOCKBACK_DECAY := 900.0
 const HURT_PRESENTATION_DURATION := 0.18
 
+@export_category("Side-view movement")
+@export var move_acceleration := 1500.0
+@export var move_deceleration := 1900.0
+@export_range(0.0, 1.0, 0.05) var air_control_multiplier := 0.75
+@export var gravity_acceleration := 1200.0
+@export var maximum_fall_speed := 720.0
+@export var jump_velocity := 420.0
+@export_range(0.0, 0.3, 0.01) var coyote_time := 0.12
+@export_range(0.0, 0.3, 0.01) var jump_buffer_time := 0.12
+@export_range(0.1, 1.0, 0.05) var jump_release_multiplier := 0.45
 @export_range(0.0, 3.0, 0.05) var death_presentation_delay := 0.0
 
 @onready var _melee_attack: MeleeAttack = $MeleeAttack
@@ -18,6 +28,8 @@ const HURT_PRESENTATION_DURATION := 0.18
 var _knockback_velocity := Vector2.ZERO
 var _is_dead := false
 var _hurt_presentation_remaining := 0.0
+var _coyote_remaining := 0.0
+var _jump_buffer_remaining := 0.0
 
 
 func _ready() -> void:
@@ -29,50 +41,61 @@ func _ready() -> void:
 	_visual_controller.refresh_art_assignment()
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if _is_dead:
-		velocity = Vector2.ZERO
-		_update_presentation(_delta)
+		velocity.x = move_toward(velocity.x, 0.0, move_deceleration * delta)
+		_apply_gravity(delta)
+		move_and_slide()
+		_update_presentation(delta)
 		return
 
 	_health.set_external_invulnerability(_dodge.get_iframes_active())
+	_update_jump_timers(delta)
 
-	var direction := Input.get_vector(
-		"move_left",
-		"move_right",
-		"move_up",
-		"move_down"
-	)
+	var input_axis := Input.get_axis("move_left", "move_right")
+	var horizontal_direction := Vector2(input_axis, 0.0)
+	if not is_zero_approx(input_axis) and not _melee_attack.is_attacking():
+		_facing.update_from_movement(horizontal_direction)
+
+	if Input.is_action_just_pressed("jump"):
+		_jump_buffer_remaining = jump_buffer_time
+	if Input.is_action_just_released("jump") and velocity.y < 0.0:
+		velocity.y *= jump_release_multiplier
 
 	if _knockback_velocity.length_squared() > 4.0:
 		velocity = _knockback_velocity
-		_knockback_velocity = _knockback_velocity.move_toward(Vector2.ZERO, KNOCKBACK_DECAY * _delta)
+		_apply_gravity(delta)
+		_knockback_velocity = _knockback_velocity.move_toward(Vector2.ZERO, KNOCKBACK_DECAY * delta)
 		move_and_slide()
-		_update_presentation(_delta)
+		_update_presentation(delta)
 		return
 
 	_knockback_velocity = Vector2.ZERO
 
-	if not _dodge.is_dodging():
-		if not _melee_attack.is_attacking():
-			_facing.update_from_movement(direction)
-
-		var dodge_direction: Vector2 = direction if direction.length_squared() > 0.0 else _facing.get_direction()
-		if Input.is_action_just_pressed("dodge"):
-			_dodge.try_dodge(dodge_direction)
+	if (
+		Input.is_action_just_pressed("dodge")
+		and not _dodge.is_dodging()
+		and not _melee_attack.is_attacking()
+		and is_on_floor()
+	):
+		var dodge_direction := horizontal_direction
+		if dodge_direction.length_squared() <= 0.0:
+			dodge_direction = _facing.get_direction()
+		_dodge.try_dodge(Vector2(signf(dodge_direction.x), 0.0))
 
 	if _dodge.is_dodging():
-		velocity = _dodge.get_dodge_velocity()
+		velocity.x = _dodge.get_dodge_velocity().x
+		_apply_gravity(delta)
 	else:
-		velocity = direction * _stats.get_move_speed()
+		_update_horizontal_velocity(input_axis, delta)
+		_apply_gravity(delta)
+		_try_consume_buffered_jump()
 
 	move_and_slide()
 
-	if Input.is_action_just_pressed("attack"):
-		var attack_direction := _get_mouse_attack_direction()
-		_facing.update_from_movement(attack_direction)
-		_melee_attack.try_attack(attack_direction)
-	_update_presentation(_delta)
+	if Input.is_action_just_pressed("attack") and not _dodge.is_dodging():
+		_melee_attack.try_attack(_facing.get_direction())
+	_update_presentation(delta)
 
 
 func take_damage(amount: int, knockback: Vector2 = Vector2.ZERO) -> bool:
@@ -98,11 +121,35 @@ func get_equipment_component() -> EquipmentComponent:
 	return _equipment
 
 
-func _get_mouse_attack_direction() -> Vector2:
-	var to_mouse := get_global_mouse_position() - global_position
-	if to_mouse.length_squared() <= 0.001:
-		return _facing.get_direction()
-	return to_mouse.normalized()
+func _update_horizontal_velocity(input_axis: float, delta: float) -> void:
+	var target_speed := input_axis * _stats.get_move_speed()
+	var rate := move_acceleration if not is_zero_approx(input_axis) else move_deceleration
+	if not is_on_floor():
+		rate *= air_control_multiplier
+	velocity.x = move_toward(velocity.x, target_speed, rate * delta)
+
+
+func _apply_gravity(delta: float) -> void:
+	if is_on_floor() and velocity.y >= 0.0:
+		velocity.y = 0.0
+		return
+	velocity.y = minf(velocity.y + gravity_acceleration * delta, maximum_fall_speed)
+
+
+func _update_jump_timers(delta: float) -> void:
+	if is_on_floor():
+		_coyote_remaining = coyote_time
+	else:
+		_coyote_remaining = maxf(_coyote_remaining - delta, 0.0)
+	_jump_buffer_remaining = maxf(_jump_buffer_remaining - delta, 0.0)
+
+
+func _try_consume_buffered_jump() -> void:
+	if _jump_buffer_remaining <= 0.0 or _coyote_remaining <= 0.0:
+		return
+	velocity.y = -jump_velocity
+	_jump_buffer_remaining = 0.0
+	_coyote_remaining = 0.0
 
 
 func _on_damaged(_amount: int, _remaining: int) -> void:

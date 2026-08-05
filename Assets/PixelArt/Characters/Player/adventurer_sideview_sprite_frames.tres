@@ -1,0 +1,70 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://cv0llcus10o61"]
+
+[ext_resource type="Texture2D" uid="uid://s42p2xxxlgc4" path="res://Project Chronicle/Assets/PixelArt/Characters/Player/adventurer_base_32x48.png" id="1_base"]
+[ext_resource type="Texture2D" uid="uid://dpxwevp3nobpq" path="res://Project Chronicle/Assets/PixelArt/Characters/Player/adventurer_attack_112x48.png" id="2_attack"]
+
+[sub_resource type="AtlasTexture" id="IdleRight"]
+atlas = ExtResource("1_base")
+region = Rect2(0, 144, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AttackRightA"]
+atlas = ExtResource("2_attack")
+region = Rect2(0, 144, 112, 48)
+
+[sub_resource type="AtlasTexture" id="AttackRightB"]
+atlas = ExtResource("2_attack")
+region = Rect2(112, 144, 112, 48)
+
+[sub_resource type="AtlasTexture" id="AttackRightC"]
+atlas = ExtResource("2_attack")
+region = Rect2(224, 144, 112, 48)
+
+[sub_resource type="AtlasTexture" id="WalkRightA"]
+atlas = ExtResource("1_base")
+region = Rect2(32, 144, 32, 48)
+
+[sub_resource type="AtlasTexture" id="WalkRightB"]
+atlas = ExtResource("1_base")
+region = Rect2(96, 144, 32, 48)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("IdleRight")
+}],
+"loop": 1,
+"name": &"idle_right",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AttackRightA")
+}, {
+"duration": 1.0,
+"texture": SubResource("AttackRightB")
+}, {
+"duration": 1.0,
+"texture": SubResource("AttackRightC")
+}],
+"loop": 0,
+"name": &"melee_attack_right",
+"speed": 24.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("WalkRightA")
+}, {
+"duration": 1.0,
+"texture": SubResource("IdleRight")
+}, {
+"duration": 1.0,
+"texture": SubResource("WalkRightB")
+}, {
+"duration": 1.0,
+"texture": SubResource("IdleRight")
+}],
+"loop": 1,
+"name": &"walk_right",
+"speed": 8.0
+}]

@@ -6,7 +6,7 @@
 size = Vector2(48, 80)
 
 [node name="ZoneTransition" type="Area2D"]
-collision_layer = 0
+collision_layer = 32
 collision_mask = 1
 script = ExtResource("1_transition")
 

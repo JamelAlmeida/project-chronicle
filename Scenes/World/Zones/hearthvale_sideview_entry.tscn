@@ -1,0 +1,111 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://Project Chronicle/Scripts/World/zone.gd" id="1_zone"]
+[ext_resource type="Resource" path="res://Project Chronicle/Resources/Zones/hearthvale.tres" id="2_data"]
+[ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/Characters/player.tscn" id="3_player"]
+[ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/UI/game_hud.tscn" id="4_hud"]
+[ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/UI/equipment_debug_panel.tscn" id="5_debug"]
+[ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/World/zone_transition.tscn" id="6_transition"]
+
+[sub_resource type="RectangleShape2D" id="GroundShape"]
+size = Vector2(1000, 100)
+
+[sub_resource type="RectangleShape2D" id="WallShape"]
+size = Vector2(32, 720)
+
+[node name="HearthvaleSideviewEntry" type="Node2D"]
+script = ExtResource("1_zone")
+zone_data = ExtResource("2_data")
+
+[node name="DistantBackground" type="Parallax2D" parent="."]
+z_index = -20
+scroll_scale = Vector2(0.25, 0.2)
+
+[node name="Sky" type="ColorRect" parent="DistantBackground"]
+offset_left = -300.0
+offset_top = -160.0
+offset_right = 1500.0
+offset_bottom = 720.0
+color = Color(0.24, 0.28, 0.25, 1)
+
+[node name="VillageSilhouette" type="Polygon2D" parent="DistantBackground"]
+polygon = PackedVector2Array(-100, 620, -100, 430, 30, 430, 70, 350, 110, 430, 240, 430, 240, 390, 380, 390, 430, 315, 480, 390, 650, 390, 650, 450, 800, 450, 850, 370, 900, 450, 1100, 450, 1100, 620)
+color = Color(0.19, 0.16, 0.12, 1)
+
+[node name="GameplayLayer" type="Node2D" parent="."]
+
+[node name="Ground" type="StaticBody2D" parent="GameplayLayer"]
+position = Vector2(500, 670)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="GameplayLayer/Ground"]
+offset_left = -500.0
+offset_top = -50.0
+offset_right = 500.0
+offset_bottom = 50.0
+color = Color(0.31, 0.29, 0.18, 1)
+
+[node name="Top" type="ColorRect" parent="GameplayLayer/Ground"]
+offset_left = -500.0
+offset_top = -50.0
+offset_right = 500.0
+offset_bottom = -40.0
+color = Color(0.54, 0.43, 0.24, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayLayer/Ground"]
+shape = SubResource("GroundShape")
+
+[node name="LeftWall" type="StaticBody2D" parent="GameplayLayer"]
+position = Vector2(-16, 360)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayLayer/LeftWall"]
+shape = SubResource("WallShape")
+
+[node name="Gate" type="Polygon2D" parent="GameplayLayer"]
+position = Vector2(850, 620)
+polygon = PackedVector2Array(-55, 0, -55, -145, -35, -170, 35, -170, 55, -145, 55, 0, 30, 0, 30, -125, -30, -125, -30, 0)
+color = Color(0.32, 0.22, 0.14, 1)
+
+[node name="SafetyLabel" type="Label" parent="GameplayLayer"]
+offset_left = 45.0
+offset_top = 65.0
+offset_right = 360.0
+offset_bottom = 95.0
+theme_override_colors/font_color = Color(0.94, 0.74, 0.36, 1)
+theme_override_font_sizes/font_size = 18
+text = "HEARTHVALE — SAFE HAVEN"
+
+[node name="SpawnPoints" type="Node2D" parent="."]
+
+[node name="default" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(180, 620)
+
+[node name="from_elderwood" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(760, 620)
+
+[node name="Player" parent="GameplayLayer" instance=ExtResource("3_player")]
+position = Vector2(180, 620)
+
+[node name="Camera2D" parent="GameplayLayer/Player" index="2"]
+limit_left = 0
+limit_top = -100
+limit_right = 1000
+limit_bottom = 720
+limit_enabled = true
+
+[node name="ToElderwood" parent="GameplayLayer" instance=ExtResource("6_transition")]
+position = Vector2(970, 575)
+target_scene = "res://Project Chronicle/Scenes/World/Zones/elderwood.tscn"
+target_spawn_id = "from_hearthvale"
+
+[node name="Label" parent="GameplayLayer/ToElderwood"]
+text = "Enter Elderwood"
+
+[node name="GameHUD" parent="." instance=ExtResource("4_hud")]
+
+[node name="EquipmentDebugPanel" parent="." instance=ExtResource("5_debug")]
+
+[editable path="GameplayLayer/Player"]

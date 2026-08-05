@@ -47,6 +47,7 @@ func setup(item_id: String, quantity: int = 1) -> void:
 
 
 func _ready() -> void:
+	add_to_group("loot_pickups")
 	body_entered.connect(_on_body_entered)
 	monitoring = true
 	monitorable = false

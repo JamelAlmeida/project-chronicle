@@ -9,42 +9,47 @@
 [ext_resource type="Script" uid="uid://djy4klp5fm7wm" path="res://Project Chronicle/Scripts/Components/equipment_component.gd" id="7_equipment"]
 [ext_resource type="Script" uid="uid://cg3gu7mlr720g" path="res://Project Chronicle/Scripts/Presentation/character_visual_controller.gd" id="8_visuals"]
 [ext_resource type="Script" uid="uid://be32audhwij5o" path="res://Project Chronicle/Scripts/Presentation/camera_presentation.gd" id="9_camera"]
-[ext_resource type="SpriteFrames" uid="uid://6yqjek2kxfb0" path="res://Project Chronicle/Assets/PixelArt/Characters/Player/adventurer_base_sprite_frames.tres" id="10_adventurer"]
+[ext_resource type="SpriteFrames" path="res://Project Chronicle/Assets/PixelArt/Characters/Player/adventurer_sideview_sprite_frames.tres" id="10_adventurer"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5nclj"]
-size = Vector2(24, 24)
+size = Vector2(22, 38)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_melee"]
 size = Vector2(36, 28)
 
 [node name="Player" type="CharacterBody2D" unique_id=1547554470]
+collision_mask = 6
+floor_snap_length = 8.0
 script = ExtResource("1_5py17")
 
 [node name="Visuals" type="Node2D" parent="." unique_id=939597102]
 
 [node name="PlaceholderVisual" type="ColorRect" parent="Visuals" unique_id=377743816]
 offset_left = -12.0
-offset_top = -12.0
+offset_top = -48.0
 offset_right = 12.0
-offset_bottom = 12.0
 color = Color(0.9891885, 0.16677955, 0.45810562, 1)
 
 [node name="PlayerSprite" type="AnimatedSprite2D" parent="Visuals" unique_id=958699716]
 visible = false
-position = Vector2(0, -12)
+position = Vector2(0, -24)
 sprite_frames = ExtResource("10_adventurer")
 animation = &"idle_right"
 
 [node name="VisualController" type="Node" parent="Visuals" unique_id=1929883830]
 script = ExtResource("8_visuals")
 sprite_path = NodePath("../PlayerSprite")
+mirror_left_from_right = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=808069002]
+position = Vector2(0, -19)
 shape = SubResource("RectangleShape2D_5nclj")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1746604908]
 limit_enabled = false
 script = ExtResource("9_camera")
+enable_smoothing = true
+smoothing_speed = 8.0
 
 [node name="StatsComponent" type="Node" parent="." unique_id=794604977]
 script = ExtResource("6_stats")
@@ -62,11 +67,13 @@ script = ExtResource("4_facing")
 script = ExtResource("5_dodge")
 
 [node name="MeleeAttack" type="Area2D" parent="." unique_id=63063372]
-collision_layer = 0
+position = Vector2(0, -22)
+collision_layer = 8
+collision_mask = 4
 script = ExtResource("2_melee")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MeleeAttack" unique_id=536713670]
-position = Vector2(30, 0)
+position = Vector2(32, 0)
 shape = SubResource("RectangleShape2D_melee")
 
 [node name="AttackVisual" type="Polygon2D" parent="MeleeAttack" unique_id=603113246]

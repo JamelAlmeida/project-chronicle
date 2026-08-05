@@ -32,7 +32,9 @@ func try_attack(facing: Vector2) -> bool:
 	if _is_attacking or _cooldown_remaining > 0.0:
 		return false
 
-	var direction: Vector2 = facing.normalized() if facing.length_squared() > 0.0 else Vector2.RIGHT
+	var direction := Vector2.RIGHT
+	if facing.x < 0.0:
+		direction = Vector2.LEFT
 	_perform_attack(direction)
 	return true
 
@@ -46,7 +48,7 @@ func _perform_attack(direction: Vector2) -> void:
 	_cooldown_remaining = _get_attack_cooldown()
 	_hit_targets.clear()
 
-	rotation = direction.angle()
+	rotation = 0.0 if direction.x >= 0.0 else PI
 	_activate_hitbox()
 	attack_started.emit()
 	_combat_feedback().spawn_weapon_trail(global_position, rotation)
@@ -142,8 +144,9 @@ func _on_body_entered(body: Node) -> void:
 	var target_body: Node2D = body as Node2D
 	var damage_dealt: int = _calculate_damage()
 	_hit_targets.append(body)
-	var knockback_direction: Vector2 = (
-		target_body.global_position - (get_parent() as Node2D).global_position
-	).normalized()
+	var horizontal_delta := target_body.global_position.x - (get_parent() as Node2D).global_position.x
+	var knockback_direction := Vector2(signf(horizontal_delta), 0.0)
+	if is_zero_approx(knockback_direction.x):
+		knockback_direction = Vector2.RIGHT if rotation == 0.0 else Vector2.LEFT
 	body.take_damage(damage_dealt, knockback_direction * knockback_force)
 	_apply_lifesteal(damage_dealt)
