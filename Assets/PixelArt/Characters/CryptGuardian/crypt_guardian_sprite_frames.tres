@@ -1,0 +1,54 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/PixelArt/Characters/CryptGuardian/crypt_guardian_states_80x80.png" id="1_sheet"]
+
+[sub_resource type="AtlasTexture" id="Atlas_idle"]
+atlas = ExtResource("1_sheet")
+region = Rect2(0, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="Atlas_move"]
+atlas = ExtResource("1_sheet")
+region = Rect2(80, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack"]
+atlas = ExtResource("1_sheet")
+region = Rect2(160, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="Atlas_hurt"]
+atlas = ExtResource("1_sheet")
+region = Rect2(240, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="Atlas_death"]
+atlas = ExtResource("1_sheet")
+region = Rect2(320, 0, 80, 80)
+
+[resource]
+animations = [{
+"frames": [{"duration": 1.0, "texture": SubResource("Atlas_attack")}],
+"loop": false,
+"name": &"attack",
+"speed": 4.0
+}, {
+"frames": [{"duration": 1.0, "texture": SubResource("Atlas_death")}],
+"loop": false,
+"name": &"death",
+"speed": 4.0
+}, {
+"frames": [{"duration": 1.0, "texture": SubResource("Atlas_hurt")}],
+"loop": false,
+"name": &"hurt",
+"speed": 6.0
+}, {
+"frames": [{"duration": 1.0, "texture": SubResource("Atlas_idle")}],
+"loop": true,
+"name": &"idle",
+"speed": 1.0
+}, {
+"frames": [
+{"duration": 1.0, "texture": SubResource("Atlas_move")},
+{"duration": 1.0, "texture": SubResource("Atlas_idle")}
+],
+"loop": true,
+"name": &"walk",
+"speed": 4.0
+}]

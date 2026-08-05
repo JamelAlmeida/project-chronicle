@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://du4u8yncpygro" path="res://Project Chronicle/Scripts/Items/equipment_data.gd" id="1_equip"]
 [ext_resource type="Script" uid="uid://d1i3c6lnlipjo" path="res://Project Chronicle/Scripts/Items/stat_block.gd" id="2_stat"]
+[ext_resource type="Texture2D" uid="uid://dapa1psrxe1qy" path="res://Project Chronicle/Assets/PixelArt/Items/bloodfang_blade.png" id="3_icon"]
 
 [sub_resource type="Resource" id="StatBlock_bloodfang"]
 script = ExtResource("2_stat")
@@ -15,5 +16,6 @@ stat_modifiers = SubResource("StatBlock_bloodfang")
 id = "bloodfang_blade"
 display_name = "Bloodfang Blade"
 description = "A vicious blade that drinks from wounds it inflicts."
+icon = ExtResource("3_icon")
 item_type = 2
 max_stack = 1

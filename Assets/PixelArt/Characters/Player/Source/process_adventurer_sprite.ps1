@@ -37,6 +37,7 @@ public static class AdventurerSpriteProcessor
             int[] minY = new int[GridSize * GridSize];
             int[] maxX = new int[GridSize * GridSize];
             int[] maxY = new int[GridSize * GridSize];
+            bool[] backgroundPixels = new bool[source.Width * source.Height];
             for (int i = 0; i < minX.Length; i++)
             {
                 minX[i] = source.Width;
@@ -54,11 +55,13 @@ public static class AdventurerSpriteProcessor
                     byte green = pixels[offset + 1];
                     byte red = pixels[offset + 2];
                     bool isBackground =
-                        red > 180 && blue > 180 && green < 110
-                        && Math.Abs(red - blue) < 110;
+                        red > 60 && blue > 60 && green < 130
+                        && red + blue > green * 3
+                        && Math.Abs(red - blue) < 100;
 
                     if (isBackground)
                     {
+                        backgroundPixels[y * source.Width + x] = true;
                         pixels[offset] = 0;
                         pixels[offset + 1] = 0;
                         pixels[offset + 2] = 0;
@@ -123,7 +126,10 @@ public static class AdventurerSpriteProcessor
                                 cropWidth - 1,
                                 x * cropWidth / width
                             );
-                            output.SetPixel(startX + x, startY + y, source.GetPixel(sourceX, sourceY));
+                            Color outputColor = backgroundPixels[sourceY * source.Width + sourceX]
+                                ? Color.Transparent
+                                : source.GetPixel(sourceX, sourceY);
+                            output.SetPixel(startX + x, startY + y, outputColor);
                         }
                     }
                 }

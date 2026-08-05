@@ -1,10 +1,71 @@
-[gd_resource type="SpriteFrames" load_steps=18 format=3]
+[gd_resource type="SpriteFrames" format=3 uid="uid://6yqjek2kxfb0"]
 
-[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/PixelArt/Characters/Player/adventurer_base_32x48.png" id="1_sheet"]
+[ext_resource type="Texture2D" uid="uid://s42p2xxxlgc4" path="res://Project Chronicle/Assets/PixelArt/Characters/Player/adventurer_base_32x48.png" id="1_sheet"]
+[ext_resource type="Texture2D" uid="uid://dpxwevp3nobpq" path="res://Project Chronicle/Assets/PixelArt/Characters/Player/adventurer_attack_112x48.png" id="2_attack_sheet"]
 
 [sub_resource type="AtlasTexture" id="Atlas_down_idle"]
 atlas = ExtResource("1_sheet")
 region = Rect2(0, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_left_idle"]
+atlas = ExtResource("1_sheet")
+region = Rect2(0, 96, 32, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_right_idle"]
+atlas = ExtResource("1_sheet")
+region = Rect2(0, 144, 32, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_up_idle"]
+atlas = ExtResource("1_sheet")
+region = Rect2(0, 48, 32, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack_down_a"]
+atlas = ExtResource("2_attack_sheet")
+region = Rect2(0, 0, 112, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack_down_b"]
+atlas = ExtResource("2_attack_sheet")
+region = Rect2(112, 0, 112, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack_down_c"]
+atlas = ExtResource("2_attack_sheet")
+region = Rect2(224, 0, 112, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack_left_a"]
+atlas = ExtResource("2_attack_sheet")
+region = Rect2(0, 96, 112, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack_left_b"]
+atlas = ExtResource("2_attack_sheet")
+region = Rect2(112, 96, 112, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack_left_c"]
+atlas = ExtResource("2_attack_sheet")
+region = Rect2(224, 96, 112, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack_right_a"]
+atlas = ExtResource("2_attack_sheet")
+region = Rect2(0, 144, 112, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack_right_b"]
+atlas = ExtResource("2_attack_sheet")
+region = Rect2(112, 144, 112, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack_right_c"]
+atlas = ExtResource("2_attack_sheet")
+region = Rect2(224, 144, 112, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack_up_a"]
+atlas = ExtResource("2_attack_sheet")
+region = Rect2(0, 48, 112, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack_up_b"]
+atlas = ExtResource("2_attack_sheet")
+region = Rect2(112, 48, 112, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack_up_c"]
+atlas = ExtResource("2_attack_sheet")
+region = Rect2(224, 48, 112, 48)
 
 [sub_resource type="AtlasTexture" id="Atlas_down_walk_a"]
 atlas = ExtResource("1_sheet")
@@ -18,26 +79,6 @@ region = Rect2(64, 0, 32, 48)
 atlas = ExtResource("1_sheet")
 region = Rect2(96, 0, 32, 48)
 
-[sub_resource type="AtlasTexture" id="Atlas_up_idle"]
-atlas = ExtResource("1_sheet")
-region = Rect2(0, 48, 32, 48)
-
-[sub_resource type="AtlasTexture" id="Atlas_up_walk_a"]
-atlas = ExtResource("1_sheet")
-region = Rect2(32, 48, 32, 48)
-
-[sub_resource type="AtlasTexture" id="Atlas_up_walk_pass"]
-atlas = ExtResource("1_sheet")
-region = Rect2(64, 48, 32, 48)
-
-[sub_resource type="AtlasTexture" id="Atlas_up_walk_b"]
-atlas = ExtResource("1_sheet")
-region = Rect2(96, 48, 32, 48)
-
-[sub_resource type="AtlasTexture" id="Atlas_left_idle"]
-atlas = ExtResource("1_sheet")
-region = Rect2(0, 96, 32, 48)
-
 [sub_resource type="AtlasTexture" id="Atlas_left_walk_a"]
 atlas = ExtResource("1_sheet")
 region = Rect2(32, 96, 32, 48)
@@ -49,10 +90,6 @@ region = Rect2(64, 96, 32, 48)
 [sub_resource type="AtlasTexture" id="Atlas_left_walk_b"]
 atlas = ExtResource("1_sheet")
 region = Rect2(96, 96, 32, 48)
-
-[sub_resource type="AtlasTexture" id="Atlas_right_idle"]
-atlas = ExtResource("1_sheet")
-region = Rect2(0, 144, 32, 48)
 
 [sub_resource type="AtlasTexture" id="Atlas_right_walk_a"]
 atlas = ExtResource("1_sheet")
@@ -66,29 +103,33 @@ region = Rect2(64, 144, 32, 48)
 atlas = ExtResource("1_sheet")
 region = Rect2(96, 144, 32, 48)
 
+[sub_resource type="AtlasTexture" id="Atlas_up_walk_a"]
+atlas = ExtResource("1_sheet")
+region = Rect2(32, 48, 32, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_up_walk_pass"]
+atlas = ExtResource("1_sheet")
+region = Rect2(64, 48, 32, 48)
+
+[sub_resource type="AtlasTexture" id="Atlas_up_walk_b"]
+atlas = ExtResource("1_sheet")
+region = Rect2(96, 48, 32, 48)
+
 [resource]
 animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("Atlas_down_idle")
 }],
-"loop": true,
+"loop": 1,
 "name": &"idle_down",
-"speed": 1.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("Atlas_up_idle")
-}],
-"loop": true,
-"name": &"idle_up",
 "speed": 1.0
 }, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("Atlas_left_idle")
 }],
-"loop": true,
+"loop": 1,
 "name": &"idle_left",
 "speed": 1.0
 }, {
@@ -96,9 +137,73 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("Atlas_right_idle")
 }],
-"loop": true,
+"loop": 1,
 "name": &"idle_right",
 "speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_up_idle")
+}],
+"loop": 1,
+"name": &"idle_up",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_attack_down_a")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_attack_down_b")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_attack_down_c")
+}],
+"loop": 0,
+"name": &"melee_attack_down",
+"speed": 24.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_attack_left_a")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_attack_left_b")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_attack_left_c")
+}],
+"loop": 0,
+"name": &"melee_attack_left",
+"speed": 24.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_attack_right_a")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_attack_right_b")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_attack_right_c")
+}],
+"loop": 0,
+"name": &"melee_attack_right",
+"speed": 24.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_attack_up_a")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_attack_up_b")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_attack_up_c")
+}],
+"loop": 0,
+"name": &"melee_attack_up",
+"speed": 24.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -113,25 +218,8 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("Atlas_down_walk_pass")
 }],
-"loop": true,
+"loop": 1,
 "name": &"walk_down",
-"speed": 7.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("Atlas_up_walk_a")
-}, {
-"duration": 1.0,
-"texture": SubResource("Atlas_up_walk_pass")
-}, {
-"duration": 1.0,
-"texture": SubResource("Atlas_up_walk_b")
-}, {
-"duration": 1.0,
-"texture": SubResource("Atlas_up_walk_pass")
-}],
-"loop": true,
-"name": &"walk_up",
 "speed": 7.0
 }, {
 "frames": [{
@@ -147,7 +235,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("Atlas_left_walk_pass")
 }],
-"loop": true,
+"loop": 1,
 "name": &"walk_left",
 "speed": 7.0
 }, {
@@ -164,7 +252,24 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("Atlas_right_walk_pass")
 }],
-"loop": true,
+"loop": 1,
 "name": &"walk_right",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_up_walk_a")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_up_walk_pass")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_up_walk_b")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_up_walk_pass")
+}],
+"loop": 1,
+"name": &"walk_up",
 "speed": 7.0
 }]

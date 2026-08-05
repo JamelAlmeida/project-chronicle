@@ -54,7 +54,8 @@ func _physics_process(_delta: float) -> void:
 	_knockback_velocity = Vector2.ZERO
 
 	if not _dodge.is_dodging():
-		_facing.update_from_movement(direction)
+		if not _melee_attack.is_attacking():
+			_facing.update_from_movement(direction)
 
 		var dodge_direction: Vector2 = direction if direction.length_squared() > 0.0 else _facing.get_direction()
 		if Input.is_action_just_pressed("dodge"):
@@ -68,7 +69,9 @@ func _physics_process(_delta: float) -> void:
 	move_and_slide()
 
 	if Input.is_action_just_pressed("attack"):
-		_melee_attack.try_attack(_facing.get_direction())
+		var attack_direction := _get_mouse_attack_direction()
+		_facing.update_from_movement(attack_direction)
+		_melee_attack.try_attack(attack_direction)
 	_update_presentation(_delta)
 
 
@@ -93,6 +96,13 @@ func get_stats_component() -> StatsComponent:
 
 func get_equipment_component() -> EquipmentComponent:
 	return _equipment
+
+
+func _get_mouse_attack_direction() -> Vector2:
+	var to_mouse := get_global_mouse_position() - global_position
+	if to_mouse.length_squared() <= 0.001:
+		return _facing.get_direction()
+	return to_mouse.normalized()
 
 
 func _on_damaged(_amount: int, _remaining: int) -> void:

@@ -36,8 +36,10 @@ func _run() -> void:
 		var direction: Vector2 = directions[direction_name]
 		var idle_animation := StringName("idle_%s" % direction_name)
 		var walk_animation := StringName("walk_%s" % direction_name)
+		var attack_animation := StringName("melee_attack_%s" % direction_name)
 		_expect(sprite.sprite_frames.has_animation(idle_animation), "%s exists" % idle_animation)
 		_expect(sprite.sprite_frames.has_animation(walk_animation), "%s exists" % walk_animation)
+		_expect(sprite.sprite_frames.has_animation(attack_animation), "%s exists" % attack_animation)
 
 		controller.update_presentation(false, false, false, false, Vector2.ZERO, direction)
 		_expect(sprite.animation == idle_animation, "%s selected from facing" % idle_animation)
@@ -45,6 +47,10 @@ func _run() -> void:
 		controller.update_presentation(false, false, false, false, direction * 100.0, direction)
 		_expect(sprite.animation == walk_animation, "%s selected from movement" % walk_animation)
 		_expect_walk_frames_are_aligned(sprite.sprite_frames, walk_animation)
+
+		controller.update_presentation(false, false, false, true, Vector2.ZERO, direction)
+		_expect(sprite.animation == attack_animation, "%s selected during attack" % attack_animation)
+		_expect_attack_frames_are_aligned(sprite.sprite_frames, attack_animation)
 
 	player.queue_free()
 	await process_frame
@@ -68,6 +74,23 @@ func _expect_walk_frames_are_aligned(frames: SpriteFrames, animation: StringName
 
 		var opaque_bottom := _find_opaque_bottom(image)
 		_expect(opaque_bottom >= 0, "%s frame %d has visible pixels" % [animation, frame_index])
+		if expected_bottom < 0:
+			expected_bottom = opaque_bottom
+		else:
+			_expect(
+				opaque_bottom == expected_bottom,
+				"%s feet remain aligned on frame %d" % [animation, frame_index]
+			)
+
+
+func _expect_attack_frames_are_aligned(frames: SpriteFrames, animation: StringName) -> void:
+	_expect(frames.get_frame_count(animation) == 3, "%s has three attack phases" % animation)
+	var expected_bottom := -1
+	for frame_index in range(frames.get_frame_count(animation)):
+		var texture := frames.get_frame_texture(animation, frame_index)
+		var image := texture.get_image()
+		_expect(image.get_size() == Vector2i(112, 48), "%s frame size" % animation)
+		var opaque_bottom := _find_opaque_bottom(image)
 		if expected_bottom < 0:
 			expected_bottom = opaque_bottom
 		else:

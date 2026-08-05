@@ -1,0 +1,54 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/PixelArt/Characters/GoblinScout/goblin_scout_states_48x56.png" id="1_sheet"]
+
+[sub_resource type="AtlasTexture" id="Atlas_idle"]
+atlas = ExtResource("1_sheet")
+region = Rect2(0, 0, 48, 56)
+
+[sub_resource type="AtlasTexture" id="Atlas_move"]
+atlas = ExtResource("1_sheet")
+region = Rect2(48, 0, 48, 56)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack"]
+atlas = ExtResource("1_sheet")
+region = Rect2(96, 0, 48, 56)
+
+[sub_resource type="AtlasTexture" id="Atlas_hurt"]
+atlas = ExtResource("1_sheet")
+region = Rect2(144, 0, 48, 56)
+
+[sub_resource type="AtlasTexture" id="Atlas_death"]
+atlas = ExtResource("1_sheet")
+region = Rect2(192, 0, 48, 56)
+
+[resource]
+animations = [{
+"frames": [{"duration": 1.0, "texture": SubResource("Atlas_attack")}],
+"loop": false,
+"name": &"attack",
+"speed": 8.0
+}, {
+"frames": [{"duration": 1.0, "texture": SubResource("Atlas_death")}],
+"loop": false,
+"name": &"death",
+"speed": 6.0
+}, {
+"frames": [{"duration": 1.0, "texture": SubResource("Atlas_hurt")}],
+"loop": false,
+"name": &"hurt",
+"speed": 8.0
+}, {
+"frames": [{"duration": 1.0, "texture": SubResource("Atlas_idle")}],
+"loop": true,
+"name": &"idle",
+"speed": 1.0
+}, {
+"frames": [
+{"duration": 1.0, "texture": SubResource("Atlas_move")},
+{"duration": 1.0, "texture": SubResource("Atlas_idle")}
+],
+"loop": true,
+"name": &"walk",
+"speed": 8.0
+}]

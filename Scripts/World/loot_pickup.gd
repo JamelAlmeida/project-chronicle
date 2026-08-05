@@ -8,6 +8,11 @@ const LOOT_PICKUP_SCENE_PATH: String = "res://Project Chronicle/Scenes/World/loo
 
 var _item_id: String = ""
 var _quantity: int = 1
+var _hover_time := 0.0
+
+@onready var _icon: Sprite2D = $Icon
+@onready var _fallback_visual: ColorRect = $ColorRect
+@onready var _sparkle: Polygon2D = $Sparkle
 
 
 static func spawn(parent: Node, world_position: Vector2, item_id: String, quantity: int = 1) -> void:
@@ -29,8 +34,16 @@ func setup(item_id: String, quantity: int = 1) -> void:
 	_quantity = quantity
 
 	var item: ItemData = _item_registry().get_item(item_id)
-	if item != null and has_node("Label"):
+	if item != null:
 		$Label.text = item.display_name
+		if item.icon != null:
+			_icon.texture = item.icon
+			_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+			_icon.visible = true
+			_fallback_visual.visible = false
+		else:
+			_icon.visible = false
+			_fallback_visual.visible = true
 
 
 func _ready() -> void:
@@ -40,6 +53,15 @@ func _ready() -> void:
 	if _item_id.is_empty():
 		setup(item_id, quantity)
 	_combat_feedback().spawn_loot_sparkle(global_position, self)
+
+
+func _process(delta: float) -> void:
+	_hover_time += delta
+	var hover_offset := sin(_hover_time * 2.4) * 1.5
+	_icon.position.y = hover_offset
+	_fallback_visual.position.y = hover_offset
+	_sparkle.rotation = _hover_time * 0.8
+	_sparkle.modulate.a = 0.45 + sin(_hover_time * 4.0) * 0.25
 
 
 func _on_body_entered(body: Node) -> void:

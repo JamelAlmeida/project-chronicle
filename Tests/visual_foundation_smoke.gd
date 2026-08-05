@@ -23,7 +23,8 @@ func _run() -> void:
 	await process_frame
 	_expect(current_scene.name == "Elderwood", "Hearthvale to Elderwood transition")
 	await _test_player_controls("Elderwood")
-	await _test_enemy_damage_death_and_loot()
+	await _test_enemy_damage_death_and_loot("Slime")
+	await _test_enemy_damage_death_and_loot("GoblinScout")
 	_test_inventory_and_equipment()
 
 	_zone_manager().transition_to(MOSSCRYPT, "from_elderwood")
@@ -32,10 +33,39 @@ func _run() -> void:
 	_expect(current_scene.name == "Mosscrypt", "Elderwood to Mosscrypt transition")
 	await _test_player_controls("Mosscrypt")
 	_expect(get_nodes_in_group("enemies").size() >= 1, "Mosscrypt enemies spawned")
+	await _test_enemy_damage_death_and_loot("CryptGuardian")
 
 	var player := get_first_node_in_group("player")
 	_expect(player != null, "Mosscrypt player spawned")
 	if player != null:
+		var equipment := player.get_node("EquipmentComponent") as EquipmentComponent
+		_expect(
+			equipment.get_equipped_id("weapon") == "swift_katana",
+			"Equipment persists through zone transition"
+		)
+
+		_zone_manager().transition_to(ELDERWOOD, "from_mosscrypt")
+		await scene_changed
+		await process_frame
+		_expect(current_scene.name == "Elderwood", "Mosscrypt to Elderwood transition")
+
+		_zone_manager().transition_to(HEARTHVALE, "from_elderwood")
+		await scene_changed
+		await process_frame
+		_expect(current_scene.name == "Hearthvale", "Elderwood to Hearthvale transition")
+
+		_zone_manager().transition_to(ELDERWOOD, "from_hearthvale")
+		await scene_changed
+		await process_frame
+		_zone_manager().transition_to(MOSSCRYPT, "from_elderwood")
+		await scene_changed
+		await process_frame
+
+		player = get_first_node_in_group("player")
+		_expect(player != null, "Player persists through complete zone round trip")
+		if player == null:
+			_finish()
+			return
 		var health := player.get_node("HealthComponent") as HealthComponent
 		health.set_current_health(1)
 		player.take_damage(1)
@@ -43,6 +73,11 @@ func _run() -> void:
 		await process_frame
 		_expect(current_scene.name == "Hearthvale", "Player death returns to Hearthvale")
 
+
+	_finish()
+
+
+func _finish() -> void:
 	if _failures.is_empty():
 		print("VISUAL FOUNDATION SMOKE: PASS")
 		quit(0)
@@ -83,22 +118,34 @@ func _test_player_controls(zone_name: String) -> void:
 	_expect(dodge.is_dodging(), "%s dodge remains active" % zone_name)
 
 
-func _test_enemy_damage_death_and_loot() -> void:
+func _test_enemy_damage_death_and_loot(enemy_token: String) -> void:
 	var enemies := get_nodes_in_group("enemies")
-	_expect(not enemies.is_empty(), "Elderwood enemies spawned")
-	if enemies.is_empty():
+	var enemy: EnemyBase
+	var scene_token := enemy_token.to_snake_case()
+	for candidate: Node in enemies:
+		if candidate.name.begins_with(enemy_token) or candidate.get_scene_file_path().contains(scene_token):
+			enemy = candidate as EnemyBase
+			break
+
+	_expect(enemy != null, "%s spawned" % enemy_token)
+	if enemy == null:
 		return
 
-	var enemy := enemies[0] as EnemyBase
 	var initial_enemy_count := enemies.size()
 	var initial_pickup_count := _count_nodes_of_type(current_scene, LootPickup)
+	var initial_health := enemy.health
+	enemy.take_damage(1)
+	_expect(enemy.health == initial_health - 1, "%s takes damage" % enemy_token)
 	enemy.take_damage(99999)
 	await process_frame
 	await process_frame
-	_expect(get_nodes_in_group("enemies").size() == initial_enemy_count - 1, "Enemy death")
+	_expect(
+		get_nodes_in_group("enemies").size() == initial_enemy_count - 1,
+		"%s death" % enemy_token
+	)
 	_expect(
 		_count_nodes_of_type(current_scene, LootPickup) == initial_pickup_count + 1,
-		"Enemy loot drop"
+		"%s loot drop" % enemy_token
 	)
 
 
@@ -114,6 +161,11 @@ func _test_inventory_and_equipment() -> void:
 	var added: int = _inventory().add_item("slime_gel", 1)
 	_expect(added == 1, "Inventory accepts item")
 	_expect(_inventory().get_quantity("slime_gel") == before + 1, "Inventory quantity updates")
+
+	var weapon_added: int = _inventory().add_item("swift_katana", 1)
+	_expect(weapon_added == 1, "Inventory accepts equipment")
+	_expect(equipment.equip_from_inventory("swift_katana"), "Equipment can be equipped")
+	_expect(equipment.get_equipped_id("weapon") == "swift_katana", "Equipment slot updates")
 
 
 func _count_nodes_of_type(root: Node, script_type: Variant) -> int:

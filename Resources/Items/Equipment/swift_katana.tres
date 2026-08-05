@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://du4u8yncpygro" path="res://Project Chronicle/Scripts/Items/equipment_data.gd" id="1_equip"]
 [ext_resource type="Script" uid="uid://d1i3c6lnlipjo" path="res://Project Chronicle/Scripts/Items/stat_block.gd" id="2_stat"]
+[ext_resource type="Texture2D" uid="uid://m7jyedfoup1u" path="res://Project Chronicle/Assets/PixelArt/Items/swift_katana.png" id="3_icon"]
 
 [sub_resource type="Resource" id="StatBlock_katana"]
 script = ExtResource("2_stat")
@@ -17,5 +18,6 @@ weapon_attack_cooldown = 0.32
 id = "swift_katana"
 display_name = "Swift Katana"
 description = "A light blade favoring speed and precision over raw power."
+icon = ExtResource("3_icon")
 item_type = 2
 max_stack = 1

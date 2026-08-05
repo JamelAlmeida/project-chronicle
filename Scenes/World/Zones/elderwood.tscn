@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://zoneelderwood01"]
+[gd_scene load_steps=13 format=3 uid="uid://zoneelderwood01"]
 
 [ext_resource type="Script" path="res://Project Chronicle/Scripts/World/zone.gd" id="1_zone"]
 [ext_resource type="Resource" uid="uid://zoneelderwood" path="res://Project Chronicle/Resources/Zones/elderwood.tres" id="2_data"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://gugfggdvihpy" path="res://Project Chronicle/Scenes/Characters/Slime.tscn" id="7_slime"]
 [ext_resource type="PackedScene" uid="uid://goblinscout01" path="res://Project Chronicle/Scenes/Characters/goblin_scout.tscn" id="8_goblin"]
 [ext_resource type="PackedScene" uid="uid://lootpickup01" path="res://Project Chronicle/Scenes/World/loot_pickup.tscn" id="9_loot"]
+[ext_resource type="Script" path="res://Project Chronicle/Scripts/Presentation/elderwood_art_dressing.gd" id="10_elderwood_art"]
 
 [sub_resource type="RectangleShape2D" id="WallH"]
 size = Vector2(1300, 32)
@@ -87,6 +88,9 @@ shape = SubResource("WallV")
 
 [node name="DepthSorted" type="Node2D" parent="."]
 y_sort_enabled = true
+
+[node name="ArtDressing" type="Node" parent="DepthSorted"]
+script = ExtResource("10_elderwood_art")
 
 [node name="TerrainLayer" type="Node2D" parent="DepthSorted"]
 y_sort_enabled = true
@@ -254,6 +258,15 @@ quantity = 2
 [node name="Player" parent="DepthSorted" instance=ExtResource("3_player")]
 position = Vector2(120, 400)
 
+[node name="Camera2D" parent="DepthSorted/Player" index="2"]
+limit_left = 0
+limit_top = 0
+limit_right = 1100
+limit_bottom = 800
+limit_enabled = true
+
 [node name="GameHUD" parent="." instance=ExtResource("4_hud")]
 
 [node name="EquipmentDebugPanel" parent="." instance=ExtResource("5_debug")]
+
+[editable path="DepthSorted/Player"]
