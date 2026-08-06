@@ -11,7 +11,7 @@ var _steadfast_bar: ProgressBar
 var _xp_bar: ProgressBar
 var _xp_label: Label
 var _expedition_label: Label
-var _quest_tracker_label: Label
+var _quest_tracker_label: Control
 var _zone_banner: PanelContainer
 var _zone_title: Label
 var _zone_subtitle: Label
@@ -79,27 +79,28 @@ func _build_expedition_readout() -> void:
 	var panel := PanelContainer.new()
 	panel.name = "ExpeditionReadout"
 	panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
-	panel.position = Vector2(14.0, 12.0)
-	panel.custom_minimum_size = Vector2(236.0, 52.0)
-	panel.size = Vector2(236.0, 52.0)
+	panel.position = Vector2(18.0, 14.0)
+	panel.custom_minimum_size = Vector2(248.0, 78.0)
+	panel.size = Vector2(248.0, 78.0)
 	panel.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
-	panel.add_theme_stylebox_override(
-		"panel",
-		UI.hud_panel_style(Color(0.035, 0.028, 0.022, 0.86), UI.COLOR_BRASS_LIGHT)
-	)
+	panel.add_theme_stylebox_override("panel", UI.hud_panel_style())
 	add_child(panel)
 
 	var box := VBoxContainer.new()
-	box.add_theme_constant_override("separation", 2)
+	box.add_theme_constant_override("separation", 3)
 	panel.add_child(box)
-	var heading := UI.style_eyebrow(Label.new(), UI.COLOR_GOLD, 11, HORIZONTAL_ALIGNMENT_CENTER)
+	var heading := UI.style_eyebrow(Label.new(), UI.COLOR_GOLD, 13, HORIZONTAL_ALIGNMENT_CENTER)
 	heading.text = "EXPEDITION"
 	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	box.add_child(heading)
-	_expedition_label = UI.style_label(Label.new(), UI.COLOR_TEXT, 13)
+	_expedition_label = UI.style_label(Label.new(), UI.COLOR_TEXT, 14)
 	_expedition_label.text = "Unsecured loot: 0"
 	_expedition_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	box.add_child(_expedition_label)
+	var inventory_hint := UI.style_label(Label.new(), UI.COLOR_MUTED, 12)
+	inventory_hint.name = "InventoryHint"
+	inventory_hint.text = "Inventory [I]"
+	box.add_child(inventory_hint)
 
 
 func _build_quest_tracker() -> void:
@@ -108,34 +109,37 @@ func _build_quest_tracker() -> void:
 	panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
 	panel.anchor_left = 1.0
 	panel.anchor_right = 1.0
-	panel.offset_left = -286.0
-	panel.offset_top = 12.0
-	panel.offset_right = -14.0
-	panel.offset_bottom = 108.0
+	panel.offset_left = -312.0
+	panel.offset_top = 14.0
+	panel.offset_right = -18.0
+	panel.offset_bottom = 148.0
 	panel.grow_horizontal = Control.GROW_DIRECTION_BEGIN
 	panel.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
-	panel.add_theme_stylebox_override(
-		"panel",
-		UI.hud_panel_style(Color(0.035, 0.03, 0.024, 0.86), UI.COLOR_QUEST)
-	)
+	panel.add_theme_stylebox_override("panel", UI.hud_panel_style())
 	add_child(panel)
 
 	var box := VBoxContainer.new()
-	box.add_theme_constant_override("separation", 3)
+	box.add_theme_constant_override("separation", 4)
 	panel.add_child(box)
-	var heading := UI.style_heading(Label.new(), Color(0.82, 0.92, 0.62), 12, HORIZONTAL_ALIGNMENT_CENTER)
+	var heading := UI.style_heading(Label.new(), UI.COLOR_GOLD, 13, HORIZONTAL_ALIGNMENT_CENTER)
 	heading.text = "ACTIVE QUESTS"
 	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	box.add_child(heading)
-	_quest_tracker_label = UI.style_label(Label.new(), UI.COLOR_TEXT, 13)
-	_quest_tracker_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_quest_tracker_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_quest_tracker_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	box.add_child(_quest_tracker_label)
+	var tracker := RichTextLabel.new()
+	tracker.name = "QuestTrackerBody"
+	tracker.bbcode_enabled = true
+	tracker.fit_content = true
+	tracker.scroll_active = false
+	tracker.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	tracker.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tracker.add_theme_font_override("normal_font", UI.body_font())
+	tracker.add_theme_font_size_override("normal_font_size", 13)
+	tracker.add_theme_color_override("default_color", UI.COLOR_TEXT)
+	_quest_tracker_label = tracker
+	box.add_child(tracker)
 
 
 func _build_zone_banner() -> void:
-	# Centered below the top trackers so it never covers Expedition.
 	_zone_banner = PanelContainer.new()
 	_zone_banner.name = "ZoneBanner"
 	_zone_banner.set_anchors_preset(Control.PRESET_CENTER_TOP)
@@ -145,14 +149,11 @@ func _build_zone_banner() -> void:
 	_zone_banner.anchor_right = 0.5
 	_zone_banner.anchor_top = 0.0
 	_zone_banner.anchor_bottom = 0.0
-	_zone_banner.offset_left = -190.0
-	_zone_banner.offset_right = 190.0
-	_zone_banner.offset_top = 78.0
-	_zone_banner.offset_bottom = 144.0
-	_zone_banner.add_theme_stylebox_override(
-		"panel",
-		UI.hud_panel_style(Color(0.04, 0.032, 0.024, 0.88), Color(0.72, 0.54, 0.26, 0.95))
-	)
+	_zone_banner.offset_left = -200.0
+	_zone_banner.offset_right = 200.0
+	_zone_banner.offset_top = 88.0
+	_zone_banner.offset_bottom = 156.0
+	_zone_banner.add_theme_stylebox_override("panel", UI.hud_panel_style())
 	add_child(_zone_banner)
 
 	var box := VBoxContainer.new()
@@ -166,154 +167,146 @@ func _build_zone_banner() -> void:
 
 
 func _build_bottom_hud() -> void:
-	# Full-rect transparent root — islands are independently anchored (no HBox pressure).
-	var root := Control.new()
+	## One cohesive premium HUD composition matching the approved mockup.
+	var root := PanelContainer.new()
 	root.name = "BottomHUD"
-	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	root.clip_contents = false
+	root.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	root.mouse_filter = Control.MOUSE_FILTER_STOP
+	root.add_theme_stylebox_override("panel", UI.master_hud_style())
+	root.anchor_left = 0.0
+	root.anchor_right = 1.0
+	root.anchor_top = 1.0
+	root.anchor_bottom = 1.0
+	root.offset_left = 16.0
+	root.offset_right = -16.0
+	root.offset_top = -168.0
+	root.offset_bottom = -10.0
+	root.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	add_child(root)
 
-	# Slim XP bar across the lower bottom — separate from the three islands.
-	_build_xp_strip(root)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 6)
+	root.add_child(column)
+
+	var row := HBoxContainer.new()
+	row.name = "HudRow"
+	row.add_theme_constant_override("separation", 18)
+	row.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	column.add_child(row)
 
 	var status := _build_status_island()
-	root.add_child(status)
-	_anchor_bottom_left(status, 14.0, 22.0, Vector2(318.0, 98.0))
+	status.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	status.size_flags_stretch_ratio = 1.15
+	row.add_child(status)
 
 	var action := _build_action_island()
-	root.add_child(action)
-	_anchor_bottom_center(action, 22.0, Vector2(468.0, 88.0))
+	action.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	action.size_flags_stretch_ratio = 1.55
+	row.add_child(action)
 
 	var menu := _build_menu_island()
-	root.add_child(menu)
-	_anchor_bottom_right(menu, 18.0, 24.0, Vector2(188.0, 138.0))
+	menu.custom_minimum_size = Vector2(236.0, 108.0)
+	menu.size_flags_horizontal = Control.SIZE_SHRINK_END
+	row.add_child(menu)
+
+	_build_xp_strip(column)
 
 
-func _build_xp_strip(root: Control) -> void:
+func _build_xp_strip(parent: Control) -> void:
 	var strip := Control.new()
 	strip.name = "XPStrip"
-	strip.anchor_left = 0.0
-	strip.anchor_right = 1.0
-	strip.anchor_top = 1.0
-	strip.anchor_bottom = 1.0
-	strip.offset_left = 14.0
-	strip.offset_right = -14.0
-	strip.offset_top = -18.0
-	strip.offset_bottom = -4.0
+	strip.custom_minimum_size = Vector2(0.0, 18.0)
+	strip.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	strip.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	root.add_child(strip)
+	parent.add_child(strip)
 
 	_xp_bar = ProgressBar.new()
 	_xp_bar.name = "XPBar"
 	_xp_bar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_xp_bar.show_percentage = false
 	_xp_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var xp_bg := UI.textured_style("xp_bar_9.png", 8.0, 1.0)
+	var xp_bg := UI.textured_style("xp_bar_9.png", 6.0, 1.0)
 	if xp_bg == null:
 		xp_bg = UI.bar_background()
 	_xp_bar.add_theme_stylebox_override("background", xp_bg)
 	_xp_bar.add_theme_stylebox_override("fill", UI.bar_fill(UI.COLOR_XP))
 	strip.add_child(_xp_bar)
 
-	_xp_label = UI.style_label(Label.new(), Color(0.86, 0.92, 0.98), 11, HORIZONTAL_ALIGNMENT_CENTER)
+	_xp_label = UI.style_label(Label.new(), Color(0.92, 0.90, 0.82), 12, HORIZONTAL_ALIGNMENT_LEFT)
 	_xp_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_xp_label.offset_left = 8.0
 	_xp_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_xp_label.text = "LEVEL 1  ·  XP 0 / 100"
 	strip.add_child(_xp_label)
 
 
-func _anchor_bottom_left(ctrl: Control, margin_left: float, margin_bottom: float, min_size: Vector2) -> void:
-	ctrl.custom_minimum_size = min_size
-	ctrl.anchor_left = 0.0
-	ctrl.anchor_top = 1.0
-	ctrl.anchor_right = 0.0
-	ctrl.anchor_bottom = 1.0
-	ctrl.grow_horizontal = Control.GROW_DIRECTION_END
-	ctrl.grow_vertical = Control.GROW_DIRECTION_BEGIN
-	ctrl.offset_left = margin_left
-	ctrl.offset_right = margin_left + min_size.x
-	ctrl.offset_top = -(margin_bottom + min_size.y)
-	ctrl.offset_bottom = -margin_bottom
-
-
-func _anchor_bottom_center(ctrl: Control, margin_bottom: float, min_size: Vector2) -> void:
-	ctrl.custom_minimum_size = min_size
-	ctrl.anchor_left = 0.5
-	ctrl.anchor_top = 1.0
-	ctrl.anchor_right = 0.5
-	ctrl.anchor_bottom = 1.0
-	ctrl.grow_horizontal = Control.GROW_DIRECTION_BOTH
-	ctrl.grow_vertical = Control.GROW_DIRECTION_BEGIN
-	var half_w := min_size.x * 0.5
-	ctrl.offset_left = -half_w
-	ctrl.offset_right = half_w
-	ctrl.offset_top = -(margin_bottom + min_size.y)
-	ctrl.offset_bottom = -margin_bottom
-
-
-func _anchor_bottom_right(ctrl: Control, margin_right: float, margin_bottom: float, min_size: Vector2) -> void:
-	ctrl.custom_minimum_size = min_size
-	ctrl.anchor_left = 1.0
-	ctrl.anchor_top = 1.0
-	ctrl.anchor_right = 1.0
-	ctrl.anchor_bottom = 1.0
-	ctrl.grow_horizontal = Control.GROW_DIRECTION_BEGIN
-	ctrl.grow_vertical = Control.GROW_DIRECTION_BEGIN
-	ctrl.offset_left = -(margin_right + min_size.x)
-	ctrl.offset_right = -margin_right
-	ctrl.offset_top = -(margin_bottom + min_size.y)
-	ctrl.offset_bottom = -margin_bottom
-
-
 func _build_status_island() -> Control:
-	var island := PanelContainer.new()
+	var island := HBoxContainer.new()
 	island.name = "StatusIsland"
-	island.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	island.add_theme_constant_override("separation", 10)
 	island.mouse_filter = Control.MOUSE_FILTER_STOP
-	island.add_theme_stylebox_override("panel", UI.status_island_style())
 
-	# Showcase status chrome already includes the crest shield — keep a spacer so
-	# Godot Labels sit in the text/bar compartments without stacking a second crest.
-	var outer := HBoxContainer.new()
-	outer.add_theme_constant_override("separation", 8)
-	island.add_child(outer)
+	var crest_wrap := Control.new()
+	crest_wrap.custom_minimum_size = Vector2(72.0, 72.0)
+	crest_wrap.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	island.add_child(crest_wrap)
 
-	var crest_space := Control.new()
-	crest_space.custom_minimum_size = Vector2(58.0, 56.0)
-	crest_space.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	outer.add_child(crest_space)
+	var crest_ring := UI.runtime_texture("crest_ring.png")
+	if crest_ring != null:
+		var ring := TextureRect.new()
+		ring.texture = crest_ring
+		ring.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		ring.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		ring.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+		ring.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		crest_wrap.add_child(ring)
+	var crest_icon := Icons.make_rect(Icons.CREST, Vector2(44, 44))
+	crest_icon.set_anchors_preset(Control.PRESET_CENTER)
+	crest_icon.anchor_left = 0.5
+	crest_icon.anchor_top = 0.5
+	crest_icon.anchor_right = 0.5
+	crest_icon.anchor_bottom = 0.5
+	crest_icon.offset_left = -22.0
+	crest_icon.offset_top = -22.0
+	crest_icon.offset_right = 22.0
+	crest_icon.offset_bottom = 22.0
+	crest_wrap.add_child(crest_icon)
 
 	var box := VBoxContainer.new()
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	box.add_theme_constant_override("separation", 3)
-	outer.add_child(box)
+	box.add_theme_constant_override("separation", 4)
+	island.add_child(box)
 
-	_level_label = UI.style_heading(Label.new(), UI.COLOR_GOLD, 14)
+	_level_label = UI.style_heading(Label.new(), UI.COLOR_GOLD, 15)
 	_level_label.text = "ADVENTURER  ·  LEVEL 1"
 	box.add_child(_level_label)
 
 	var hp_stack := Control.new()
-	hp_stack.custom_minimum_size = Vector2(230.0, 20.0)
+	hp_stack.custom_minimum_size = Vector2(260.0, 24.0)
 	box.add_child(hp_stack)
 	_hp_bar = ProgressBar.new()
 	_hp_bar.name = "HPBar"
 	_hp_bar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_hp_bar.show_percentage = false
-	var hp_bg := UI.textured_style("bar_empty_9.png", 8.0, 2.0)
+	var hp_bg := UI.textured_style("bar_empty_9.png", 6.0, 1.0)
 	if hp_bg == null:
 		hp_bg = UI.bar_background()
 	_hp_bar.add_theme_stylebox_override("background", hp_bg)
-	_hp_bar.add_theme_stylebox_override("fill", UI.bar_fill(UI.COLOR_HEALTH))
+	var hp_fill := UI.textured_style("bar_hp_9.png", 4.0, 0.0)
+	if hp_fill == null:
+		hp_fill = UI.bar_fill(UI.COLOR_HEALTH)
+	else:
+		(hp_fill as StyleBoxTexture).modulate_color = Color(1.0, 0.55, 0.45, 1.0)
+	_hp_bar.add_theme_stylebox_override("fill", hp_fill)
 	hp_stack.add_child(_hp_bar)
-	_hp_label = UI.style_label(Label.new(), Color(1.0, 0.95, 0.90), 12, HORIZONTAL_ALIGNMENT_CENTER)
+	_hp_label = UI.style_label(Label.new(), Color(1.0, 0.96, 0.90), 13, HORIZONTAL_ALIGNMENT_CENTER)
 	_hp_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_hp_label.text = "HP 100 / 100"
 	_hp_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hp_stack.add_child(_hp_label)
 
 	var steadfast_stack := Control.new()
-	steadfast_stack.custom_minimum_size = Vector2(230.0, 14.0)
+	steadfast_stack.custom_minimum_size = Vector2(260.0, 18.0)
 	box.add_child(steadfast_stack)
 	_steadfast_bar = ProgressBar.new()
 	_steadfast_bar.name = "SteadfastBar"
@@ -322,9 +315,12 @@ func _build_status_island() -> Control:
 	_steadfast_bar.value = 100.0
 	_steadfast_bar.show_percentage = false
 	_steadfast_bar.add_theme_stylebox_override("background", UI.bar_background())
-	_steadfast_bar.add_theme_stylebox_override("fill", UI.bar_fill(UI.COLOR_STEADFAST))
+	var steadfast_fill := UI.textured_style("bar_steadfast_9.png", 4.0, 0.0)
+	if steadfast_fill == null:
+		steadfast_fill = UI.bar_fill(UI.COLOR_STEADFAST)
+	_steadfast_bar.add_theme_stylebox_override("fill", steadfast_fill)
 	steadfast_stack.add_child(_steadfast_bar)
-	_resource_label = UI.style_label(Label.new(), Color(0.88, 0.94, 1.0), 11, HORIZONTAL_ALIGNMENT_CENTER)
+	_resource_label = UI.style_label(Label.new(), Color(0.90, 0.94, 1.0), 12, HORIZONTAL_ALIGNMENT_CENTER)
 	_resource_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_resource_label.text = "STEADFAST  100 / 100"
 	_resource_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -333,16 +329,14 @@ func _build_status_island() -> Control:
 
 
 func _build_action_island() -> Control:
-	var island := PanelContainer.new()
+	var island := CenterContainer.new()
 	island.name = "ActionIsland"
-	island.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	island.mouse_filter = Control.MOUSE_FILTER_STOP
-	island.add_theme_stylebox_override("panel", UI.action_island_style())
 
 	var center := HBoxContainer.new()
 	center.name = "ActionBar"
 	center.alignment = BoxContainer.ALIGNMENT_CENTER
-	center.add_theme_constant_override("separation", 5)
+	center.add_theme_constant_override("separation", 6)
 	island.add_child(center)
 
 	center.add_child(_make_action_slot(Icons.ATTACK, "Basic Attack", "E", Color(0.82, 0.60, 0.24), true))
@@ -353,7 +347,8 @@ func _build_action_island() -> Control:
 	center.add_child(_make_action_slot(Icons.ARC_SLASH, "Future Technique", "2", Color(0.74, 0.58, 0.24), false))
 	center.add_child(_make_action_slot(Icons.PULSE_WAVE, "Future Technique", "3", Color(0.28, 0.52, 0.78), false))
 	center.add_child(_make_action_slot(Icons.VERDANT_BLOOM, "Future Technique", "4", Color(0.32, 0.62, 0.38), false))
-	center.add_child(_make_action_slot(Icons.POTION, "Future Technique", "5", Color(0.72, 0.28, 0.28), false))
+	center.add_child(_make_action_slot(Icons.POTION, "Potion", "5", Color(0.72, 0.28, 0.28), false))
+	center.add_child(_make_action_slot("", "Reserved Slot", "", Color(0.35, 0.30, 0.22), false))
 	return island
 
 
@@ -365,26 +360,25 @@ func _make_action_slot(
 	unlocked: bool
 ) -> PanelContainer:
 	var slot := PanelContainer.new()
-	slot.custom_minimum_size = Vector2(52.0, 60.0)
+	slot.custom_minimum_size = Vector2(58.0, 72.0)
 	slot.tooltip_text = action_name
 	slot.add_theme_stylebox_override(
 		"panel",
 		UI.action_slot_style(accent if unlocked else Color(0.22, 0.18, 0.14), false)
 	)
 	if not unlocked:
-		slot.modulate = Color(0.55, 0.55, 0.55, 0.88)
+		slot.modulate = Color(0.58, 0.58, 0.58, 0.92)
 
 	var box := VBoxContainer.new()
 	box.alignment = BoxContainer.ALIGNMENT_CENTER
-	box.add_theme_constant_override("separation", 1)
+	box.add_theme_constant_override("separation", 2)
 	slot.add_child(box)
 
-	# Icon-forward: light plate only — no nested ornate frames.
 	var icon_stack := Control.new()
-	icon_stack.custom_minimum_size = Vector2(40, 36)
+	icon_stack.custom_minimum_size = Vector2(44, 40)
 	box.add_child(icon_stack)
 
-	var kit_icon := _kit_action_icon(icon_id)
+	var kit_icon := _kit_action_icon(icon_id) if not icon_id.is_empty() else null
 	var icon: Control
 	if kit_icon != null:
 		var tex := TextureRect.new()
@@ -396,12 +390,15 @@ func _make_action_slot(
 		if not unlocked:
 			tex.modulate = Color(0.70, 0.70, 0.70, 0.85)
 		icon = tex
+	elif not icon_id.is_empty():
+		icon = Icons.make_rect(icon_id, Vector2(40, 38))
+		icon.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	else:
-		icon = Icons.make_rect(icon_id, Vector2(38, 36))
+		icon = Control.new()
 		icon.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	icon_stack.add_child(icon)
 
-	if not unlocked:
+	if not unlocked and not icon_id.is_empty():
 		var lock_tex := UI.runtime_texture("icon_lock.png")
 		if lock_tex != null:
 			var lock_rect := TextureRect.new()
@@ -410,7 +407,6 @@ func _make_action_slot(
 			lock_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 			lock_rect.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 			lock_rect.modulate = Color(1.0, 1.0, 1.0, 0.78)
-			lock_rect.custom_minimum_size = Vector2(18, 18)
 			lock_rect.set_anchors_preset(Control.PRESET_CENTER)
 			lock_rect.anchor_left = 0.5
 			lock_rect.anchor_top = 0.5
@@ -430,7 +426,7 @@ func _make_action_slot(
 	cooldown.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	icon_stack.add_child(cooldown)
 
-	var key := UI.style_keybind(Label.new(), unlocked, 11)
+	var key := UI.style_keybind(Label.new(), unlocked or key_text.is_empty(), 11)
 	key.text = key_text
 	box.add_child(key)
 
@@ -465,34 +461,32 @@ func _kit_action_icon(icon_id: String) -> Texture2D:
 
 
 func _build_menu_island() -> Control:
-	var island := PanelContainer.new()
+	var island := GridContainer.new()
 	island.name = "MenuIsland"
-	island.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	island.columns = 2
+	island.add_theme_constant_override("h_separation", 8)
+	island.add_theme_constant_override("v_separation", 8)
 	island.mouse_filter = Control.MOUSE_FILTER_STOP
-	island.add_theme_stylebox_override("panel", UI.menu_island_style())
 
-	var box := VBoxContainer.new()
-	box.name = "MenuAccess"
-	box.add_theme_constant_override("separation", 5)
-	island.add_child(box)
-	box.add_child(_make_menu_button("Character", "C", &"character", "icon_helm.png"))
-	box.add_child(_make_menu_button("Inventory", "I", &"inventory", "icon_bag.png"))
-	box.add_child(_make_menu_button("Techniques", "K", &"techniques", "icon_scroll.png"))
-	box.add_child(_make_menu_button("Quest Log", "J", &"quests", "icon_nature.png"))
+	island.add_child(_make_menu_button("CHARACTER", "C", &"character", "icon_helm.png"))
+	island.add_child(_make_menu_button("INVENTORY", "I", &"inventory", "icon_bag.png"))
+	island.add_child(_make_menu_button("TECHNIQUES", "K", &"techniques", "icon_scroll.png"))
+	island.add_child(_make_menu_button("QUEST LOG", "J", &"quests", "icon_nature.png"))
 	return island
 
 
 func _make_menu_button(text: String, key: String, panel_id: StringName, kit_icon: String) -> Button:
 	var button := UI.style_button(Button.new())
-	button.custom_minimum_size = Vector2(154.0, 26.0)
-	button.add_theme_font_size_override("font_size", 12)
-	button.add_theme_constant_override("icon_max_width", 18)
+	button.custom_minimum_size = Vector2(110.0, 44.0)
+	button.add_theme_font_size_override("font_size", 11)
+	button.add_theme_constant_override("icon_max_width", 20)
 	button.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	var tex := UI.runtime_texture(kit_icon)
 	if tex != null:
 		button.icon = tex
 		button.expand_icon = true
-	button.text = "%s  [%s]" % [text, key]
+	button.text = "%s [%s]" % [text, key]
 	button.pressed.connect(_open_panel.bind(panel_id))
 	return button
 
@@ -501,7 +495,7 @@ func _build_status_message() -> void:
 	_status_label = UI.style_label(Label.new(), Color.WHITE, 15, HORIZONTAL_ALIGNMENT_CENTER)
 	_status_label.name = "StatusMessage"
 	_status_label.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
-	_status_label.position = Vector2(-300.0, -168.0)
+	_status_label.position = Vector2(-300.0, -196.0)
 	_status_label.size = Vector2(600.0, 26.0)
 	_status_label.modulate.a = 0.0
 	add_child(_status_label)
@@ -591,18 +585,28 @@ func _refresh_expedition_label() -> void:
 	var total := 0
 	for entry: Dictionary in inventory.get_expedition_summary():
 		total += int(entry.get("quantity", 0))
-	_expedition_label.text = "Unsecured loot: %d  ·  Inventory [I]" % total
+	_expedition_label.text = "Unsecured loot: %d" % total
 
 
 func _refresh_quest_tracker() -> void:
 	if _quest_tracker_label == null:
 		return
 	var quest_lines: PackedStringArray = _quest_manager().get_visible_quest_lines()
-	_quest_tracker_label.text = (
-		"\n".join(quest_lines)
-		if not quest_lines.is_empty()
-		else "No tracked objectives.\nPress F near opportunities."
-	)
+	if quest_lines.is_empty():
+		_quest_tracker_label.text = "No tracked objectives.\nPress F near opportunities."
+		_quest_tracker_label.add_theme_color_override("font_color", UI.COLOR_TEXT)
+		return
+	# Prefer BBCode hierarchy: gold titles, muted ivory objectives.
+	if _quest_tracker_label is RichTextLabel:
+		var rtl := _quest_tracker_label as RichTextLabel
+		rtl.clear()
+		for line: String in quest_lines:
+			if line.begins_with("◆"):
+				rtl.append_text("[color=#f5d678]%s[/color]\n" % line)
+			else:
+				rtl.append_text("[color=#b8ae9c]%s[/color]\n" % line)
+	else:
+		_quest_tracker_label.text = "\n".join(quest_lines)
 
 
 func _refresh_action_slot_state() -> void:

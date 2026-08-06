@@ -1,6 +1,6 @@
 # Legacy Visuals Archive
 
-Retired during the **Hard Visual Reset**. These assets and scripts are kept for rollback safety. They must not render in normal gameplay.
+Retired during the **Hard Visual Reset**. These assets and scripts are kept for rollback safety.
 
 ## Contents
 
@@ -11,14 +11,11 @@ Retired during the **Hard Visual Reset**. These assets and scripts are kept for 
 | `Scripts/Presentation/elderwood_immersion.gd` | Orphaned Elderwood ColorRect/Polygon immersion |
 | `Scripts/Presentation/elderwood_art_dressing.gd` | Orphaned top-down Elderwood dressing |
 | `UI/Runtime/` | Oldest UI kit from an early visual pass |
-| `UI/ChronicleV2/` | UI Rescue V2 ornament skins |
-| `UI/ShowcaseRuntimeUI/` | Showcase Master Pack UI crops (retired from active HUD) |
+| `UI/ChronicleV2/` | UI Rescue V2 ornament skins (fallback only) |
 | `Environment/PixelArt_Elderwood/` | Earlier PixelArt Elderwood environment pack |
 
-## Active approved packs (not archived)
+## Active approved UI pack
 
-`Assets/Showcase/Runtime/Environment` and `Assets/Showcase/Runtime/Combat` remain on disk for the next approved-art integration milestone. They are **not** auto-placed by immersion scripts after this reset.
+`Assets/Showcase/Runtime/UI/` holds Showcase Master Pack UI crops restored for the **Master UI Recreation** milestone. They support the approved mockup (`Assets/Showcase/Source/chronicle_master_visual_target.png`).
 
-## Re-enable policy
-
-Do not re-attach these scripts to zone scenes. Integrate approved packs deliberately under `ApprovedEnvironmentArt` / HUD theme wiring with `USE_ORNAMENT_SKINS` only when a new approved UI pack is signed off.
+`Assets/Showcase/Runtime/Environment` and `Assets/Showcase/Runtime/Combat` remain for environment/combat art integration.

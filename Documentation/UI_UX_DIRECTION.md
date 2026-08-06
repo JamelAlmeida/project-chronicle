@@ -9,17 +9,17 @@ Chronicle uses an original, desktop-first dark-fantasy interface with MMO-inspir
 - Keep status messages temporary. Keep the active quest tracker compact and unobtrusive.
 - Preserve space for future buffs/debuffs and a target frame without displaying empty systems now.
 
-### Immersion-slice skin
+### Immersion-slice skin / Master UI target
 
-> **Hard visual reset:** Obsolete ornament UI skins (Showcase Runtime UI, ChronicleV2, older Runtime kits) are archived under `LegacyVisuals/UI/`. The HUD currently uses minimal flat StyleBox chrome with native Godot text while bindings remain intact. Re-skin only from an **approved** Chronicle UI pack — see [APPROVED_ART_ONLY.md](APPROVED_ART_ONLY.md).
+> **Master UI Recreation:** The approved mockup `Assets/Showcase/Source/chronicle_master_visual_target.png` is the visual authority. Runtime ornament comes from `Assets/Showcase/Runtime/UI/`. Godot Labels remain authoritative for all dynamic text.
 
-- Prefer a cozy dark-fantasy look once approved UI art returns: dark stone bottom chrome, warm gold edging, readable red HP and blue Steadfast bars, and colorful centered action slots.
+- Prefer a cohesive dark-fantasy bottom HUD with bronze-gold framing: crest/status left, eight action slots center, 2×2 menu buttons right, slim XP strip beneath.
 - Use **Cinzel** (weighted) for major headings, zone names, and limited combat emphasis. Use **Alegreya** (weighted) for body copy, HUD values, buttons, objectives, and item detail. Primary text is warm ivory; headings use muted gold; secondary text uses subdued gray. Dark outline/shadow keeps type readable over panels and the world.
 - Keep the top-left expedition ledger and top-right quest tracker compact, framed, and quieter than the world.
-- Segment the bottom adventure chrome into three islands with visible world gaps between them: left player status (crest, name/level, HP, secondary resource), center action bar, and right menu access. Place a slim XP bar across the lower bottom region beneath the islands. Do not reconnect islands with a full-width background slab.
-- Keep action slots centered with distinct icons, Cinzel keybind labels under each slot, and menu access grouped at the bottom-right island. Locked slots use darkening. Functional icons live in `Assets/UI/Icons/`.
+- Keep action slots independent (no giant static action-bar screenshot). Locked slots use darkening plus optional lock overlay.
+- Functional icons live in `Assets/Showcase/Runtime/UI/` with `Assets/UI/Icons/` as fallback.
 - Godot Labels remain authoritative for all dynamic text, keybinds, and damage numbers. Do not stack decorative frames or use baked sheet text.
-- Ordinary damage numbers use warm ivory at a larger MMO-readable scale, criticals use pale copper-gold with a CRIT callout, and player damage uses muted rose. Chronicle does not reproduce another game's iconic number palette or stacking behavior.
+- Ordinary damage numbers use warm ivory at a larger MMO-readable scale, criticals use pale copper-gold with a CRIT callout, and player damage uses muted rose.
 - World framing and environment presentation await approved Chronicle environment packs mounted under `ApprovedEnvironmentArt`.
 
 Current bindings are `E` attack, `Space` dash, `1` or legacy `Q` primary Technique, `C` Character, `I` Inventory, `K` Technique Book, `J` Quest Log, and `F` contextual quest interaction. Number keys `1–5` establish the primary action-bar range. `Tab` is reserved for future target cycling.

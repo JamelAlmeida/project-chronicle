@@ -18,6 +18,7 @@ Approved supplied Chronicle asset packs are the **only** visual source of truth 
 - Processing, slicing, placing, animating, layering, and integrating **approved** art packs
 - Keeping gameplay systems, collision, and Control/script bindings intact while visuals are swapped
 - Mounting approved art under clear scene nodes such as `ApprovedEnvironmentArt`
+- Recreating HUD/windows from the approved mockup using `Assets/Showcase/Runtime/UI/` ornament crops and native Godot text
 
 ### Primitive shapes remain allowed for
 

@@ -111,16 +111,19 @@ func get_visible_quest_lines() -> PackedStringArray:
 			continue
 		var quest := get_quest(quest_id)
 		if state == QuestState.AVAILABLE:
-			lines.append("[Available] %s" % quest.title)
+			lines.append("◆  %s" % quest.title)
+			lines.append("    Available — press F to accept.")
 			continue
 		if state == QuestState.READY_TO_TURN_IN:
-			lines.append("[Ready] %s" % quest.title)
+			lines.append("◆  %s" % quest.title)
+			lines.append("    Ready to turn in — press F.")
 			continue
+		lines.append("◆  %s" % quest.title)
 		var progress: Array = _progress.get(quest_id, [])
 		for index in range(quest.objectives.size()):
 			var objective: QuestObjectiveData = quest.objectives[index]
 			var current := int(progress[index]) if index < progress.size() else 0
-			lines.append("%s: %d/%d" % [objective.description, current, objective.required_amount])
+			lines.append("    %s (%d/%d)" % [objective.description, current, objective.required_amount])
 	return lines
 
 
