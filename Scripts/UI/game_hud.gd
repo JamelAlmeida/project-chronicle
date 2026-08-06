@@ -81,6 +81,7 @@ func _build_expedition_readout() -> void:
 	panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	panel.position = Vector2(14.0, 12.0)
 	panel.size = Vector2(228.0, 48.0)
+	panel.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	panel.add_theme_stylebox_override(
 		"panel",
 		UI.hud_panel_style(Color(0.035, 0.028, 0.022, 0.86), UI.COLOR_BRASS_LIGHT)
@@ -109,6 +110,7 @@ func _build_quest_tracker() -> void:
 	panel.offset_right = -14.0
 	panel.offset_bottom = 108.0
 	panel.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	panel.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	panel.add_theme_stylebox_override(
 		"panel",
 		UI.hud_panel_style(Color(0.035, 0.03, 0.024, 0.86), UI.COLOR_QUEST)
@@ -156,10 +158,11 @@ func _build_bottom_hud() -> void:
 	panel.anchor_top = 1.0
 	panel.anchor_bottom = 1.0
 	panel.offset_left = 0.0
-	panel.offset_top = -128.0
+	panel.offset_top = -112.0
 	panel.offset_right = 0.0
 	panel.offset_bottom = 0.0
 	panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	panel.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	panel.add_theme_stylebox_override("panel", UI.bottom_hud_style())
 	add_child(panel)
 
@@ -200,8 +203,18 @@ func _build_vitals() -> Control:
 	var crest := PanelContainer.new()
 	crest.custom_minimum_size = Vector2(52.0, 52.0)
 	crest.add_theme_stylebox_override("panel", UI.action_slot_style(UI.COLOR_BRASS_LIGHT))
-	var crest_icon := Icons.make_rect(Icons.CREST, Vector2(40, 40))
-	crest.add_child(crest_icon)
+	var kit_crest := UI.runtime_texture("crest_icon.png")
+	if kit_crest != null:
+		var crest_rect := TextureRect.new()
+		crest_rect.texture = kit_crest
+		crest_rect.custom_minimum_size = Vector2(40, 40)
+		crest_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		crest_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		crest_rect.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+		crest_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		crest.add_child(crest_rect)
+	else:
+		crest.add_child(Icons.make_rect(Icons.CREST, Vector2(40, 40)))
 	row.add_child(crest)
 
 	var box := VBoxContainer.new()
@@ -292,22 +305,7 @@ func _make_action_slot(
 
 	var icon_plate := PanelContainer.new()
 	icon_plate.custom_minimum_size = Vector2(46.0, 42.0)
-	var plate_style := StyleBoxFlat.new()
-	plate_style.bg_color = Color(0.05, 0.038, 0.028, 0.98)
-	plate_style.border_width_left = 1
-	plate_style.border_width_top = 1
-	plate_style.border_width_right = 1
-	plate_style.border_width_bottom = 1
-	plate_style.border_color = accent.lightened(0.22) if unlocked else Color(0.24, 0.2, 0.15, 1.0)
-	plate_style.corner_radius_top_left = 3
-	plate_style.corner_radius_top_right = 3
-	plate_style.corner_radius_bottom_right = 3
-	plate_style.corner_radius_bottom_left = 3
-	plate_style.content_margin_left = 2.0
-	plate_style.content_margin_top = 2.0
-	plate_style.content_margin_right = 2.0
-	plate_style.content_margin_bottom = 2.0
-	icon_plate.add_theme_stylebox_override("panel", plate_style)
+	icon_plate.add_theme_stylebox_override("panel", UI.action_slot_style(accent if unlocked else Color(0.20, 0.16, 0.12)))
 	box.add_child(icon_plate)
 
 	var icon_stack := Control.new()
@@ -364,7 +362,7 @@ func _build_status_message() -> void:
 	_status_label = UI.style_label(Label.new(), Color.WHITE, 13, HORIZONTAL_ALIGNMENT_CENTER)
 	_status_label.name = "StatusMessage"
 	_status_label.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
-	_status_label.position = Vector2(-300.0, -146.0)
+	_status_label.position = Vector2(-300.0, -132.0)
 	_status_label.size = Vector2(600.0, 24.0)
 	_status_label.modulate.a = 0.0
 	add_child(_status_label)

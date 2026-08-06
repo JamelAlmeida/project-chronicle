@@ -9,7 +9,7 @@ extends Camera2D
 @export_range(0.0, 160.0, 1.0) var look_ahead_distance := 42.0
 @export_range(1.0, 20.0, 0.5) var look_ahead_speed := 7.5
 @export var vertical_offset := -8.0
-@export var gameplay_zoom := Vector2(1.92, 1.92)
+@export var gameplay_zoom := Vector2(1.68, 1.68)
 @export_range(0.0, 12.0, 0.25) var maximum_shake_pixels := 4.0
 
 var _rest_offset := Vector2.ZERO

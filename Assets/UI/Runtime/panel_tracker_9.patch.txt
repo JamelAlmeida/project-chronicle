@@ -1,0 +1,5 @@
+left=24
+right=24
+top=24
+bottom=24
+

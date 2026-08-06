@@ -1,0 +1,4 @@
+frame_w=96
+frame_h=112
+count=8
+

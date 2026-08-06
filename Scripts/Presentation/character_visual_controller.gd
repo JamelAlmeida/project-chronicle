@@ -28,7 +28,8 @@ func update_presentation(
 	is_dodging: bool,
 	is_attacking: bool,
 	motion: Vector2,
-	facing: Vector2
+	facing: Vector2,
+	is_on_floor: bool = true
 ) -> void:
 	if facing.length_squared() > 0.001:
 		_current_direction = _direction_name(facing)
@@ -42,7 +43,9 @@ func update_presentation(
 		next_state = &"dodge"
 	elif is_attacking:
 		next_state = &"attack"
-	elif motion.length_squared() > 1.0:
+	elif not is_on_floor:
+		next_state = &"jump" if motion.y < 0.0 else &"fall"
+	elif absf(motion.x) > 1.0:
 		next_state = locomotion_animation
 
 	var state_changed := next_state != _current_state
@@ -90,12 +93,14 @@ func spawn_detached_death_animation(parent: Node = null) -> AnimatedSprite2D:
 
 func get_supported_animation_names() -> PackedStringArray:
 	return PackedStringArray([
-		"idle_down", "idle_up", "idle_left", "idle_right",
-		"walk_down", "walk_up", "walk_left", "walk_right",
-		"run_down", "run_up", "run_left", "run_right",
-		"attack_down", "attack_up", "attack_left", "attack_right",
-		"melee_attack_down", "melee_attack_up", "melee_attack_left", "melee_attack_right",
-		"dodge_down", "dodge_up", "dodge_left", "dodge_right",
+		"idle", "idle_down", "idle_up", "idle_left", "idle_right",
+		"walk", "walk_down", "walk_up", "walk_left", "walk_right",
+		"run", "run_down", "run_up", "run_left", "run_right",
+		"jump", "jump_right", "fall", "fall_right",
+		"dash", "dash_right",
+		"attack", "attack_down", "attack_up", "attack_left", "attack_right",
+		"melee_basic", "melee_attack_down", "melee_attack_up", "melee_attack_left", "melee_attack_right",
+		"dodge", "dodge_down", "dodge_up", "dodge_left", "dodge_right",
 		"hurt_down", "hurt_up", "hurt_left", "hurt_right",
 		"death_down", "death_up", "death_left", "death_right",
 	])
@@ -152,6 +157,21 @@ func _find_state_animation(state: StringName, direction: StringName) -> StringNa
 		candidates.append(state)
 		candidates.append(&"walk")
 		candidates.append(&"move")
+	elif state == &"dodge":
+		candidates.append(StringName("dodge_%s" % direction))
+		candidates.append(StringName("dash_%s" % direction))
+		if mirror_left_from_right and direction == &"left":
+			candidates.append(&"dodge_right")
+			candidates.append(&"dash_right")
+		candidates.append(&"dodge")
+		candidates.append(&"dash")
+	elif state == &"jump" or state == &"fall":
+		candidates.append(StringName("%s_%s" % [state, direction]))
+		if mirror_left_from_right and direction == &"left":
+			candidates.append(StringName("%s_right" % state))
+		candidates.append(state)
+		if state == &"fall":
+			candidates.append(&"jump")
 	else:
 		candidates.append(StringName("%s_%s" % [state, direction]))
 		if mirror_left_from_right and direction == &"left":

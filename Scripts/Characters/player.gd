@@ -22,7 +22,7 @@ const HURT_PRESENTATION_DURATION := 0.18
 @onready var _stats: StatsComponent = $StatsComponent
 @onready var _equipment: EquipmentComponent = $EquipmentComponent
 @onready var _placeholder_visual: CanvasItem = $Visuals/PlaceholderVisual
-@onready var _player_sprite: AnimatedSprite2D = $Visuals/PlayerSprite
+@onready var _player_sprite: AnimatedSprite2D = $Visuals/BaseCharacter
 @onready var _visual_controller: CharacterVisualController = $Visuals/VisualController
 
 var _knockback_velocity := Vector2.ZERO
@@ -218,7 +218,8 @@ func _update_presentation(delta: float) -> void:
 		_dodge.is_dodging(),
 		_melee_attack.is_attacking(),
 		velocity,
-		_facing.get_direction()
+		_facing.get_direction(),
+		is_on_floor()
 	)
 
 

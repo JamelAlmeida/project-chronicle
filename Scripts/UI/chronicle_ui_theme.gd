@@ -3,6 +3,7 @@ extends RefCounted
 
 const BODY_FONT_PATH := "res://Project Chronicle/Assets/Fonts/Alegreya-Variable.ttf"
 const HEADING_FONT_PATH := "res://Project Chronicle/Assets/Fonts/Cinzel-Variable.ttf"
+const UI_RUNTIME_ROOT := "res://Project Chronicle/Assets/UI/Runtime/"
 
 const COLOR_INK := Color(0.035, 0.028, 0.022, 0.98)
 const COLOR_PANEL := Color(0.055, 0.045, 0.035, 0.94)
@@ -21,6 +22,7 @@ const COLOR_QUEST := Color(0.36, 0.54, 0.28, 1.0)
 
 static var _body_font: FontFile
 static var _heading_font: FontFile
+static var _texture_cache: Dictionary = {}
 
 
 static func body_font() -> FontFile:
@@ -41,7 +43,44 @@ static func _load_font(path: String) -> FontFile:
 	return font
 
 
-static func panel_style(background: Color = COLOR_PANEL, border: Color = COLOR_BRASS) -> StyleBoxFlat:
+static func runtime_texture(name: String) -> Texture2D:
+	if _texture_cache.has(name):
+		return _texture_cache[name] as Texture2D
+	var path := "%s%s" % [UI_RUNTIME_ROOT, name]
+	if not ResourceLoader.exists(path):
+		return null
+	var tex := load(path) as Texture2D
+	_texture_cache[name] = tex
+	return tex
+
+
+static func textured_style(
+	texture_name: String,
+	margin: float = 24.0,
+	content_margin: float = 12.0
+) -> StyleBox:
+	var tex := runtime_texture(texture_name)
+	if tex == null:
+		return null
+	var style := StyleBoxTexture.new()
+	style.texture = tex
+	style.texture_margin_left = margin
+	style.texture_margin_top = margin
+	style.texture_margin_right = margin
+	style.texture_margin_bottom = margin
+	style.content_margin_left = content_margin
+	style.content_margin_top = content_margin
+	style.content_margin_right = content_margin
+	style.content_margin_bottom = content_margin
+	style.axis_stretch_horizontal = StyleBoxTexture.AXIS_STRETCH_MODE_TILE_FIT
+	style.axis_stretch_vertical = StyleBoxTexture.AXIS_STRETCH_MODE_TILE_FIT
+	return style
+
+
+static func panel_style(background: Color = COLOR_PANEL, border: Color = COLOR_BRASS) -> StyleBox:
+	var textured := textured_style("panel_empty_large_9.png", 30.0, 14.0)
+	if textured != null:
+		return textured
 	var style := StyleBoxFlat.new()
 	style.bg_color = background
 	style.border_width_left = 2
@@ -64,13 +103,24 @@ static func panel_style(background: Color = COLOR_PANEL, border: Color = COLOR_B
 
 
 ## Compact top trackers — quiet over the world.
-static func hud_panel_style(background: Color = COLOR_PANEL, border: Color = COLOR_BRASS) -> StyleBoxFlat:
-	var style := panel_style(background, border)
+static func hud_panel_style(background: Color = COLOR_PANEL, border: Color = COLOR_BRASS) -> StyleBox:
+	var textured := textured_style("panel_tracker_9.png", 22.0, 10.0)
+	if textured == null:
+		textured = textured_style("panel_compact_9.png", 22.0, 10.0)
+	if textured != null:
+		return textured
+	var style := StyleBoxFlat.new()
+	style.bg_color = background
 	style.border_width_left = 1
 	style.border_width_top = 1
 	style.border_width_right = 1
 	style.border_width_bottom = 1
 	style.border_color = border.lightened(0.08)
+	style.corner_radius_top_left = 3
+	style.corner_radius_top_right = 3
+	style.corner_radius_bottom_right = 3
+	style.corner_radius_bottom_left = 3
+	style.shadow_color = Color(0.0, 0.0, 0.0, 0.55)
 	style.shadow_size = 3
 	style.shadow_offset = Vector2(0.0, 1.0)
 	style.content_margin_left = 10.0
@@ -81,7 +131,15 @@ static func hud_panel_style(background: Color = COLOR_PANEL, border: Color = COL
 
 
 ## Full-width bottom adventure bar — dark stone with warm gold edging.
-static func bottom_hud_style() -> StyleBoxFlat:
+static func bottom_hud_style() -> StyleBox:
+	var textured := textured_style("bottom_hud_ref_9.png", 18.0, 10.0)
+	if textured != null:
+		var tex_style := textured as StyleBoxTexture
+		tex_style.content_margin_left = 14.0
+		tex_style.content_margin_top = 8.0
+		tex_style.content_margin_right = 14.0
+		tex_style.content_margin_bottom = 6.0
+		return tex_style
 	var style := StyleBoxFlat.new()
 	style.bg_color = COLOR_STONE
 	style.border_width_left = 0
@@ -103,12 +161,21 @@ static func bottom_hud_style() -> StyleBoxFlat:
 	return style
 
 
-static func inset_style(accent: Color = Color(0.22, 0.18, 0.14, 1.0)) -> StyleBoxFlat:
-	var style := panel_style(COLOR_INSET, accent)
+static func inset_style(accent: Color = Color(0.22, 0.18, 0.14, 1.0)) -> StyleBox:
+	var textured := textured_style("panel_frame_9.png", 24.0, 8.0)
+	if textured != null:
+		return textured
+	var style := StyleBoxFlat.new()
+	style.bg_color = COLOR_INSET
 	style.border_width_left = 1
 	style.border_width_top = 1
 	style.border_width_right = 1
 	style.border_width_bottom = 1
+	style.border_color = accent
+	style.corner_radius_top_left = 3
+	style.corner_radius_top_right = 3
+	style.corner_radius_bottom_right = 3
+	style.corner_radius_bottom_left = 3
 	style.shadow_size = 1
 	style.shadow_color = Color(0.0, 0.0, 0.0, 0.4)
 	style.content_margin_left = 3.0
@@ -118,37 +185,72 @@ static func inset_style(accent: Color = Color(0.22, 0.18, 0.14, 1.0)) -> StyleBo
 	return style
 
 
-static func action_slot_style(accent: Color) -> StyleBoxFlat:
+static func action_slot_style(accent: Color) -> StyleBox:
+	var slot_tex := runtime_texture("slot_clean.png")
+	if slot_tex == null:
+		slot_tex = runtime_texture("slot_empty_9.png")
+	if slot_tex == null:
+		slot_tex = runtime_texture("action_slot_9.png")
+	if slot_tex != null:
+		var style := StyleBoxTexture.new()
+		style.texture = slot_tex
+		style.texture_margin_left = 12.0
+		style.texture_margin_top = 12.0
+		style.texture_margin_right = 12.0
+		style.texture_margin_bottom = 12.0
+		style.content_margin_left = 4.0
+		style.content_margin_top = 4.0
+		style.content_margin_right = 4.0
+		style.content_margin_bottom = 4.0
+		style.modulate_color = Color(1.0, 1.0, 1.0, 1.0).lerp(accent, 0.08)
+		return style
+	var flat := StyleBoxFlat.new()
+	flat.bg_color = Color(0.04, 0.032, 0.024, 0.97)
+	flat.border_width_left = 2
+	flat.border_width_top = 2
+	flat.border_width_right = 2
+	flat.border_width_bottom = 2
+	flat.border_color = accent.lightened(0.12)
+	flat.corner_radius_top_left = 4
+	flat.corner_radius_top_right = 4
+	flat.corner_radius_bottom_right = 4
+	flat.corner_radius_bottom_left = 4
+	flat.shadow_color = Color(0.0, 0.0, 0.0, 0.55)
+	flat.shadow_size = 3
+	flat.shadow_offset = Vector2(0.0, 1.0)
+	flat.content_margin_left = 4.0
+	flat.content_margin_top = 4.0
+	flat.content_margin_right = 4.0
+	flat.content_margin_bottom = 4.0
+	return flat
+
+
+static func section_style(accent: Color = COLOR_BRASS) -> StyleBox:
+	var textured := textured_style("panel_frame_9.png", 24.0, 10.0)
+	if textured != null:
+		return textured
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.04, 0.032, 0.024, 0.97)
-	style.border_width_left = 2
-	style.border_width_top = 2
-	style.border_width_right = 2
-	style.border_width_bottom = 2
-	style.border_color = accent.lightened(0.12)
-	style.corner_radius_top_left = 4
-	style.corner_radius_top_right = 4
-	style.corner_radius_bottom_right = 4
-	style.corner_radius_bottom_left = 4
-	style.shadow_color = Color(0.0, 0.0, 0.0, 0.55)
-	style.shadow_size = 3
-	style.shadow_offset = Vector2(0.0, 1.0)
-	style.content_margin_left = 4.0
-	style.content_margin_top = 4.0
-	style.content_margin_right = 4.0
-	style.content_margin_bottom = 4.0
-	return style
-
-
-static func section_style(accent: Color = COLOR_BRASS) -> StyleBoxFlat:
-	var style := inset_style(accent.darkened(0.34))
 	style.bg_color = Color(0.03, 0.024, 0.018, 0.95)
+	style.border_width_left = 1
 	style.border_width_top = 2
+	style.border_width_right = 1
+	style.border_width_bottom = 1
 	style.border_color = accent.darkened(0.1)
+	style.corner_radius_top_left = 3
+	style.corner_radius_top_right = 3
+	style.corner_radius_bottom_right = 3
+	style.corner_radius_bottom_left = 3
+	style.content_margin_left = 8.0
+	style.content_margin_top = 8.0
+	style.content_margin_right = 8.0
+	style.content_margin_bottom = 8.0
 	return style
 
 
-static func bar_background() -> StyleBoxFlat:
+static func bar_background() -> StyleBox:
+	var textured := textured_style("bar_empty_9.png", 8.0, 2.0)
+	if textured != null:
+		return textured
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(0.03, 0.024, 0.018, 1.0)
 	style.border_width_left = 1
@@ -223,9 +325,20 @@ static func style_button(button: Button, accent: Color = COLOR_BRASS) -> Button:
 	button.add_theme_color_override("font_pressed_color", COLOR_GOLD)
 	button.add_theme_font_override("font", body_font())
 	button.add_theme_font_size_override("font_size", 12)
-	button.add_theme_stylebox_override("normal", inset_style(accent.darkened(0.42)))
-	button.add_theme_stylebox_override("hover", inset_style(accent.darkened(0.12)))
-	button.add_theme_stylebox_override("pressed", inset_style(accent))
+	var normal := textured_style("menu_btn_chrome_9.png", 12.0, 8.0)
+	if normal == null:
+		normal = textured_style("btn_frame_9.png", 12.0, 8.0)
+	if normal == null:
+		normal = inset_style(accent.darkened(0.42))
+	var hover := normal.duplicate()
+	if hover is StyleBoxTexture:
+		(hover as StyleBoxTexture).modulate_color = Color(1.08, 1.05, 0.95, 1.0)
+	var pressed := normal.duplicate()
+	if pressed is StyleBoxTexture:
+		(pressed as StyleBoxTexture).modulate_color = Color(0.92, 0.88, 0.78, 1.0)
+	button.add_theme_stylebox_override("normal", normal)
+	button.add_theme_stylebox_override("hover", hover)
+	button.add_theme_stylebox_override("pressed", pressed)
 	button.add_theme_stylebox_override("disabled", inset_style(Color(0.12, 0.1, 0.08, 1.0)))
 	return button
 
