@@ -1,7 +1,9 @@
 extends CanvasLayer
 
 const UI := preload("res://Project Chronicle/Scripts/UI/chronicle_ui_theme.gd")
-const PLAYER_PREVIEW_TEXTURE := preload("res://Project Chronicle/Assets/PixelArt/Characters/Player/adventurer_base_32x48.png")
+## Character preview uses the approved Adventurer kit — not archived PixelArt player sheets.
+const PLAYER_PREVIEW_TEXTURE := preload("res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_idle.png")
+const PLAYER_PREVIEW_REGION := Rect2(0.0, 0.0, 96.0, 112.0)
 const PANEL_TITLES := {
 	&"character": "CHARACTER",
 	&"inventory": "INVENTORY",
@@ -284,7 +286,7 @@ func _build_character_preview_column() -> Control:
 	var preview := TextureRect.new()
 	var atlas := AtlasTexture.new()
 	atlas.atlas = PLAYER_PREVIEW_TEXTURE
-	atlas.region = Rect2(0.0, 144.0, 32.0, 48.0)
+	atlas.region = PLAYER_PREVIEW_REGION
 	preview.texture = atlas
 	preview.custom_minimum_size = Vector2(120.0, 168.0)
 	preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE

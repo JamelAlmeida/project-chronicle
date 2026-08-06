@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://uf1qurajb43h"
-path="res://.godot/imported/potion.png-7aabb027a9fa62e7e1c9210352afaaec.ctex"
+uid="uid://brwvl3cguivxb"
+path="res://.godot/imported/icon_nature.png-47c6e4bf15666adc4ebf7013676169b5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Project Chronicle/Assets/UI/Icons/potion.png"
-dest_files=["res://.godot/imported/potion.png-7aabb027a9fa62e7e1c9210352afaaec.ctex"]
+source_file="res://Project Chronicle/LegacyVisuals/UI/ShowcaseFillerIcons/icon_nature.png"
+dest_files=["res://.godot/imported/icon_nature.png-47c6e4bf15666adc4ebf7013676169b5.ctex"]
 
 [params]
 

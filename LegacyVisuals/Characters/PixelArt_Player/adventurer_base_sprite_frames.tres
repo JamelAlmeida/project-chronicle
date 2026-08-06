@@ -1,7 +1,7 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://6yqjek2kxfb0"]
 
-[ext_resource type="Texture2D" uid="uid://s42p2xxxlgc4" path="res://Project Chronicle/Assets/PixelArt/Characters/Player/adventurer_base_32x48.png" id="1_sheet"]
-[ext_resource type="Texture2D" uid="uid://dpxwevp3nobpq" path="res://Project Chronicle/Assets/PixelArt/Characters/Player/adventurer_attack_112x48.png" id="2_attack_sheet"]
+[ext_resource type="Texture2D" uid="uid://s42p2xxxlgc4" path="res://Project Chronicle/LegacyVisuals/Characters/PixelArt_Player/adventurer_base_32x48.png" id="1_sheet"]
+[ext_resource type="Texture2D" uid="uid://dpxwevp3nobpq" path="res://Project Chronicle/LegacyVisuals/Characters/PixelArt_Player/adventurer_attack_112x48.png" id="2_attack_sheet"]
 
 [sub_resource type="AtlasTexture" id="Atlas_down_idle"]
 atlas = ExtResource("1_sheet")

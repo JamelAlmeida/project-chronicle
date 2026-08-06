@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2koin5yfekib"
-path="res://.godot/imported/slime_states_48x40.png-53f2bccac6975e578d05e6974daeb3c8.ctex"
+uid="uid://coom7gifkn0ay"
+path="res://.godot/imported/icon_shadow.png-8a74e0436aaa10910b0e5c65b367ff3b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Project Chronicle/Assets/PixelArt/Characters/Slime/slime_states_48x40.png"
-dest_files=["res://.godot/imported/slime_states_48x40.png-53f2bccac6975e578d05e6974daeb3c8.ctex"]
+source_file="res://Project Chronicle/LegacyVisuals/UI/ShowcaseFillerIcons/icon_shadow.png"
+dest_files=["res://.godot/imported/icon_shadow.png-8a74e0436aaa10910b0e5c65b367ff3b.ctex"]
 
 [params]
 

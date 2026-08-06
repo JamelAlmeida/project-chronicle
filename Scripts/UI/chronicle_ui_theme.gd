@@ -6,7 +6,8 @@ const HEADING_FONT_PATH := "res://Project Chronicle/Assets/Fonts/Cinzel-Variable
 ## Master UI recreation — approved Showcase Master Pack UI crops are the ornament source.
 const USE_ORNAMENT_SKINS := true
 const SHOWCASE_UI_ROOT := "res://Project Chronicle/Assets/Showcase/Runtime/UI/"
-const UI_RUNTIME_ROOT := "res://Project Chronicle/LegacyVisuals/UI/ChronicleV2/Runtime/"
+## Legacy ChronicleV2 fallback removed — required furniture copied into Showcase UI.
+const UI_RUNTIME_ROOT := ""
 
 const COLOR_INK := Color(0.028, 0.022, 0.016, 0.98)
 const COLOR_PANEL := Color(0.048, 0.038, 0.028, 0.94)
@@ -75,6 +76,8 @@ static func showcase_texture(relative_path: String) -> Texture2D:
 
 static func _load_texture_from_roots(name: String, roots: Array) -> Texture2D:
 	for root in roots:
+		if str(root).is_empty():
+			continue
 		var tex := _load_texture_path("%s%s" % [root, name])
 		if tex != null:
 			return tex

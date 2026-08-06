@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bsh07a177e7ml"
-path="res://.godot/imported/arc_slash.png-fdfd658124003389050e2e9f878f3b6a.ctex"
+uid="uid://uf1qurajb43h"
+path="res://.godot/imported/potion.png-bbe03af1aafca1c0ecb1a31786ee903a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Project Chronicle/Assets/UI/Icons/arc_slash.png"
-dest_files=["res://.godot/imported/arc_slash.png-fdfd658124003389050e2e9f878f3b6a.ctex"]
+source_file="res://Project Chronicle/LegacyVisuals/UI/FillerActionIcons/potion.png"
+dest_files=["res://.godot/imported/potion.png-bbe03af1aafca1c0ecb1a31786ee903a.ctex"]
 
 [params]
 

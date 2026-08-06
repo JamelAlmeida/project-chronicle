@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://s42p2xxxlgc4"
-path="res://.godot/imported/adventurer_base_32x48.png-2222430d39a56ab45f74cdd58336f59e.ctex"
+uid="uid://bih3gypppvftp"
+path="res://.godot/imported/icon_shadow.png-a3b789e84057ef52238218e33b133130.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Project Chronicle/Assets/PixelArt/Characters/Player/adventurer_base_32x48.png"
-dest_files=["res://.godot/imported/adventurer_base_32x48.png-2222430d39a56ab45f74cdd58336f59e.ctex"]
+source_file="res://Project Chronicle/LegacyVisuals/UI/ShowcaseFillerIcons/Debug/icon_shadow.png"
+dest_files=["res://.godot/imported/icon_shadow.png-a3b789e84057ef52238218e33b133130.ctex"]
 
 [params]
 

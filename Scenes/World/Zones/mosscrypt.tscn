@@ -29,6 +29,7 @@ zone_data = ExtResource("2_data")
 z_index = -100
 
 [node name="NeutralPlayableSurface" type="ColorRect" parent="Background"]
+visible = false
 offset_left = -40.0
 offset_top = -40.0
 offset_right = 420.0

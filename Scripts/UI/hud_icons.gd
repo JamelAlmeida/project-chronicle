@@ -1,22 +1,14 @@
 class_name HudIcons
 extends RefCounted
 
-## Loads Chronicle HUD pixel icons with nearest-neighbor presentation.
+## Active Chronicle HUD icons used by real assigned actions / crest only.
+## Filler sample spell/consumable icons are archived under LegacyVisuals/UI/FillerActionIcons/.
 
 const ICON_ROOT := "res://Project Chronicle/Assets/UI/Icons/"
 
 const CREST := "crest"
 const ATTACK := "attack"
 const DASH := "dash"
-const TECHNIQUE := "technique"
-const ARC_SLASH := "arc_slash"
-const PULSE_WAVE := "pulse_wave"
-const VERDANT_BLOOM := "verdant_bloom"
-const POTION := "potion"
-const MENU_CHARACTER := "menu_character"
-const MENU_INVENTORY := "menu_inventory"
-const MENU_TECHNIQUES := "menu_techniques"
-const MENU_QUESTS := "menu_quests"
 
 static var _cache: Dictionary = {}
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://crmsmebmewb5g"
-path="res://.godot/imported/menu_techniques.png-86baba2b72b8a4f75b63ec7979478187.ctex"
+uid="uid://bxx877edqru3l"
+path="res://.godot/imported/icon_sword.png-45a961a0324a44bbfe452b31e261165c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Project Chronicle/Assets/UI/Icons/menu_techniques.png"
-dest_files=["res://.godot/imported/menu_techniques.png-86baba2b72b8a4f75b63ec7979478187.ctex"]
+source_file="res://Project Chronicle/LegacyVisuals/UI/ShowcaseFillerIcons/icon_sword.png"
+dest_files=["res://.godot/imported/icon_sword.png-45a961a0324a44bbfe452b31e261165c.ctex"]
 
 [params]
 

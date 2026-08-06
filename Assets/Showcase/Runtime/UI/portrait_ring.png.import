@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bjmmk4l5lsci2"
-path="res://.godot/imported/menu_quests.png-57e6f32034c9d46ebdcefb5a5d060da8.ctex"
+uid="uid://bygqqq8web6ge"
+path="res://.godot/imported/portrait_ring.png-fa54f3cd5a6d13b48cf31f70ed4fe7ff.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Project Chronicle/Assets/UI/Icons/menu_quests.png"
-dest_files=["res://.godot/imported/menu_quests.png-57e6f32034c9d46ebdcefb5a5d060da8.ctex"]
+source_file="res://Project Chronicle/Assets/Showcase/Runtime/UI/portrait_ring.png"
+dest_files=["res://.godot/imported/portrait_ring.png-fa54f3cd5a6d13b48cf31f70ed4fe7ff.ctex"]
 
 [params]
 

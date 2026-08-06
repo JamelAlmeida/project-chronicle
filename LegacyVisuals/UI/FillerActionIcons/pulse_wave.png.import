@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://n6nsq8xtekjr"
-path="res://.godot/imported/verdant_bloom.png-1e988a9644d0d33444e5f7996bc3cedd.ctex"
+uid="uid://vjae14ltf68g"
+path="res://.godot/imported/pulse_wave.png-e6e6776f96f23ed081d4340952df728c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Project Chronicle/Assets/UI/Icons/verdant_bloom.png"
-dest_files=["res://.godot/imported/verdant_bloom.png-1e988a9644d0d33444e5f7996bc3cedd.ctex"]
+source_file="res://Project Chronicle/LegacyVisuals/UI/FillerActionIcons/pulse_wave.png"
+dest_files=["res://.godot/imported/pulse_wave.png-e6e6776f96f23ed081d4340952df728c.ctex"]
 
 [params]
 

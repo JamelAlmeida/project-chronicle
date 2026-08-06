@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dr3l2ytwophrd"
-path="res://.godot/imported/menu_inventory.png-3e3773a64619d5340ce99aa921598d59.ctex"
+uid="uid://dsrtrwqkf4aug"
+path="res://.godot/imported/btn_plus.png-7e06a092e7c1e65f1e8f9ada8a10f8fa.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Project Chronicle/Assets/UI/Icons/menu_inventory.png"
-dest_files=["res://.godot/imported/menu_inventory.png-3e3773a64619d5340ce99aa921598d59.ctex"]
+source_file="res://Project Chronicle/Assets/Showcase/Runtime/UI/btn_plus.png"
+dest_files=["res://.godot/imported/btn_plus.png-7e06a092e7c1e65f1e8f9ada8a10f8fa.ctex"]
 
 [params]
 

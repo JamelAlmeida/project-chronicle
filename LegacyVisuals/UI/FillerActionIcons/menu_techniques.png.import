@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://coom7gifkn0ay"
-path="res://.godot/imported/icon_shadow.png-51db8b6879b9ffb1f17ba7c353380e8c.ctex"
+uid="uid://crmsmebmewb5g"
+path="res://.godot/imported/menu_techniques.png-3dbfe8219b318d1c675be15ac115cc69.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Project Chronicle/Assets/Showcase/Runtime/UI/icon_shadow.png"
-dest_files=["res://.godot/imported/icon_shadow.png-51db8b6879b9ffb1f17ba7c353380e8c.ctex"]
+source_file="res://Project Chronicle/LegacyVisuals/UI/FillerActionIcons/menu_techniques.png"
+dest_files=["res://.godot/imported/menu_techniques.png-3dbfe8219b318d1c675be15ac115cc69.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dua7g6ybxl0dx"
-path="res://.godot/imported/icon_fire.png-8e1989eb805e982baffd8d61404a03b8.ctex"
+uid="uid://bi3r5p7fslajt"
+path="res://.godot/imported/icon_fire.png-498436a3e4f29d6317e019662ced34d2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Project Chronicle/Assets/Showcase/Runtime/UI/icon_fire.png"
-dest_files=["res://.godot/imported/icon_fire.png-8e1989eb805e982baffd8d61404a03b8.ctex"]
+source_file="res://Project Chronicle/LegacyVisuals/UI/ShowcaseFillerIcons/Debug/icon_fire.png"
+dest_files=["res://.godot/imported/icon_fire.png-498436a3e4f29d6317e019662ced34d2.ctex"]
 
 [params]
 

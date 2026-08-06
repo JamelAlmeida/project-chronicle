@@ -18,7 +18,7 @@ Chronicle uses an original, desktop-first dark-fantasy interface with MMO-inspir
 - Use **Cinzel** (weighted) for major headings, zone names, and limited combat emphasis. Use **Alegreya** (weighted) for body copy, HUD values, buttons, objectives, and item detail. Primary text is warm ivory; headings use muted gold; secondary text uses subdued gray. Dark outline/shadow keeps type readable over panels and the world.
 - Keep the top-left expedition ledger and top-right quest tracker compact, framed, and quieter than the world.
 - Keep action slots independent (no giant static action-bar screenshot). Locked slots use darkening plus optional lock overlay.
-- Functional icons live in `Assets/Showcase/Runtime/UI/` with `Assets/UI/Icons/` as fallback.
+- Functional menu icons live in `Assets/Showcase/Runtime/UI/` (helm/bag/slash/scroll/lock). Assigned action icons live in `Assets/UI/Icons/` (`attack`, `dash`, `crest`). Do not use archived filler ability icons.
 - Godot Labels remain authoritative for all dynamic text, keybinds, and damage numbers. Do not stack decorative frames or use baked sheet text.
 - Ordinary damage numbers use warm ivory at a larger MMO-readable scale, criticals use pale copper-gold with a CRIT callout, and player damage uses muted rose.
 - World framing and environment presentation await approved Chronicle environment packs mounted under `ApprovedEnvironmentArt`.

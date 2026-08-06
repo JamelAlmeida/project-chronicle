@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dpxwevp3nobpq"
-path="res://.godot/imported/adventurer_attack_112x48.png-aa945a5d6018ef39e7a6673e0e2d01f6.ctex"
+uid="uid://n6nsq8xtekjr"
+path="res://.godot/imported/verdant_bloom.png-54c7cdca37002ac60d01c122669ed1ce.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Project Chronicle/Assets/PixelArt/Characters/Player/adventurer_attack_112x48.png"
-dest_files=["res://.godot/imported/adventurer_attack_112x48.png-aa945a5d6018ef39e7a6673e0e2d01f6.ctex"]
+source_file="res://Project Chronicle/LegacyVisuals/UI/FillerActionIcons/verdant_bloom.png"
+dest_files=["res://.godot/imported/verdant_bloom.png-54c7cdca37002ac60d01c122669ed1ce.ctex"]
 
 [params]
 

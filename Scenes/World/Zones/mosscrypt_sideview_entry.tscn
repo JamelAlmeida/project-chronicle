@@ -33,6 +33,7 @@ collision_layer = 2
 collision_mask = 0
 
 [node name="NeutralPlayableSurface" type="ColorRect" parent="Gameplay/Collision/Ground"]
+visible = false
 offset_left = -450.0
 offset_top = -50.0
 offset_right = 450.0

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://omgmgx8ma3s2"
-path="res://.godot/imported/technique.png-060dcd1c656a34fa9e0c9a58421e5849.ctex"
+uid="uid://dpxwevp3nobpq"
+path="res://.godot/imported/adventurer_attack_112x48.png-a8e14d2594dd2a56341cae056534df8d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Project Chronicle/Assets/UI/Icons/technique.png"
-dest_files=["res://.godot/imported/technique.png-060dcd1c656a34fa9e0c9a58421e5849.ctex"]
+source_file="res://Project Chronicle/LegacyVisuals/Characters/PixelArt_Player/adventurer_attack_112x48.png"
+dest_files=["res://.godot/imported/adventurer_attack_112x48.png-a8e14d2594dd2a56341cae056534df8d.ctex"]
 
 [params]
 
