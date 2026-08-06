@@ -193,7 +193,8 @@ public static class ChronicleShowcaseMasterProcessor
 			{ "hit_spark_b", new Rectangle(1015, 430, 165, 150) },
 			{ "hit_spark_c", new Rectangle(1255, 425, 195, 155) },
 			{ "loot_sparkle", new Rectangle(800, 650, 280, 140) },
-			{ "hit_burst", new Rectangle(1145, 655, 320, 130) },
+			// Do NOT crop hit_burst — that sheet region is baked "2147! CRIT!" example glyphs.
+			// Runtime damage numbers are always Godot Labels driven by resolved combat amounts.
 		};
 	}
 

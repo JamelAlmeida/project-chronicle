@@ -9,6 +9,7 @@ enum TechniqueType {
 @export var id: String = ""
 @export var display_name: String = ""
 @export_multiline var description: String = ""
+@export var icon: Texture2D
 @export var technique_type: TechniqueType = TechniqueType.PASSIVE
 @export var category: StringName = &"general"
 @export var tags: PackedStringArray = []

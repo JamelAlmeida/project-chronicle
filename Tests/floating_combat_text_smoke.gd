@@ -73,6 +73,15 @@ func _run() -> void:
 		if shown in ["70", "236", "796", "2147", "2147!"] and resolved not in [70, 236, 796, 2147]:
 			_expect(false, "Baked example '%s' appeared without matching combat result" % shown)
 
+	_expect(
+		not ResourceLoader.exists("res://Project Chronicle/Assets/Showcase/Runtime/Combat/hit_burst.png"),
+		"Baked hit_burst 2147 glyph is removed from runtime Combat pack"
+	)
+	_expect(
+		not FileAccess.file_exists("res://Project Chronicle/Assets/Showcase/Runtime/Combat/hit_burst.png"),
+		"Baked hit_burst 2147 glyph file is absent from runtime Combat pack"
+	)
+
 	_finish()
 
 

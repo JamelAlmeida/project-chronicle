@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://djdktedbuvmfp"
-path="res://.godot/imported/hit_burst.png-837d64eb27462f2386e383664265c9aa.ctex"
+uid="uid://dnerrfwrwi6de"
+path="res://.godot/imported/Debug_hit_burst.png-bf67b7f86a90b51d80f2c9ba84f97f6d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Project Chronicle/Assets/Showcase/Runtime/Combat/hit_burst.png"
-dest_files=["res://.godot/imported/hit_burst.png-837d64eb27462f2386e383664265c9aa.ctex"]
+source_file="res://Project Chronicle/LegacyVisuals/Combat/BakedNumberGlyphs/Debug_hit_burst.png"
+dest_files=["res://.godot/imported/Debug_hit_burst.png-bf67b7f86a90b51d80f2c9ba84f97f6d.ctex"]
 
 [params]
 

@@ -13,6 +13,7 @@ Retired during the **Hard Visual Reset**. These assets and scripts are kept for 
 | `UI/Runtime/` | Oldest UI kit from an early visual pass |
 | `UI/ChronicleV2/` | UI Rescue V2 ornament skins (fallback only) |
 | `Environment/PixelArt_Elderwood/` | Earlier PixelArt Elderwood environment pack |
+| `Combat/BakedNumberGlyphs/` | Mis-cropped combat sheet glyphs (`2147!` / `CRIT!`) — never use at runtime |
 
 ## Active approved UI pack
 

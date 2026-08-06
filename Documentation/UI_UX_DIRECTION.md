@@ -14,6 +14,7 @@ Chronicle uses an original, desktop-first dark-fantasy interface with MMO-inspir
 > **Master UI Recreation:** The approved mockup `Assets/Showcase/Source/chronicle_master_visual_target.png` is the visual authority. Runtime ornament comes from `Assets/Showcase/Runtime/UI/`. Godot Labels remain authoritative for all dynamic text.
 
 - Prefer a cohesive dark-fantasy bottom HUD with bronze-gold framing: crest/status left, eight action slots center, 2×2 menu buttons right, slim XP strip beneath.
+- Action-bar **framing and proportions** follow the approved mockup. Action-bar **content** reflects real gameplay assignments only: unassigned slots stay visually empty, locked slots show only the locked state, and assigned Technique/item slots use that entry's real icon. Do not fill empty slots with showcase/sample artwork or invented spells/items.
 - Use **Cinzel** (weighted) for major headings, zone names, and limited combat emphasis. Use **Alegreya** (weighted) for body copy, HUD values, buttons, objectives, and item detail. Primary text is warm ivory; headings use muted gold; secondary text uses subdued gray. Dark outline/shadow keeps type readable over panels and the world.
 - Keep the top-left expedition ledger and top-right quest tracker compact, framed, and quieter than the world.
 - Keep action slots independent (no giant static action-bar screenshot). Locked slots use darkening plus optional lock overlay.

@@ -55,12 +55,28 @@ func _test_elderwood_foundation() -> void:
 		"Optional elevated route uses one-way collision"
 	)
 	_expect(
-		current_scene.has_node("Gameplay/Collision/OptionalRoute/HighOneWay/CollisionShape2D"),
-		"High elevated platform collision is present"
-	)
-	_expect(
 		current_scene.has_node("Gameplay/Collision/EntryRise/CollisionShape2D"),
 		"Entry rise collision is present"
+	)
+	_expect(
+		not current_scene.has_node("Gameplay/Collision/OptionalRoute/MiddleOneWay"),
+		"Prototype middle ghost platform is removed"
+	)
+	_expect(
+		not current_scene.has_node("Gameplay/Collision/OptionalRoute/HighOneWay"),
+		"Prototype high ghost platform is removed"
+	)
+	_expect(
+		not current_scene.has_node("Gameplay/Collision/RootBridge"),
+		"Prototype root-bridge ghost platform is removed"
+	)
+	_expect(
+		current_scene.get_node_or_null("ApprovedEnvironmentArt/EntryRiseVisual") != null,
+		"Entry rise has approved visible platform art"
+	)
+	_expect(
+		current_scene.get_node_or_null("ApprovedEnvironmentArt/CenterLedgeVisual") != null,
+		"Center elevated ledge has approved visible platform art"
 	)
 	_expect(
 		current_scene.get_node_or_null("Gameplay/Collision/MainGround/Visual") == null,

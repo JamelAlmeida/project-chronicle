@@ -157,13 +157,13 @@ func spawn_optional_effect(
 
 
 func _spawn_hit_spark(world_position: Vector2) -> Node2D:
+	# Never include hit_burst.png — that crop is baked example "2147! CRIT!" glyph art.
 	var tex_root := _spawn_showcase_sprite(
 		world_position,
 		[
 			"res://Project Chronicle/Assets/Showcase/Runtime/Combat/hit_spark_a.png",
 			"res://Project Chronicle/Assets/Showcase/Runtime/Combat/hit_spark_b.png",
 			"res://Project Chronicle/Assets/Showcase/Runtime/Combat/hit_spark_c.png",
-			"res://Project Chronicle/Assets/Showcase/Runtime/Combat/hit_burst.png",
 		],
 		24,
 		Vector2(0.55, 0.55),

@@ -94,7 +94,7 @@ func _build_and_animate() -> void:
 	label.add_theme_constant_override("outline_size", 8 if is_critical else 5)
 	label.add_theme_constant_override("shadow_offset_x", 1)
 	label.add_theme_constant_override("shadow_offset_y", 1)
-	label.add_theme_font_size_override("font_size", 42 if is_critical else 28)
+	label.add_theme_font_size_override("font_size", 46 if is_critical else 30)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.position = Vector2(-96.0, -40.0)
@@ -106,12 +106,12 @@ func _build_and_animate() -> void:
 		crit.name = "CritCallout"
 		crit.text = "CRIT!"
 		crit.add_theme_font_override("font", _combat_font())
-		crit.add_theme_color_override("font_color", Color(1.0, 0.74, 0.34, 1.0))
+		crit.add_theme_color_override("font_color", Color(1.0, 0.78, 0.32, 1.0))
 		crit.add_theme_color_override("font_outline_color", Color(0.02, 0.014, 0.01, 0.98))
-		crit.add_theme_constant_override("outline_size", 5)
-		crit.add_theme_font_size_override("font_size", 16)
+		crit.add_theme_constant_override("outline_size", 6)
+		crit.add_theme_font_size_override("font_size", 17)
 		crit.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		crit.position = Vector2(-64.0, 12.0)
+		crit.position = Vector2(-64.0, 14.0)
 		crit.size = Vector2(128.0, 22.0)
 		add_child(crit)
 		_spawn_crit_burst()
@@ -142,6 +142,39 @@ func _build_and_animate() -> void:
 
 
 func _spawn_crit_burst() -> void:
+	## Prefer approved spark art (never baked number glyphs). Fallback to procedural burst.
+	var spark_paths := [
+		"res://Project Chronicle/Assets/Showcase/Runtime/Combat/hit_spark_a.png",
+		"res://Project Chronicle/Assets/Showcase/Runtime/Combat/hit_spark_b.png",
+		"res://Project Chronicle/Assets/Showcase/Runtime/Combat/hit_spark_c.png",
+	]
+	for path: String in spark_paths:
+		if ResourceLoader.exists(path) or FileAccess.file_exists(path):
+			var tex: Texture2D = null
+			if ResourceLoader.exists(path):
+				tex = load(path) as Texture2D
+			else:
+				var image := Image.load_from_file(path)
+				if image != null and not image.is_empty():
+					tex = ImageTexture.create_from_image(image)
+			if tex == null:
+				continue
+			var sprite := Sprite2D.new()
+			sprite.name = "CritBurst"
+			sprite.texture = tex
+			sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+			sprite.centered = true
+			sprite.modulate = Color(1.12, 0.96, 0.62, 0.72)
+			sprite.scale = Vector2(0.28, 0.28)
+			sprite.z_index = -1
+			add_child(sprite)
+			var spark_tween := sprite.create_tween()
+			spark_tween.set_parallel(true)
+			spark_tween.tween_property(sprite, "scale", Vector2(0.62, 0.62), 0.16)
+			spark_tween.tween_property(sprite, "modulate:a", 0.0, 0.22)
+			spark_tween.chain().tween_callback(sprite.queue_free)
+			return
+
 	var burst := Polygon2D.new()
 	burst.name = "CritBurst"
 	burst.polygon = PackedVector2Array([

@@ -141,49 +141,72 @@ static func hud_panel_style(background: Color = COLOR_PANEL, border: Color = COL
 
 
 static func master_hud_style() -> StyleBox:
-	## Cohesive bottom HUD chrome matching the approved mockup's continuous bar.
-	var textured := textured_style("panel_compact_9.png", 26.0, 12.0)
+	## Outer bottom HUD chrome — continuous premium bar matching the mockup silhouette.
+	var textured := textured_style("panel_compact_9.png", 26.0, 10.0)
 	if textured == null:
 		textured = textured_style("status_island_9.png", 28.0, 12.0)
 	if textured != null:
 		var tex_style := textured as StyleBoxTexture
-		tex_style.content_margin_left = 14.0
-		tex_style.content_margin_right = 14.0
-		tex_style.content_margin_top = 10.0
-		tex_style.content_margin_bottom = 8.0
+		tex_style.content_margin_left = 12.0
+		tex_style.content_margin_right = 12.0
+		tex_style.content_margin_top = 8.0
+		tex_style.content_margin_bottom = 6.0
 		tex_style.modulate_color = Color(1.0, 1.0, 1.0, 0.98)
 		return tex_style
 	return _flat_panel(Color(0.035, 0.028, 0.020, 0.94), Color(0.62, 0.48, 0.26, 0.85), 2, 14.0, 10.0, 8)
 
 
 static func hud_island_style() -> StyleBox:
-	return _island_style_named("status_island_9.png", "panel_compact_9.png")
+	return status_island_style()
 
 
 static func status_island_style() -> StyleBox:
-	return _island_style_named("status_island_9.png", "panel_compact_9.png")
+	## Prefer status island crop; bottom_hud is a strong secondary status chrome.
+	var style := _island_style_named("status_island_9.png", "bottom_hud.png", 24.0, 10.0)
+	if style is StyleBoxTexture:
+		var tex := style as StyleBoxTexture
+		tex.content_margin_left = 12.0
+		tex.content_margin_right = 14.0
+		tex.content_margin_top = 10.0
+		tex.content_margin_bottom = 10.0
+	return style
 
 
 static func action_island_style() -> StyleBox:
-	return _island_style_named("panel_compact_9.png", "panel_header_9.png")
+	## Center action tray — inset chrome without status crest crops.
+	var style := _island_style_named("panel_section.png", "panel_compact_9.png", 16.0, 8.0)
+	if style is StyleBoxTexture:
+		var tex := style as StyleBoxTexture
+		tex.content_margin_left = 10.0
+		tex.content_margin_right = 10.0
+		tex.content_margin_top = 8.0
+		tex.content_margin_bottom = 6.0
+		tex.modulate_color = Color(0.96, 0.94, 0.90, 0.96)
+	return style
 
 
 static func menu_island_style() -> StyleBox:
-	return _island_style_named("panel_compact_9.png", "btn_chrome_9.png")
+	var style := _island_style_named("menu_island_9.png", "btn_chrome_9.png", 18.0, 8.0)
+	if style is StyleBoxTexture:
+		var tex := style as StyleBoxTexture
+		tex.content_margin_left = 10.0
+		tex.content_margin_right = 10.0
+		tex.content_margin_top = 8.0
+		tex.content_margin_bottom = 8.0
+	return style
 
 
-static func _island_style_named(primary: String, fallback: String) -> StyleBox:
-	var textured := textured_style(primary, 22.0, 10.0)
+static func _island_style_named(
+	primary: String,
+	fallback: String,
+	margin: float = 22.0,
+	content_margin: float = 10.0
+) -> StyleBox:
+	var textured := textured_style(primary, margin, content_margin)
 	if textured == null:
-		textured = textured_style(fallback, 22.0, 10.0)
+		textured = textured_style(fallback, margin, content_margin)
 	if textured != null:
 		var tex_style := textured as StyleBoxTexture
-		tex_style.texture_margin_top = 16.0
-		tex_style.texture_margin_bottom = 16.0
-		tex_style.content_margin_left = 12.0
-		tex_style.content_margin_top = 8.0
-		tex_style.content_margin_right = 12.0
-		tex_style.content_margin_bottom = 8.0
 		tex_style.modulate_color = Color(1.0, 1.0, 1.0, 0.98)
 		return tex_style
 	return _flat_panel(
@@ -211,13 +234,19 @@ static func inset_style(accent: Color = Color(0.22, 0.18, 0.14, 1.0)) -> StyleBo
 
 static func action_slot_style(accent: Color, emphasized: bool = false) -> StyleBox:
 	var tex_name := "slot_selected_9.png" if emphasized else "slot_empty_9.png"
-	var textured := textured_style(tex_name, 12.0, 5.0)
+	var textured := textured_style(tex_name, 14.0, 6.0)
 	if textured == null:
-		textured = textured_style("slot_square.png", 10.0, 4.0)
+		textured = textured_style("slot_square.png", 12.0, 5.0)
 	if textured != null:
 		var tex_style := textured as StyleBoxTexture
+		tex_style.content_margin_left = 5.0
+		tex_style.content_margin_top = 4.0
+		tex_style.content_margin_right = 5.0
+		tex_style.content_margin_bottom = 4.0
 		if emphasized:
-			tex_style.modulate_color = Color(1.08, 1.04, 0.94, 1.0).lerp(accent, 0.06)
+			tex_style.modulate_color = Color(1.10, 1.06, 0.94, 1.0).lerp(accent, 0.05)
+		else:
+			tex_style.modulate_color = Color(1.0, 1.0, 1.0, 1.0)
 		return tex_style
 	var flat := StyleBoxFlat.new()
 	flat.bg_color = Color(0.018, 0.014, 0.010, 0.88)
