@@ -91,25 +91,24 @@ func is_panel_open(panel_id: StringName = &"") -> bool:
 
 func _build_interface() -> void:
 	_overlay = Control.new()
-	_overlay.name = "MenuOverlay"
+	_overlay.name = "WindowLayer"
 	_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_overlay)
 
 	var shade := ColorRect.new()
+	shade.name = "Dimmer"
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	shade.color = Color(0.01, 0.012, 0.014, 0.42)
+	shade.color = Color(0.04, 0.045, 0.055, 0.45)
 	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_overlay.add_child(shade)
 
 	_window = PanelContainer.new()
-	_window.name = "RootWindow"
+	_window.name = "ActiveWindow"
 	_window.set_anchors_preset(Control.PRESET_CENTER)
-	_window.position = Vector2(-520.0, -300.0)
-	_window.size = Vector2(1040.0, 600.0)
+	_window.position = Vector2(-500.0, -290.0)
+	_window.size = Vector2(1000.0, 580.0)
 	_window.mouse_filter = Control.MOUSE_FILTER_STOP
-	_window.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
-	# One outer frame only — no stacked decorative chrome.
 	_window.add_theme_stylebox_override("panel", UI.panel_style(UI.COLOR_PANEL))
 	_overlay.add_child(_window)
 
@@ -120,7 +119,7 @@ func _build_interface() -> void:
 	var header := HBoxContainer.new()
 	header.add_theme_constant_override("separation", 10)
 	root_box.add_child(header)
-	_title_label = UI.style_heading(Label.new(), UI.COLOR_GOLD, 26)
+	_title_label = UI.style_heading(Label.new(), UI.COLOR_GOLD, 24)
 	_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(_title_label)
 	var close_button := UI.style_button(Button.new())
@@ -131,6 +130,7 @@ func _build_interface() -> void:
 	header.add_child(close_button)
 
 	var tabs := HBoxContainer.new()
+	tabs.name = "WindowTabs"
 	tabs.add_theme_constant_override("separation", 8)
 	root_box.add_child(tabs)
 	tabs.add_child(_make_tab_button("Character [C]", &"character"))
@@ -264,24 +264,10 @@ func _build_character_preview_column() -> Control:
 	center.add_theme_constant_override("separation", 6)
 	gear_stage.add_child(center)
 
-	var preview_ring := PanelContainer.new()
-	preview_ring.custom_minimum_size = Vector2(168.0, 200.0)
-	var ring_style := UI.inset_style(Color(0.30, 0.25, 0.16))
-	var portrait := UI.runtime_texture("portrait_ring.png")
-	if portrait != null:
-		var style := StyleBoxTexture.new()
-		style.texture = portrait
-		style.texture_margin_left = 22.0
-		style.texture_margin_top = 22.0
-		style.texture_margin_right = 22.0
-		style.texture_margin_bottom = 22.0
-		style.content_margin_left = 12.0
-		style.content_margin_top = 12.0
-		style.content_margin_right = 12.0
-		style.content_margin_bottom = 12.0
-		ring_style = style
-	preview_ring.add_theme_stylebox_override("panel", ring_style)
-	center.add_child(preview_ring)
+	var preview_frame := PanelContainer.new()
+	preview_frame.custom_minimum_size = Vector2(168.0, 200.0)
+	preview_frame.add_theme_stylebox_override("panel", UI.inset_style(Color(0.32, 0.34, 0.38)))
+	center.add_child(preview_frame)
 
 	var preview := TextureRect.new()
 	var atlas := AtlasTexture.new()
@@ -292,7 +278,7 @@ func _build_character_preview_column() -> Control:
 	preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	preview.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	preview_ring.add_child(preview)
+	preview_frame.add_child(preview)
 
 	var weapon_row := HBoxContainer.new()
 	weapon_row.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -465,20 +451,10 @@ func _build_inventory_content() -> void:
 			icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 			row.add_child(icon)
 		else:
-			var icon_fallback := TextureRect.new()
-			var bag := UI.runtime_texture("icon_bag.png")
-			if bag != null:
-				icon_fallback.texture = bag
-				icon_fallback.custom_minimum_size = Vector2(46.0, 46.0)
-				icon_fallback.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-				icon_fallback.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-				icon_fallback.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
-				row.add_child(icon_fallback)
-			else:
-				var glyph := UI.style_heading(Label.new(), UI.COLOR_GOLD, 18, HORIZONTAL_ALIGNMENT_CENTER)
-				glyph.text = "◆"
-				glyph.custom_minimum_size.x = 46.0
-				row.add_child(glyph)
+			var glyph := UI.style_heading(Label.new(), UI.COLOR_GOLD, 18, HORIZONTAL_ALIGNMENT_CENTER)
+			glyph.text = "◆"
+			glyph.custom_minimum_size.x = 46.0
+			row.add_child(glyph)
 		var description := VBoxContainer.new()
 		description.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		row.add_child(description)

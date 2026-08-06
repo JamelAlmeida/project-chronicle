@@ -92,58 +92,60 @@ func _run() -> void:
 	if camera_presentation != null:
 		_expect(camera_presentation.vertical_offset > -35.0, "Camera frames play closer above the HUD")
 
-	var slime := get_first_node_in_group("enemies") as EnemyBase
-	_expect(slime != null, "Side-view Slime spawns")
-	if slime != null:
-		await _wait_physics(12)
-		_expect(slime.is_on_floor(), "Slime stays grounded")
-		player.global_position = Vector2(slime.global_position.x - 180.0, 620.0)
-		player.velocity = Vector2.ZERO
-		var slime_start_x := slime.global_position.x
-		await _wait_physics(12)
-		_expect(slime.global_position.x < slime_start_x, "Slime approaches horizontally")
+	## Spawn a temporary combat slime (art-cleared shell) for gameplay checks only.
+	var slime_scene := load("res://Project Chronicle/Scenes/Characters/Slime.tscn") as PackedScene
+	var slime := slime_scene.instantiate() as EnemyBase
+	current_scene.get_node("Gameplay/Enemies").add_child(slime)
+	slime.global_position = Vector2(1180.0, 620.0)
+	await _wait_physics(12)
+	_expect(slime.is_on_floor(), "Combat slime shell stays grounded")
+	player.global_position = Vector2(slime.global_position.x - 180.0, 620.0)
+	player.velocity = Vector2.ZERO
+	var slime_start_x := slime.global_position.x
+	await _wait_physics(12)
+	_expect(slime.global_position.x < slime_start_x, "Combat slime approaches horizontally")
 
-		var health := player.get_node("HealthComponent") as HealthComponent
-		player.global_position = slime.global_position + Vector2(-24.0, 0.0)
-		player.velocity = Vector2.ZERO
-		var health_before_contact := health.current_health
-		slime.call("_try_attack_player")
-		_expect(health.current_health < health_before_contact, "Slime damages the player")
+	var health := player.get_node("HealthComponent") as HealthComponent
+	player.global_position = slime.global_position + Vector2(-24.0, 0.0)
+	player.velocity = Vector2.ZERO
+	var health_before_contact := health.current_health
+	slime.call("_try_attack_player")
+	_expect(health.current_health < health_before_contact, "Combat slime damages the player")
 
-		var melee := player.get_node("MeleeAttack") as MeleeAttack
-		_expect(melee.try_attack(Vector2.RIGHT), "Right-facing melee starts")
-		_expect(is_zero_approx(melee.rotation), "Melee hitbox faces right")
-		await _wait_physics(35)
-		_expect(melee.try_attack(Vector2.LEFT), "Left-facing melee starts")
-		_expect(is_equal_approx(absf(melee.rotation), PI), "Melee hitbox faces left")
-		await _wait_physics(35)
+	var melee := player.get_node("MeleeAttack") as MeleeAttack
+	_expect(melee.try_attack(Vector2.RIGHT), "Right-facing melee starts")
+	_expect(is_zero_approx(melee.rotation), "Melee hitbox faces right")
+	await _wait_physics(35)
+	_expect(melee.try_attack(Vector2.LEFT), "Left-facing melee starts")
+	_expect(is_equal_approx(absf(melee.rotation), PI), "Melee hitbox faces left")
+	await _wait_physics(35)
 
-		var equipment := player.get_node("EquipmentComponent") as EquipmentComponent
-		_inventory().add_item("swift_katana", 1)
-		_expect(equipment.equip_from_inventory("swift_katana"), "Equipment still equips")
-		_expect(equipment.get_equipped_id("weapon") == "swift_katana", "Equipment state updates")
-		_inventory().add_item("crimson_leech_ring", 1)
-		_expect(equipment.equip_from_inventory("crimson_leech_ring"), "Lifesteal ring equips")
-		health.set_current_health(maxi(health.current_health - 30, 1))
-		var health_before_lifesteal := health.current_health
-		melee.call("_apply_lifesteal", 50)
-		_expect(health.current_health > health_before_lifesteal, "Lifesteal still heals")
+	var equipment := player.get_node("EquipmentComponent") as EquipmentComponent
+	_inventory().add_item("swift_katana", 1)
+	_expect(equipment.equip_from_inventory("swift_katana"), "Equipment still equips")
+	_expect(equipment.get_equipped_id("weapon") == "swift_katana", "Equipment state updates")
+	_inventory().add_item("crimson_leech_ring", 1)
+	_expect(equipment.equip_from_inventory("crimson_leech_ring"), "Lifesteal ring equips")
+	health.set_current_health(maxi(health.current_health - 30, 1))
+	var health_before_lifesteal := health.current_health
+	melee.call("_apply_lifesteal", 50)
+	_expect(health.current_health > health_before_lifesteal, "Lifesteal still heals")
 
-		var pickup_count := _count_nodes_of_type(current_scene, LootPickup)
-		var expedition_before: int = _inventory().get_expedition_quantity("slime_gel")
-		var death_position := slime.global_position
-		slime.take_damage(99999)
-		await process_frame
-		await process_frame
-		_expect(_count_nodes_of_type(current_scene, LootPickup) == pickup_count + 1, "Slime drops loot")
-		var dropped_pickup := _nearest_pickup(death_position)
-		_expect(dropped_pickup != null, "Dropped loot remains collectible")
-		if dropped_pickup != null:
-			dropped_pickup.call("_on_body_entered", player)
-			_expect(
-				_inventory().get_expedition_quantity("slime_gel") > expedition_before,
-				"Elderwood loot is unsecured"
-			)
+	var pickup_count := _count_nodes_of_type(current_scene, LootPickup)
+	var expedition_before: int = _inventory().get_expedition_quantity("slime_gel")
+	var death_position := slime.global_position
+	slime.take_damage(99999)
+	await process_frame
+	await process_frame
+	_expect(_count_nodes_of_type(current_scene, LootPickup) == pickup_count + 1, "Slime drops loot")
+	var dropped_pickup := _nearest_pickup(death_position)
+	_expect(dropped_pickup != null, "Dropped loot remains collectible")
+	if dropped_pickup != null:
+		dropped_pickup.call("_on_body_entered", player)
+		_expect(
+			_inventory().get_expedition_quantity("slime_gel") > expedition_before,
+			"Elderwood loot is unsecured"
+		)
 
 	_zone_manager().transition_to(MOSSCRYPT, "from_elderwood")
 	await scene_changed

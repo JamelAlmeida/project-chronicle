@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://zonemosscrypt01"]
+[gd_scene load_steps=12 format=3 uid="uid://zonemosscrypt01"]
 
 [ext_resource type="Script" path="res://Project Chronicle/Scripts/World/zone.gd" id="1_zone"]
 [ext_resource type="Resource" uid="uid://zonemosscrypt" path="res://Project Chronicle/Resources/Zones/mosscrypt.tres" id="2_data"]
@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://ce7ivsgg7hxxa" path="res://Project Chronicle/Scenes/UI/game_hud.tscn" id="4_hud"]
 [ext_resource type="PackedScene" uid="uid://equipdebugpanel" path="res://Project Chronicle/Scenes/UI/equipment_debug_panel.tscn" id="5_debug"]
 [ext_resource type="PackedScene" uid="uid://zonetrans01" path="res://Project Chronicle/Scenes/World/zone_transition.tscn" id="6_transition"]
-[ext_resource type="PackedScene" uid="uid://gugfggdvihpy" path="res://Project Chronicle/Scenes/Characters/Slime.tscn" id="7_slime"]
 [ext_resource type="PackedScene" uid="uid://goblinscout01" path="res://Project Chronicle/Scenes/Characters/goblin_scout.tscn" id="8_goblin"]
 [ext_resource type="PackedScene" uid="uid://cryptguard01" path="res://Project Chronicle/Scenes/Characters/crypt_guardian.tscn" id="9_guardian"]
 [ext_resource type="PackedScene" uid="uid://lootchest01" path="res://Project Chronicle/Scenes/World/loot_chest.tscn" id="10_chest"]
@@ -101,17 +100,8 @@ position = Vector2(190, 150)
 
 [node name="Enemies" type="Node2D" parent="Gameplay"]
 
-[node name="Slime1" parent="Gameplay/Enemies" instance=ExtResource("7_slime")]
-position = Vector2(190, 220)
-
 [node name="Goblin1" parent="Gameplay/Enemies" instance=ExtResource("8_goblin")]
 position = Vector2(190, 400)
-
-[node name="Slime2" parent="Gameplay/Enemies" instance=ExtResource("7_slime")]
-position = Vector2(160, 520)
-
-[node name="Slime3" parent="Gameplay/Enemies" instance=ExtResource("7_slime")]
-position = Vector2(220, 520)
 
 [node name="Goblin2" parent="Gameplay/Enemies" instance=ExtResource("8_goblin")]
 position = Vector2(190, 700)

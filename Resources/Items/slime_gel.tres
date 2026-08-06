@@ -1,11 +1,9 @@
 [gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://dynijg8c62qw4"]
 
 [ext_resource type="Script" uid="uid://d3bx5ss6yoaou" path="res://Project Chronicle/Scripts/Items/item_data.gd" id="1_item"]
-[ext_resource type="Texture2D" uid="uid://dj4ficb4b58v7" path="res://Project Chronicle/Assets/PixelArt/Items/slime_gel.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_item")
 id = "slime_gel"
 display_name = "Slime Gel"
 description = "A sticky gel harvested from slimes. Used in crafting."
-icon = ExtResource("2_icon")

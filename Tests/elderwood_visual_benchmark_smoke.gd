@@ -14,10 +14,10 @@ func _run() -> void:
 	_expect(current_scene != null and current_scene.name == "Elderwood", "Elderwood loads")
 	if current_scene != null:
 		_test_elderwood_foundation()
-		_test_enemy_art("Slime")
 		_test_player_attack_art()
 		_test_hud_shell()
-		_test_loot_pickup()
+		_test_loot_pickup_shell()
+		_test_old_showcase_art_cleared()
 
 	_test_item_icons()
 
@@ -71,12 +71,24 @@ func _test_elderwood_foundation() -> void:
 		"Prototype root-bridge ghost platform is removed"
 	)
 	_expect(
-		current_scene.get_node_or_null("ApprovedEnvironmentArt/EntryRiseVisual") != null,
-		"Entry rise has approved visible platform art"
+		current_scene.get_node_or_null("ApprovedEnvironmentArt/EntryRiseVisual") == null,
+		"Legacy Showcase entry-rise platform art is cleared"
 	)
 	_expect(
-		current_scene.get_node_or_null("ApprovedEnvironmentArt/CenterLedgeVisual") != null,
-		"Center elevated ledge has approved visible platform art"
+		current_scene.get_node_or_null("ApprovedEnvironmentArt/CenterLedgeVisual") == null,
+		"Legacy Showcase center ledge art is cleared"
+	)
+	_expect(
+		current_scene.get_node("ApprovedEnvironmentArt").get_child_count() == 0,
+		"ApprovedEnvironmentArt mount is empty pending new Chronicle art"
+	)
+	_expect(
+		current_scene.get_node("Gameplay/Enemies").get_child_count() == 0,
+		"Legacy Showcase slime instances are removed from Elderwood"
+	)
+	_expect(
+		current_scene.get_node("Gameplay/Loot").get_child_count() == 0,
+		"Legacy slime-gel world drop is removed from Elderwood"
 	)
 	_expect(
 		current_scene.get_node_or_null("Gameplay/Collision/MainGround/Visual") == null,
@@ -96,25 +108,29 @@ func _test_elderwood_foundation() -> void:
 	)
 
 
-func _test_enemy_art(expected_name: String) -> void:
-	var scene_token := expected_name.to_snake_case()
-	for enemy: Node in get_nodes_in_group("enemies"):
-		if enemy.name.begins_with(expected_name) or enemy.get_scene_file_path().contains(scene_token):
-			var sprite := enemy.get_node("Visuals/CharacterSprite") as AnimatedSprite2D
-			var fallback := enemy.get_node("Visuals/PlaceholderVisual") as CanvasItem
-			_expect(sprite.visible, "%s generated sprite is visible" % expected_name)
-			_expect(not fallback.visible, "%s fallback is retained but hidden" % expected_name)
-			_expect(
-				sprite.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST,
-				"%s uses nearest-neighbor filtering" % expected_name
-			)
-			for animation: StringName in [&"idle", &"walk", &"attack", &"hurt", &"death"]:
-				_expect(
-					sprite.sprite_frames.has_animation(animation),
-					"%s has %s art" % [expected_name, animation]
-				)
-			return
-	_expect(false, "%s instance is present" % expected_name)
+func _test_enemy_art(_expected_name: String) -> void:
+	## Showcase slime art retired — enemy presentation awaits new Chronicle packs.
+	pass
+
+
+func _test_old_showcase_art_cleared() -> void:
+	_expect(
+		not ResourceLoader.exists(
+			"res://Project Chronicle/Scenes/Characters/Slime.tscn"
+		) or (
+			load("res://Project Chronicle/Scenes/Characters/Slime.tscn") as PackedScene
+		) != null,
+		"Slime scene still loads as gameplay shell"
+	)
+	var slime_scene := load("res://Project Chronicle/Scenes/Characters/Slime.tscn") as PackedScene
+	var slime := slime_scene.instantiate()
+	current_scene.add_child(slime)
+	var sprite := slime.get_node("Visuals/CharacterSprite") as AnimatedSprite2D
+	var fallback := slime.get_node("Visuals/PlaceholderVisual") as CanvasItem
+	_expect(sprite.sprite_frames == null, "Slime no longer references Showcase SpriteFrames")
+	_expect(not sprite.visible, "Slime sprite stays hidden until new art is assigned")
+	_expect(not fallback.visible, "Slime ColorRect placeholder stays hidden")
+	slime.queue_free()
 
 
 func _test_player_attack_art() -> void:
@@ -124,6 +140,7 @@ func _test_player_attack_art() -> void:
 		return
 	var attack_visual := player.get_node("MeleeAttack/AttackVisual")
 	_expect(attack_visual is Polygon2D, "Melee prototype rectangle is replaced by a shaped slash")
+	_expect(not (attack_visual as CanvasItem).visible, "AttackVisual stays hidden (Adventurer frames carry melee)")
 
 
 func _test_hud_shell() -> void:
@@ -131,27 +148,26 @@ func _test_hud_shell() -> void:
 	_expect(hud != null, "HUD is present")
 	if hud != null:
 		_expect(hud.has_node("BottomHUD"), "Functional bottom HUD shell is present")
-		_expect(hud.has_node("ZoneBanner"), "Zone banner shell is present")
+		_expect(hud.find_child("ZoneBanner", true, false) != null, "Zone banner shell is present")
+		_expect(hud.has_node("TopLeft/ExpeditionPanel"), "Expedition panel shell is present")
+		_expect(not hud.has_node("HudShell"), "Legacy HudShell is absent")
 
 
-func _test_loot_pickup() -> void:
-	var pickups := get_nodes_in_group("loot_pickup_visual_test")
-	var pickup: LootPickup
-	if pickups.is_empty():
-		pickup = preload("res://Project Chronicle/Scenes/World/loot_pickup.tscn").instantiate()
-		current_scene.add_child(pickup)
-		pickup.setup("slime_gel", 1)
-	else:
-		pickup = pickups[0] as LootPickup
+func _test_loot_pickup_shell() -> void:
+	var pickup: LootPickup = preload("res://Project Chronicle/Scenes/World/loot_pickup.tscn").instantiate()
+	current_scene.add_child(pickup)
+	pickup.setup("slime_gel", 1)
 	_expect(pickup != null, "Loot pickup can instantiate")
-	if pickup != null:
-		_expect(pickup.get_node("Icon").visible, "Loot pickup uses item icon")
-		_expect(not pickup.get_node("ColorRect").visible, "Loot fallback hides when icon is usable")
+	_expect(not pickup.get_node("Icon").visible, "Slime gel has no legacy icon art")
+	_expect(pickup.get_node("ColorRect").visible, "Loot falls back without inventing drop art")
+	pickup.queue_free()
 
 
 func _test_item_icons() -> void:
+	var slime_gel: ItemData = root.get_node("ItemRegistry").get_item("slime_gel")
+	_expect(slime_gel != null, "slime_gel item data remains registered")
+	_expect(slime_gel != null and slime_gel.icon == null, "slime_gel legacy PixelArt icon cleared")
 	for item_id: String in [
-		"slime_gel",
 		"swift_katana",
 		"bloodfang_blade",
 		"crimson_leech_ring",

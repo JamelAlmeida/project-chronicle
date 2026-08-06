@@ -33,8 +33,19 @@ func _run() -> void:
 		and equipment.get_node_or_null("Feet") != null
 		and equipment.get_node_or_null("Hands") != null
 		and equipment.get_node_or_null("Cloak") != null
-		and equipment.get_node_or_null("MainHand") != null,
+		and equipment.get_node_or_null("Body") != null
+		and equipment.get_node_or_null("Head") != null
+		and equipment.get_node_or_null("MainHand") != null
+		and equipment.get_node_or_null("OffHand") != null,
 		"EquipmentVisuals includes future gear layer hooks"
+	)
+	_expect(player.get_node_or_null("Visuals/HairBack") != null, "HairBack layer hook exists")
+	_expect(player.get_node_or_null("Visuals/HairFront") != null, "HairFront layer hook exists")
+	_expect(player.get_node_or_null("Visuals/CharacterFX") != null, "CharacterFX layer hook exists")
+	_expect(
+		equipment.get_children().size() >= 1
+		and str(equipment.get_child(0).name) == "Cloak",
+		"EquipmentVisuals draw order starts with Cloak (back)"
 	)
 	_expect(ground_shadow == null or not ground_shadow.visible, "Programmer GroundShadow is disabled")
 	_expect(attack_visual == null or not attack_visual.visible, "Programmer AttackVisual stays hidden")

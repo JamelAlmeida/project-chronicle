@@ -37,21 +37,25 @@ offset_top = -48.0
 offset_right = 12.0
 color = Color(0.9891885, 0.16677955, 0.45810562, 1)
 
+[node name="HairBack" type="Node2D" parent="Visuals" unique_id=617224751]
+
 [node name="BaseCharacter" type="AnimatedSprite2D" parent="Visuals" unique_id=958699716]
 texture_filter = 1
 position = Vector2(0, -52)
 sprite_frames = ExtResource("10_adventurer")
 animation = &"idle_right"
 
+[node name="HairFront" type="Node2D" parent="Visuals" unique_id=1531780133]
+
 [node name="EquipmentVisuals" type="Node2D" parent="Visuals" unique_id=1844221101]
 
 [node name="Cloak" type="Node2D" parent="Visuals/EquipmentVisuals" unique_id=1844221106]
 
-[node name="Body" type="Node2D" parent="Visuals/EquipmentVisuals" unique_id=1844221105]
-
 [node name="Legs" type="Node2D" parent="Visuals/EquipmentVisuals" unique_id=220958238]
 
 [node name="Feet" type="Node2D" parent="Visuals/EquipmentVisuals" unique_id=1631879215]
+
+[node name="Body" type="Node2D" parent="Visuals/EquipmentVisuals" unique_id=1844221105]
 
 [node name="Hands" type="Node2D" parent="Visuals/EquipmentVisuals" unique_id=784642846]
 
@@ -60,6 +64,8 @@ animation = &"idle_right"
 [node name="MainHand" type="Node2D" parent="Visuals/EquipmentVisuals" unique_id=1844221102]
 
 [node name="OffHand" type="Node2D" parent="Visuals/EquipmentVisuals" unique_id=1844221103]
+
+[node name="CharacterFX" type="Node2D" parent="Visuals" unique_id=832357922]
 
 [node name="VisualController" type="Node" parent="Visuals" unique_id=1929883830]
 script = ExtResource("8_visuals")

@@ -3,6 +3,8 @@ extends Node
 
 ## Presentation-only adapter for replaceable AnimatedSprite2D character art.
 ## Expected animation names are documented by get_supported_animation_names().
+## Modular layer contract (96×112, X=48, Y=102, shared timing): see Documentation/ART_PIPELINE.md.
+## Live BaseCharacter remains the temporary combined Adventurer preset until modular layers are authored.
 
 @export var sprite_path: NodePath = ^"../CharacterSprite"
 @export var placeholder_path: NodePath = ^"../PlaceholderVisual"

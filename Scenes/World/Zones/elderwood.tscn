@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://zoneelderwood01"]
+[gd_scene load_steps=8 format=3 uid="uid://zoneelderwood01"]
 
 [ext_resource type="Script" path="res://Project Chronicle/Scripts/World/zone.gd" id="1_zone"]
 [ext_resource type="Resource" path="res://Project Chronicle/Resources/Zones/elderwood.tres" id="2_data"]
@@ -6,12 +6,6 @@
 [ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/UI/game_hud.tscn" id="4_hud"]
 [ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/UI/equipment_debug_panel.tscn" id="5_debug"]
 [ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/World/zone_transition.tscn" id="6_transition"]
-[ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/Characters/Slime.tscn" id="7_slime"]
-[ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/World/loot_pickup.tscn" id="8_loot"]
-[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/Showcase/Runtime/Environment/ground_long.png" id="9_ground"]
-[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/Showcase/Runtime/Environment/platform_ledge.png" id="10_ledge"]
-[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/Showcase/Runtime/Environment/platform_mid.png" id="11_mid"]
-[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/Showcase/Runtime/Environment/lantern_post.png" id="12_lantern"]
 
 [sub_resource type="RectangleShape2D" id="GroundShape"]
 size = Vector2(2400, 100)
@@ -34,48 +28,6 @@ z_index = -25
 
 [node name="ApprovedEnvironmentArt" type="Node2D" parent="."]
 z_index = -10
-
-[node name="GroundVisualA" type="Sprite2D" parent="ApprovedEnvironmentArt"]
-texture_filter = 1
-position = Vector2(360, 668)
-scale = Vector2(0.92, 0.72)
-texture = ExtResource("9_ground")
-
-[node name="GroundVisualB" type="Sprite2D" parent="ApprovedEnvironmentArt"]
-texture_filter = 1
-position = Vector2(1000, 668)
-scale = Vector2(0.92, 0.72)
-texture = ExtResource("9_ground")
-
-[node name="GroundVisualC" type="Sprite2D" parent="ApprovedEnvironmentArt"]
-texture_filter = 1
-position = Vector2(1640, 668)
-scale = Vector2(0.92, 0.72)
-texture = ExtResource("9_ground")
-
-[node name="GroundVisualD" type="Sprite2D" parent="ApprovedEnvironmentArt"]
-texture_filter = 1
-position = Vector2(2180, 668)
-scale = Vector2(0.92, 0.72)
-texture = ExtResource("9_ground")
-
-[node name="EntryRiseVisual" type="Sprite2D" parent="ApprovedEnvironmentArt"]
-texture_filter = 1
-position = Vector2(470, 628)
-scale = Vector2(0.58, 0.58)
-texture = ExtResource("10_ledge")
-
-[node name="EntryLantern" type="Sprite2D" parent="ApprovedEnvironmentArt"]
-texture_filter = 1
-position = Vector2(390, 560)
-scale = Vector2(0.32, 0.32)
-texture = ExtResource("12_lantern")
-
-[node name="CenterLedgeVisual" type="Sprite2D" parent="ApprovedEnvironmentArt"]
-texture_filter = 1
-position = Vector2(980, 600)
-scale = Vector2(0.62, 0.62)
-texture = ExtResource("11_mid")
 
 [node name="Gameplay" type="Node2D" parent="."]
 
@@ -138,21 +90,7 @@ gameplay_zoom = Vector2(1.55, 1.55)
 
 [node name="Enemies" type="Node2D" parent="Gameplay"]
 
-[node name="SlimeEntry" parent="Gameplay/Enemies" instance=ExtResource("7_slime")]
-position = Vector2(1080, 620)
-
-[node name="SlimeTrail" parent="Gameplay/Enemies" instance=ExtResource("7_slime")]
-position = Vector2(1185, 620)
-
-[node name="SlimeDanger" parent="Gameplay/Enemies" instance=ExtResource("7_slime")]
-position = Vector2(1290, 620)
-
 [node name="Loot" type="Node2D" parent="Gameplay"]
-
-[node name="ElevatedLoot" parent="Gameplay/Loot" instance=ExtResource("8_loot")]
-position = Vector2(980, 520)
-item_id = "slime_gel"
-quantity = 2
 
 [node name="Interactions" type="Node2D" parent="Gameplay"]
 

@@ -22,13 +22,19 @@ Related: [APPROVED_ART_ONLY.md](APPROVED_ART_ONLY.md), [ART_DIRECTION.md](ART_DI
 
 | Role | Path |
 |---|---|
-| Adventurer (player) | `Assets/Characters/Adventurer/Runtime/` |
+| Adventurer (player default preset) | `Assets/Characters/Adventurer/Runtime/` |
+| Player modular pipeline (forward, empty until authored) | `Assets/Characters/Player/` |
 | Environment crops (Hearthvale / Elderwood) | `Assets/Showcase/Runtime/Environment/` |
-| Combat FX + Showcase slime | `Assets/Showcase/Runtime/Combat/` |
-| UI furniture (frames, bars, slots, buttons, medallions) | `Assets/Showcase/Runtime/UI/` |
+| Environment modular pipeline (forward) | `Assets/Environment/` |
+| Combat FX + Showcase slime | `Assets/Showcase/Runtime/Combat/` *(slime SpriteFrames retired from live Slime scene; awaiting new enemy pack)* |
+| FX modular pipeline (forward) | `Assets/FX/` |
+| UI furniture (frames, bars, slots, buttons, medallions) | `Assets/Showcase/Runtime/UI/` *(legacy ornament; live HUD is flat until new pack)* |
 | Assigned action icons (attack / dash / crest) | `Assets/UI/Icons/` |
+| Item icons / world drops (forward) | `Assets/Items/Icons/`, `Assets/Items/WorldDrops/` |
 | Enemy / item PixelArt still in live use | `Assets/PixelArt/Characters/{GoblinScout,CryptGuardian}/`, `Assets/PixelArt/Items/` |
 | Fonts | `Assets/Fonts/` |
+
+Pipeline contract: [ART_PIPELINE.md](ART_PIPELINE.md).
 
 Mount environment art under scene node `ApprovedEnvironmentArt`. Keep gameplay collision separate under `Gameplay/Collision`.
 

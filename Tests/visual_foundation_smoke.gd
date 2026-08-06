@@ -113,19 +113,23 @@ func _test_player_controls(zone_name: String) -> void:
 
 
 func _test_enemy_damage_death_and_loot(enemy_token: String) -> void:
-	var enemies := get_nodes_in_group("enemies")
-	var enemy: EnemyBase
-	var scene_token := enemy_token.to_snake_case()
-	for candidate: Node in enemies:
-		if candidate.name.begins_with(enemy_token) or candidate.get_scene_file_path().contains(scene_token):
-			enemy = candidate as EnemyBase
-			break
+	## Live zones no longer place Showcase slimes; spawn an art-cleared shell for combat checks.
+	var enemies_root := current_scene.get_node_or_null("Gameplay/Enemies")
+	_expect(enemies_root != null, "Enemy mount exists")
+	if enemies_root == null:
+		return
+	var slime_scene := load("res://Project Chronicle/Scenes/Characters/Slime.tscn") as PackedScene
+	var enemy := slime_scene.instantiate() as EnemyBase
+	enemies_root.add_child(enemy)
+	enemy.global_position = Vector2(1180.0, 620.0)
+	await process_frame
+	await process_frame
 
-	_expect(enemy != null, "%s spawned" % enemy_token)
+	_expect(enemy != null and (enemy.enemy_id == "slime"), "%s shell spawned" % enemy_token)
 	if enemy == null:
 		return
 
-	var initial_enemy_count := enemies.size()
+	var initial_enemy_count := get_nodes_in_group("enemies").size()
 	var initial_pickup_count := _count_nodes_of_type(current_scene, LootPickup)
 	var initial_health := enemy.health
 	enemy.take_damage(1)

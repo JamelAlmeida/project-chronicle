@@ -4,7 +4,7 @@ extends Area2D
 const LOOT_PICKUP_SCENE_PATH: String = "res://Project Chronicle/Scenes/World/loot_pickup.tscn"
 const UI := preload("res://Project Chronicle/Scripts/UI/chronicle_ui_theme.gd")
 
-@export var item_id: String = "slime_gel"
+@export var item_id: String = ""
 @export var quantity: int = 1
 
 var _item_id: String = ""
@@ -38,8 +38,10 @@ func setup(item_id: String, quantity: int = 1) -> void:
 	var item: ItemData = _item_registry().get_item(item_id)
 	if item != null:
 		$Label.text = item.display_name
-		if item.icon != null:
-			_icon.texture = item.icon
+		## Prefer dedicated world_sprite; fall back to inventory icon; never invent art.
+		var drop_tex: Texture2D = item.world_sprite if item.world_sprite != null else item.icon
+		if drop_tex != null:
+			_icon.texture = drop_tex
 			_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 			_icon.visible = true
 			_fallback_visual.visible = false
