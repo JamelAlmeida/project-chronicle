@@ -87,6 +87,10 @@ func _run() -> void:
 
 	var camera := player.get_node("Camera2D") as Camera2D
 	_expect(camera != null and camera.limit_enabled, "Side-view camera uses map limits")
+	_expect(camera.zoom.x >= 1.5 and camera.zoom.y >= 1.5, "Camera uses closer presentation zoom")
+	var camera_presentation := camera as CameraPresentation
+	if camera_presentation != null:
+		_expect(camera_presentation.vertical_offset > -35.0, "Camera frames play closer above the HUD")
 
 	var slime := get_first_node_in_group("enemies") as EnemyBase
 	_expect(slime != null, "Side-view Slime spawns")

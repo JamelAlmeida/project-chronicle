@@ -24,10 +24,10 @@ script = ExtResource("1_5py17")
 
 [node name="Visuals" type="Node2D" parent="." unique_id=939597102]
 
-[node name="GroundShadow" type="Polygon2D" parent="Visuals"]
+[node name="GroundShadow" type="Polygon2D" parent="Visuals" unique_id=1765845558]
 z_index = -2
-polygon = PackedVector2Array(-15, -3, -10, -6, 10, -6, 15, -3, 10, 0, -10, 0)
 color = Color(0.02, 0.025, 0.022, 0.46)
+polygon = PackedVector2Array(-15, -3, -10, -6, 10, -6, 15, -3, 10, 0, -10, 0)
 
 [node name="PlaceholderVisual" type="ColorRect" parent="Visuals" unique_id=377743816]
 offset_left = -12.0

@@ -63,16 +63,17 @@ func _tone_existing_scene() -> void:
 	var zone := get_parent()
 	var sky := zone.get_node_or_null("DistantBackground/Sky") as ColorRect
 	if sky != null:
-		sky.color = Color(0.055, 0.105, 0.12, 1.0)
+		# Warm golden-hour wash, cooler as the forest deepens.
+		sky.color = Color(0.18, 0.16, 0.14, 1.0)
 	var canopy := zone.get_node_or_null("DistantBackground/DistantCanopy") as Polygon2D
 	if canopy != null:
-		canopy.color = Color(0.035, 0.082, 0.073, 1.0)
+		canopy.color = Color(0.045, 0.09, 0.06, 1.0)
 	var depth := zone.get_node_or_null("MidBackground/ForestDepth") as Polygon2D
 	if depth != null:
-		depth.color = Color(0.038, 0.105, 0.071, 0.92)
+		depth.color = Color(0.05, 0.12, 0.07, 0.94)
 	var existing_mist := zone.get_node_or_null("AtmosphericOverlays/MistBand") as ColorRect
 	if existing_mist != null:
-		existing_mist.color = Color(0.42, 0.56, 0.48, 0.028)
+		existing_mist.color = Color(0.55, 0.58, 0.42, 0.035)
 	for landmark_path in [
 		"GameplayLayer/Landmarks/AncientTree",
 		"GameplayLayer/Landmarks/RuinArch",
@@ -121,13 +122,13 @@ func _build_forest_depth() -> void:
 	distant.z_index = -32
 	add_child(distant)
 	for entry in [
-		[Vector2(-80, 90), Vector2(2.8, 1.15)],
-		[Vector2(300, 70), Vector2(3.4, 1.35)],
-		[Vector2(760, 105), Vector2(3.0, 1.2)],
-		[Vector2(1190, 68), Vector2(3.5, 1.4)],
-		[Vector2(1650, 92), Vector2(3.25, 1.25)],
-		[Vector2(2110, 62), Vector2(3.6, 1.35)],
-		[Vector2(2480, 100), Vector2(2.8, 1.2)],
+		[Vector2(-80, 130), Vector2(3.0, 1.25)],
+		[Vector2(300, 110), Vector2(3.55, 1.42)],
+		[Vector2(760, 145), Vector2(3.15, 1.28)],
+		[Vector2(1190, 108), Vector2(3.65, 1.48)],
+		[Vector2(1650, 132), Vector2(3.4, 1.32)],
+		[Vector2(2110, 102), Vector2(3.75, 1.42)],
+		[Vector2(2480, 140), Vector2(3.0, 1.28)],
 	]:
 		var crown := Polygon2D.new()
 		crown.position = entry[0]
@@ -135,25 +136,25 @@ func _build_forest_depth() -> void:
 		crown.scale = entry[1]
 		crown.color = Color(0.022, 0.061, 0.050, 0.96)
 		distant.add_child(crown)
-	for branch_y in [150.0, 225.0]:
+	for branch_y in [190.0, 265.0]:
 		var branch := Line2D.new()
 		branch.points = PackedVector2Array([
 			Vector2(-120, branch_y), Vector2(420, branch_y + 34),
 			Vector2(920, branch_y - 8), Vector2(1430, branch_y + 28),
 			Vector2(1980, branch_y - 4), Vector2(2520, branch_y + 22),
 		])
-		branch.width = 18.0 if branch_y < 200.0 else 11.0
+		branch.width = 18.0 if branch_y < 230.0 else 11.0
 		branch.default_color = Color(0.025, 0.064, 0.050, 0.86)
 		distant.add_child(branch)
 	for entry in [
-		["tree_ancient_c", Vector2(-80, 635), 2.45],
-		["tree_ancient_a", Vector2(260, 640), 2.15],
-		["tree_ancient_b", Vector2(610, 638), 2.55],
-		["tree_ancient_c", Vector2(1010, 640), 2.30],
-		["tree_ancient_a", Vector2(1390, 638), 2.60],
-		["tree_ancient_b", Vector2(1810, 640), 2.35],
-		["tree_ancient_c", Vector2(2210, 640), 2.60],
-		["tree_ancient_a", Vector2(2510, 638), 2.25],
+		["tree_ancient_c", Vector2(-80, 635), 2.65],
+		["tree_ancient_a", Vector2(260, 640), 2.35],
+		["tree_ancient_b", Vector2(610, 638), 2.75],
+		["tree_ancient_c", Vector2(1010, 640), 2.50],
+		["tree_ancient_a", Vector2(1390, 638), 2.80],
+		["tree_ancient_b", Vector2(1810, 640), 2.55],
+		["tree_ancient_c", Vector2(2210, 640), 2.80],
+		["tree_ancient_a", Vector2(2510, 638), 2.45],
 	]:
 		_add_sprite(
 			distant,
@@ -167,12 +168,12 @@ func _build_forest_depth() -> void:
 	middle.z_index = -5
 	add_child(middle)
 	for entry in [
-		["tree_ancient_a", Vector2(125, 620), 1.55],
-		["tree_ancient_b", Vector2(440, 620), 1.70],
-		["tree_ancient_c", Vector2(875, 620), 1.45],
-		["tree_ancient_a", Vector2(1530, 620), 1.72],
-		["tree_ancient_b", Vector2(1870, 620), 1.85],
-		["tree_ancient_c", Vector2(2290, 620), 1.65],
+		["tree_ancient_a", Vector2(125, 620), 1.70],
+		["tree_ancient_b", Vector2(440, 620), 1.85],
+		["tree_ancient_c", Vector2(875, 620), 1.60],
+		["tree_ancient_a", Vector2(1530, 620), 1.88],
+		["tree_ancient_b", Vector2(1870, 620), 2.00],
+		["tree_ancient_c", Vector2(2290, 620), 1.80],
 	]:
 		var tree := _add_sprite(middle, str(entry[0]), entry[1], float(entry[2]), Color(0.72, 0.82, 0.67, 1.0))
 		if tree != null:
@@ -185,15 +186,18 @@ func _build_authored_props() -> void:
 	props.z_index = -2
 	add_child(props)
 	for entry in [
-		["rock_medium", Vector2(285, 620), 1.15],
-		["bush_flower", Vector2(360, 620), 1.2],
-		["mushrooms", Vector2(515, 620), 1.1],
-		["fallen_log", Vector2(905, 620), 1.1],
-		["flowers", Vector2(1080, 620), 1.0],
-		["stump", Vector2(1470, 620), 1.1],
-		["rock_large", Vector2(1765, 620), 1.05],
-		["bush_dark", Vector2(1980, 620), 1.3],
-		["mushrooms", Vector2(2240, 620), 1.15],
+		["rock_medium", Vector2(285, 620), 1.25],
+		["bush_flower", Vector2(360, 620), 1.3],
+		["grass_tuft", Vector2(420, 620), 1.15],
+		["mushrooms", Vector2(515, 620), 1.2],
+		["fallen_log", Vector2(905, 620), 1.2],
+		["flowers", Vector2(1080, 620), 1.1],
+		["bush_dark", Vector2(1240, 620), 1.2],
+		["stump", Vector2(1470, 620), 1.2],
+		["rock_large", Vector2(1765, 620), 1.15],
+		["bush_dark", Vector2(1980, 620), 1.4],
+		["grass_tuft", Vector2(2105, 620), 1.2],
+		["mushrooms", Vector2(2240, 620), 1.25],
 	]:
 		_add_sprite(props, str(entry[0]), entry[1], float(entry[2]), Color(0.90, 0.94, 0.84, 1.0))
 	var ruins := Node2D.new()
@@ -201,20 +205,22 @@ func _build_authored_props() -> void:
 	ruins.z_index = -3
 	add_child(ruins)
 	for entry in [
-		["waystone_fragment", Vector2(190, 620), 1.25],
-		["broken_wall_corner", Vector2(1170, 620), 1.35],
-		["mossy_pillar", Vector2(1275, 620), 1.4],
-		["broken_wall_end", Vector2(1370, 620), 1.25],
-		["carved_stone", Vector2(2055, 620), 1.15],
-		["ruined_arch", Vector2(2180, 620), 1.55],
+		["waystone_fragment", Vector2(190, 620), 1.35],
+		["broken_wall_corner", Vector2(1170, 620), 1.45],
+		["mossy_pillar", Vector2(1275, 620), 1.5],
+		["broken_wall_end", Vector2(1370, 620), 1.35],
+		["carved_stone", Vector2(2055, 620), 1.25],
+		["ruined_arch", Vector2(2180, 620), 1.65],
 	]:
 		_add_sprite(ruins, str(entry[0]), entry[1], float(entry[2]), Color(0.67, 0.73, 0.63, 1.0))
 	var foreground := Node2D.new()
 	foreground.name = "ElderwoodForegroundFraming"
 	foreground.z_index = 24
 	add_child(foreground)
-	_add_sprite(foreground, "bush_dark", Vector2(20, 680), 2.1, Color(0.18, 0.32, 0.23, 0.82))
-	_add_sprite(foreground, "grass_tuft", Vector2(2360, 680), 2.2, Color(0.16, 0.29, 0.20, 0.82))
+	_add_sprite(foreground, "bush_dark", Vector2(20, 680), 2.35, Color(0.18, 0.32, 0.23, 0.84))
+	_add_sprite(foreground, "bush_dark", Vector2(90, 690), 1.7, Color(0.14, 0.26, 0.18, 0.72))
+	_add_sprite(foreground, "grass_tuft", Vector2(2360, 680), 2.4, Color(0.16, 0.29, 0.20, 0.84))
+	_add_sprite(foreground, "grass_tuft", Vector2(2285, 695), 1.8, Color(0.14, 0.25, 0.17, 0.7))
 
 
 func _build_atmosphere() -> void:
@@ -222,14 +228,15 @@ func _build_atmosphere() -> void:
 	atmosphere.name = "ElderwoodAmbientLife"
 	atmosphere.z_index = 14
 	add_child(atmosphere)
+	_build_golden_hour_light(atmosphere)
 	for index in range(26):
 		var mote := Polygon2D.new()
 		var radius := 1.4 if index % 4 else 2.2
 		mote.polygon = _circle_points(8, radius)
-		mote.color = Color(0.72, 0.83, 0.52, 0.72 if index % 4 else 0.9)
+		mote.color = Color(0.86, 0.78, 0.42, 0.72 if index % 4 else 0.9)
 		var origin := Vector2(
 			80.0 + fmod(float(index * 193), 2240.0),
-			255.0 + fmod(float(index * 71), 315.0)
+			280.0 + fmod(float(index * 71), 280.0)
 		)
 		mote.position = origin
 		atmosphere.add_child(mote)
@@ -239,8 +246,8 @@ func _build_atmosphere() -> void:
 		leaf.polygon = PackedVector2Array([
 			Vector2(-4, 0), Vector2(0, -2), Vector2(5, 0), Vector2(0, 2),
 		])
-		leaf.color = Color(0.47, 0.57, 0.25, 0.78)
-		var origin := Vector2(-120.0 + float(index % 4) * 620.0, 170.0 + float(index % 3) * 105.0)
+		leaf.color = Color(0.52, 0.48, 0.22, 0.78)
+		var origin := Vector2(-120.0 + float(index % 4) * 620.0, 210.0 + float(index % 3) * 95.0)
 		atmosphere.add_child(leaf)
 		_leaves.append({
 			"node": leaf,
@@ -250,13 +257,41 @@ func _build_atmosphere() -> void:
 		})
 	for index in range(3):
 		var mist := ColorRect.new()
-		mist.position = Vector2(-120, 535 + index * 25)
-		mist.size = Vector2(2640, 34 + index * 10)
-		mist.color = Color(0.48, 0.62, 0.54, 0.035 + index * 0.012)
+		mist.position = Vector2(-120, 505 + index * 28)
+		mist.size = Vector2(2640, 38 + index * 10)
+		mist.color = Color(0.58, 0.56, 0.38, 0.03 + index * 0.01)
 		mist.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		atmosphere.add_child(mist)
 		atmosphere.move_child(mist, 0)
 		_mist_bands.append(mist)
+
+
+func _build_golden_hour_light(parent: Node) -> void:
+	var light := Node2D.new()
+	light.name = "GoldenHourLight"
+	light.z_index = -12
+	parent.add_child(light)
+	var wash := Polygon2D.new()
+	wash.polygon = PackedVector2Array([
+		Vector2(-80, 40), Vector2(920, 80), Vector2(780, 640), Vector2(-80, 640),
+	])
+	wash.color = Color(0.92, 0.68, 0.28, 0.08)
+	light.add_child(wash)
+	for index in range(5):
+		var shaft := Polygon2D.new()
+		var x := 80.0 + float(index) * 150.0
+		shaft.polygon = PackedVector2Array([
+			Vector2(x, 20), Vector2(x + 38, 20),
+			Vector2(x + 120 + index * 18.0, 620), Vector2(x + 48 + index * 10.0, 620),
+		])
+		shaft.color = Color(0.95, 0.78, 0.38, 0.045 + float(index % 2) * 0.012)
+		light.add_child(shaft)
+	var shade := Polygon2D.new()
+	shade.polygon = PackedVector2Array([
+		Vector2(1100, 60), Vector2(2500, 40), Vector2(2500, 640), Vector2(980, 640),
+	])
+	shade.color = Color(0.04, 0.08, 0.1, 0.12)
+	light.add_child(shade)
 
 
 func _add_tiled_rect(

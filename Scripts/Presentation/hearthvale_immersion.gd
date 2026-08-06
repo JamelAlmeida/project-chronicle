@@ -41,35 +41,41 @@ func _build_distant_landscape() -> void:
 	layer.z_index = -18
 	add_child(layer)
 	var moon := Polygon2D.new()
-	moon.position = Vector2(1460, 165)
+	moon.position = Vector2(1460, 195)
 	moon.polygon = _circle_points(24, 46.0)
-	moon.color = Color(0.76, 0.72, 0.58, 0.20)
+	moon.color = Color(0.86, 0.72, 0.42, 0.28)
 	layer.add_child(moon)
+	var dusk := Polygon2D.new()
+	dusk.polygon = PackedVector2Array([
+		Vector2(-200, 40), Vector2(900, 60), Vector2(760, 640), Vector2(-200, 640),
+	])
+	dusk.color = Color(0.92, 0.62, 0.28, 0.07)
+	layer.add_child(dusk)
 	for cloud_points in [
 		PackedVector2Array([
-			Vector2(80, 235), Vector2(220, 218), Vector2(345, 235),
-			Vector2(220, 246), Vector2(80, 242),
+			Vector2(80, 255), Vector2(220, 238), Vector2(345, 255),
+			Vector2(220, 266), Vector2(80, 262),
 		]),
 		PackedVector2Array([
-			Vector2(1050, 250), Vector2(1220, 225), Vector2(1410, 244),
-			Vector2(1270, 263), Vector2(1050, 258),
+			Vector2(1050, 270), Vector2(1220, 245), Vector2(1410, 264),
+			Vector2(1270, 283), Vector2(1050, 278),
 		]),
 	]:
-		_add_polygon(layer, cloud_points, Color(0.43, 0.45, 0.43, 0.11))
+		_add_polygon(layer, cloud_points, Color(0.55, 0.48, 0.36, 0.14))
 	_add_polygon(layer, PackedVector2Array([
-		Vector2(-300, 430), Vector2(80, 300), Vector2(380, 390),
-		Vector2(720, 260), Vector2(1100, 390), Vector2(1480, 280),
-		Vector2(2100, 410), Vector2(2100, 720), Vector2(-300, 720),
-	]), Color(0.16, 0.20, 0.19, 1.0))
+		Vector2(-300, 400), Vector2(80, 275), Vector2(380, 360),
+		Vector2(720, 240), Vector2(1100, 360), Vector2(1480, 255),
+		Vector2(2100, 380), Vector2(2100, 720), Vector2(-300, 720),
+	]), Color(0.18, 0.16, 0.12, 1.0))
 	for entry in [
-		[90.0, 430.0, 135.0], [340.0, 410.0, 175.0], [720.0, 435.0, 125.0],
-		[1120.0, 420.0, 160.0], [1480.0, 438.0, 120.0], [1770.0, 410.0, 175.0],
+		[90.0, 400.0, 145.0], [340.0, 380.0, 185.0], [720.0, 405.0, 135.0],
+		[1120.0, 390.0, 170.0], [1480.0, 408.0, 130.0], [1770.0, 380.0, 185.0],
 	]:
 		_add_distant_roof(layer, float(entry[0]), float(entry[1]), float(entry[2]))
 	var horizon := Line2D.new()
-	horizon.points = PackedVector2Array([Vector2(-200, 455), Vector2(2050, 455)])
+	horizon.points = PackedVector2Array([Vector2(-200, 430), Vector2(2050, 430)])
 	horizon.width = 3.0
-	horizon.default_color = Color(0.56, 0.39, 0.20, 0.18)
+	horizon.default_color = Color(0.72, 0.48, 0.22, 0.22)
 	layer.add_child(horizon)
 
 
@@ -78,11 +84,11 @@ func _build_settlement() -> void:
 	architecture.name = "HearthvaleArchitecture"
 	architecture.z_index = -4
 	add_child(architecture)
-	_add_building(architecture, Vector2(95, 620), 245.0, 235.0, Color(0.43, 0.31, 0.22), "THE WAYFARER")
-	_add_building(architecture, Vector2(390, 620), 270.0, 285.0, Color(0.49, 0.39, 0.27), "HEARTH HALL")
-	_add_building(architecture, Vector2(735, 620), 230.0, 220.0, Color(0.37, 0.32, 0.27), "FORGE")
-	_add_building(architecture, Vector2(1035, 620), 255.0, 245.0, Color(0.46, 0.36, 0.25), "PROVISIONS")
-	_add_building(architecture, Vector2(1335, 620), 210.0, 205.0, Color(0.42, 0.34, 0.25), "")
+	_add_building(architecture, Vector2(95, 620), 245.0, 255.0, Color(0.43, 0.31, 0.22), "THE WAYFARER")
+	_add_building(architecture, Vector2(390, 620), 270.0, 305.0, Color(0.49, 0.39, 0.27), "HEARTH HALL")
+	_add_building(architecture, Vector2(735, 620), 230.0, 240.0, Color(0.37, 0.32, 0.27), "FORGE")
+	_add_building(architecture, Vector2(1035, 620), 255.0, 265.0, Color(0.46, 0.36, 0.25), "PROVISIONS")
+	_add_building(architecture, Vector2(1335, 620), 210.0, 225.0, Color(0.42, 0.34, 0.25), "")
 	_add_well(architecture, Vector2(555, 615))
 	_add_gate_details(architecture, Vector2(1610, 620))
 

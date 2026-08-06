@@ -35,13 +35,13 @@ scroll_scale = Vector2(0.18, 0.12)
 
 [node name="Sky" type="ColorRect" parent="DistantBackground"]
 offset_left = -400.0
-offset_top = -220.0
+offset_top = -40.0
 offset_right = 3000.0
 offset_bottom = 760.0
 color = Color(0.105, 0.17, 0.19, 1)
 
 [node name="DistantCanopy" type="Polygon2D" parent="DistantBackground"]
-polygon = PackedVector2Array(-300, 280, 0, 170, 250, 230, 520, 130, 820, 220, 1120, 120, 1410, 220, 1700, 145, 2040, 235, 2360, 130, 2750, 240, 3000, 300, 3000, 720, -300, 720)
+polygon = PackedVector2Array(-300, 220, 0, 140, 250, 190, 520, 110, 820, 185, 1120, 100, 1410, 180, 1700, 120, 2040, 195, 2360, 110, 2750, 200, 3000, 250, 3000, 720, -300, 720)
 color = Color(0.075, 0.13, 0.12, 1)
 
 [node name="MidBackground" type="Parallax2D" parent="."]
@@ -49,7 +49,7 @@ z_index = -25
 scroll_scale = Vector2(0.5, 0.35)
 
 [node name="ForestDepth" type="Polygon2D" parent="MidBackground"]
-polygon = PackedVector2Array(-200, 620, -120, 210, -60, 210, 0, 620, 180, 620, 235, 150, 300, 150, 360, 620, 570, 620, 620, 230, 682, 230, 740, 620, 960, 620, 1010, 175, 1080, 175, 1140, 620, 1370, 620, 1420, 245, 1490, 245, 1550, 620, 1800, 620, 1860, 155, 1940, 155, 2010, 620, 2250, 620, 2300, 220, 2370, 220, 2450, 620)
+polygon = PackedVector2Array(-200, 620, -120, 175, -60, 175, 0, 620, 180, 620, 235, 125, 300, 125, 360, 620, 570, 620, 620, 195, 682, 195, 740, 620, 960, 620, 1010, 145, 1080, 145, 1140, 620, 1370, 620, 1420, 205, 1490, 205, 1550, 620, 1800, 620, 1860, 130, 1940, 130, 2010, 620, 2250, 620, 2300, 185, 2370, 185, 2450, 620)
 color = Color(0.09, 0.205, 0.14, 1)
 
 [node name="GameplayLayer" type="Node2D" parent="."]
@@ -95,7 +95,7 @@ collision_mask = 0
 shape = SubResource("SideWall")
 
 [node name="EntryRise" type="StaticBody2D" parent="GameplayLayer/Terrain"]
-position = Vector2(470, 592)
+position = Vector2(470, 585)
 collision_layer = 2
 collision_mask = 0
 
@@ -112,7 +112,7 @@ shape = SubResource("PlatformWide")
 [node name="OptionalRoute" type="Node2D" parent="GameplayLayer/Terrain"]
 
 [node name="LowerOneWay" type="StaticBody2D" parent="GameplayLayer/Terrain/OptionalRoute"]
-position = Vector2(980, 560)
+position = Vector2(980, 555)
 collision_layer = 2
 collision_mask = 0
 
@@ -129,7 +129,7 @@ one_way_collision = true
 one_way_collision_margin = 6.0
 
 [node name="MiddleOneWay" type="StaticBody2D" parent="GameplayLayer/Terrain/OptionalRoute"]
-position = Vector2(1200, 505)
+position = Vector2(1200, 500)
 collision_layer = 2
 collision_mask = 0
 
@@ -163,7 +163,7 @@ one_way_collision = true
 one_way_collision_margin = 6.0
 
 [node name="RootBridge" type="StaticBody2D" parent="GameplayLayer/Terrain"]
-position = Vector2(1690, 535)
+position = Vector2(1690, 525)
 rotation = -0.07
 collision_layer = 2
 collision_mask = 0
@@ -215,7 +215,7 @@ position = Vector2(140, 620)
 
 [node name="Camera2D" parent="GameplayLayer/Actors/Player" index="2"]
 limit_left = 0
-limit_top = -120
+limit_top = 40
 limit_right = 2400
 limit_bottom = 720
 limit_enabled = true
@@ -254,19 +254,19 @@ text = "Mosscrypt Trail"
 z_index = 30
 
 [node name="LeftLeaves" type="Polygon2D" parent="ForegroundLayer"]
-polygon = PackedVector2Array(0, 0, 180, 0, 100, 90, 0, 140)
-color = Color(0.035, 0.09, 0.055, 0.8)
+polygon = PackedVector2Array(0, 40, 210, 20, 140, 130, 40, 210, 0, 240)
+color = Color(0.035, 0.09, 0.055, 0.82)
 
 [node name="RightLeaves" type="Polygon2D" parent="ForegroundLayer"]
-polygon = PackedVector2Array(2220, 0, 2400, 0, 2400, 150, 2300, 95)
-color = Color(0.035, 0.09, 0.055, 0.8)
+polygon = PackedVector2Array(2190, 20, 2400, 40, 2400, 240, 2280, 150, 2220, 90)
+color = Color(0.035, 0.09, 0.055, 0.82)
 
 [node name="AtmosphericOverlays" type="Node2D" parent="."]
 z_index = 20
 
 [node name="MistBand" type="ColorRect" parent="AtmosphericOverlays"]
 offset_left = 0.0
-offset_top = 570.0
+offset_top = 540.0
 offset_right = 2400.0
 offset_bottom = 620.0
 color = Color(0.55, 0.68, 0.58, 0.06)

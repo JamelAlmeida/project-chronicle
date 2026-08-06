@@ -13,7 +13,6 @@ description = "Defeat Elderwood slimes"
 [sub_resource type="Resource" id="Reward_trial"]
 script = ExtResource("3_reward")
 xp = 70
-technique_ids = PackedStringArray("arc_sweep")
 
 [resource]
 script = ExtResource("1_quest")
@@ -23,4 +22,3 @@ description = "Prove that you can survive beyond Hearthvale's gate."
 quest_giver_id = "hearthvale_adventurers_board"
 objectives = Array[ExtResource("2_objective")]([SubResource("Objective_kill")])
 rewards = SubResource("Reward_trial")
-next_quest_ids = PackedStringArray("gel_for_the_road")

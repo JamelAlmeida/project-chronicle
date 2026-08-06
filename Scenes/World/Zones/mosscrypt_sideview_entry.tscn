@@ -87,7 +87,7 @@ position = Vector2(170, 620)
 
 [node name="Camera2D" parent="GameplayLayer/Player" index="2"]
 limit_left = 0
-limit_top = -100
+limit_top = 40
 limit_right = 900
 limit_bottom = 720
 limit_enabled = true

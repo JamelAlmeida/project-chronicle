@@ -24,13 +24,13 @@ scroll_scale = Vector2(0.25, 0.2)
 
 [node name="Sky" type="ColorRect" parent="DistantBackground"]
 offset_left = -300.0
-offset_top = -160.0
+offset_top = -40.0
 offset_right = 2300.0
 offset_bottom = 720.0
-color = Color(0.17, 0.20, 0.22, 1)
+color = Color(0.22, 0.18, 0.14, 1)
 
 [node name="VillageSilhouette" type="Polygon2D" parent="DistantBackground"]
-polygon = PackedVector2Array(-100, 620, -100, 430, 30, 430, 70, 350, 110, 430, 240, 430, 240, 390, 380, 390, 430, 315, 480, 390, 650, 390, 650, 450, 800, 450, 850, 370, 900, 450, 1100, 450, 1100, 620)
+polygon = PackedVector2Array(-100, 620, -100, 390, 30, 390, 70, 300, 110, 390, 240, 390, 240, 345, 380, 345, 430, 265, 480, 345, 650, 345, 650, 410, 800, 410, 850, 320, 900, 410, 1100, 410, 1100, 620)
 color = Color(0.13, 0.12, 0.105, 0.92)
 
 [node name="ImmersionDressing" type="Node2D" parent="."]
@@ -76,11 +76,11 @@ color = Color(0.32, 0.22, 0.14, 1)
 
 [node name="SafetyLabel" type="Label" parent="GameplayLayer"]
 offset_left = 45.0
-offset_top = 65.0
+offset_top = 95.0
 offset_right = 360.0
-offset_bottom = 95.0
+offset_bottom = 120.0
 theme_override_colors/font_color = Color(0.94, 0.74, 0.36, 1)
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 text = "HEARTHVALE — SAFE HAVEN"
 
 [node name="SpawnPoints" type="Node2D" parent="."]
@@ -96,7 +96,7 @@ position = Vector2(180, 620)
 
 [node name="Camera2D" parent="GameplayLayer/Player" index="2"]
 limit_left = 0
-limit_top = -100
+limit_top = 40
 limit_right = 1800
 limit_bottom = 720
 limit_enabled = true

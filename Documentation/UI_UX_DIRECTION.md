@@ -11,11 +11,14 @@ Chronicle uses an original, desktop-first dark-fantasy interface with MMO-inspir
 
 ### Immersion-slice skin
 
-- Use near-black charcoal surfaces, inset iron tones, aged brass borders, restrained gold hierarchy, and deep region-appropriate accents.
+- Prefer a cozy dark-fantasy look: dark stone bottom chrome, warm gold edging, readable red HP and blue Steadfast bars, and colorful centered action slots.
 - Use **Cinzel** for major headings, zone names, and limited combat emphasis. Use **Alegreya** for body copy, HUD values, buttons, objectives, and item detail.
 - Keep the top-left expedition ledger and top-right quest tracker compact, framed, and quieter than the world.
-- Keep action slots centered, keybinds visible, and menu access grouped at the bottom. Ornament must clarify hierarchy rather than consume play space.
+- Keep the bottom adventure bar full-width and ornate, but still secondary to the playfield. Include crest/identity, vitals, action bar, menu access, and a thin XP strip.
+- Keep action slots centered with distinct pixel icons, keybinds visible, and menu access grouped at the bottom. Ornament must clarify hierarchy rather than consume play space.
+- Action and menu icons live in `Assets/UI/Icons` as 32×32 nearest-neighbor pixel art. They should read clearly at HUD scale without copying another game's icon language.
 - Ordinary damage numbers use warm ivory, criticals use pale copper-gold at a larger scale, and player damage uses muted rose. Motion is short and restrained; Chronicle does not reproduce another game's iconic number palette or stacking behavior.
+- World framing should feel intimate and golden-hour dense: closer camera, filled canopy, warm entry light into cooler wilderness depth.
 
 Current bindings are `E` attack, `Space` dash, `1` or legacy `Q` primary Technique, `C` Character, `I` Inventory, `K` Technique Book, `J` Quest Log, and `F` contextual quest interaction. Number keys `1–5` establish the primary action-bar range. `Tab` is reserved for future target cycling.
 
