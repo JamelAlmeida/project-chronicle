@@ -1,0 +1,4 @@
+left=28
+right=28
+top=28
+bottom=28

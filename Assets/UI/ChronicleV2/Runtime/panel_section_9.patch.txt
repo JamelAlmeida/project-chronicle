@@ -1,0 +1,4 @@
+left=26
+right=26
+top=26
+bottom=26

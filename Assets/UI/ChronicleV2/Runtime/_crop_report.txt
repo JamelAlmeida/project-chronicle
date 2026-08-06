@@ -1,0 +1,3 @@
+chronicle_ui_frames_bars_v2.png: panel_main panel_tracker panel_compact panel_header bar_ornate bar_empty crest_ring bottom_hud bar_segmented panel_small bar_thin divider_flourish 
+chronicle_ui_slots_icons_v2.png: slot_selected slot_empty btn_wide btn_chrome panel_section panel_inset btn_plus btn_minus portrait_ring hotbar_strip slot_square slot_square_alt icon_sword icon_fire icon_shadow icon_mage icon_ice icon_nature icon_potion icon_bag icon_scroll icon_helm icon_lock 
+chronicle_character_window_kit_v2.png: char_btn char_btn_alt char_divider char_btn_mid equip_slot equip_slot_b equip_slot_c equip_slot_wide equip_slot_med equip_slot_med_b equip_slot_sm char_footer char_divider_long 

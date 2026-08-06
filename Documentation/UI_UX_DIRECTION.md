@@ -12,12 +12,13 @@ Chronicle uses an original, desktop-first dark-fantasy interface with MMO-inspir
 ### Immersion-slice skin
 
 - Prefer a cozy dark-fantasy look: dark stone bottom chrome, warm gold edging, readable red HP and blue Steadfast bars, and colorful centered action slots.
-- Use **Cinzel** for major headings, zone names, and limited combat emphasis. Use **Alegreya** for body copy, HUD values, buttons, objectives, and item detail.
+- Use **Cinzel** (weighted) for major headings, zone names, and limited combat emphasis. Use **Alegreya** (weighted) for body copy, HUD values, buttons, objectives, and item detail. Primary text is warm ivory; headings use muted gold; secondary text uses subdued gray. Dark outline/shadow keeps type readable over panels and the world.
 - Keep the top-left expedition ledger and top-right quest tracker compact, framed, and quieter than the world.
-- Keep the bottom adventure bar full-width and ornate, but still secondary to the playfield. Include crest/identity, vitals, action bar, menu access, and a thin XP strip.
-- Keep action slots centered with distinct pixel icons, Cinzel keybind labels under each slot, and menu access grouped at the bottom. Ornament must clarify hierarchy rather than consume play space.
+- Segment the bottom adventure chrome into three islands with visible world gaps between them: left player status (crest, name/level, HP, secondary resource, XP), center action bar, and right menu access. Do not reconnect islands with a full-width background slab.
+- Keep action slots centered with distinct icons, Cinzel keybind labels under each slot, and menu access grouped at the bottom-right island. Prefer light translucent slot plates with thin borders; strengthen borders only for ready/selected/hover emphasis. Locked slots use darkening plus a small lock overlay.
 - Action and menu icons live in `Assets/UI/Icons` as 32×32 nearest-neighbor pixel art. They should read clearly at HUD scale without copying another game's icon language.
-- Approved Character + UI Kit v1 source sheets live under `Assets/Characters/Adventurer/Source` and `Assets/UI/Source`. Runtime crops/atlases used by the HUD and Adventurer live in the matching `Runtime` folders. Godot Labels remain authoritative for all dynamic text and keybinds.
+- Approved Character + UI Kit v1 source sheets live under `Assets/Characters/Adventurer/Source` and `Assets/UI/Source`. Runtime crops/atlases used by the Adventurer live in the matching `Runtime` folders.
+- UI Rescue V2 source sheets live under `Assets/UI/ChronicleV2/Source`. Clean isolated runtime crops used by the HUD and panels live in `Assets/UI/ChronicleV2/Runtime`. Godot Labels remain authoritative for all dynamic text and keybinds. Do not stack decorative frames or use baked sheet text.
 - Ordinary damage numbers use warm ivory, criticals use pale copper-gold at a larger scale, and player damage uses muted rose. Motion is short and restrained; Chronicle does not reproduce another game's iconic number palette or stacking behavior.
 - World framing should feel intimate and golden-hour dense: closer camera, filled canopy, warm entry light into cooler wilderness depth.
 
