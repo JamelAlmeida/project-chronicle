@@ -25,6 +25,7 @@ script = ExtResource("1_5py17")
 [node name="Visuals" type="Node2D" parent="." unique_id=939597102]
 
 [node name="GroundShadow" type="Polygon2D" parent="Visuals" unique_id=1765845558]
+visible = false
 z_index = -2
 color = Color(0.015, 0.02, 0.018, 0.55)
 polygon = PackedVector2Array(-22, -3, -14, -8, 14, -8, 22, -3, 14, 1, -14, 1)
@@ -39,20 +40,27 @@ color = Color(0.9891885, 0.16677955, 0.45810562, 1)
 [node name="BaseCharacter" type="AnimatedSprite2D" parent="Visuals" unique_id=958699716]
 texture_filter = 1
 position = Vector2(0, -52)
+scale = Vector2(1, 1)
 sprite_frames = ExtResource("10_adventurer")
 animation = &"idle_right"
 
 [node name="EquipmentVisuals" type="Node2D" parent="Visuals" unique_id=1844221101]
 
-[node name="MainHand" type="Node2D" parent="Visuals/EquipmentVisuals" unique_id=1844221102]
-
-[node name="OffHand" type="Node2D" parent="Visuals/EquipmentVisuals" unique_id=1844221103]
-
-[node name="Head" type="Node2D" parent="Visuals/EquipmentVisuals" unique_id=1844221104]
+[node name="Cloak" type="Node2D" parent="Visuals/EquipmentVisuals" unique_id=1844221106]
 
 [node name="Body" type="Node2D" parent="Visuals/EquipmentVisuals" unique_id=1844221105]
 
-[node name="Cloak" type="Node2D" parent="Visuals/EquipmentVisuals" unique_id=1844221106]
+[node name="Legs" type="Node2D" parent="Visuals/EquipmentVisuals"]
+
+[node name="Feet" type="Node2D" parent="Visuals/EquipmentVisuals"]
+
+[node name="Hands" type="Node2D" parent="Visuals/EquipmentVisuals"]
+
+[node name="Head" type="Node2D" parent="Visuals/EquipmentVisuals" unique_id=1844221104]
+
+[node name="MainHand" type="Node2D" parent="Visuals/EquipmentVisuals" unique_id=1844221102]
+
+[node name="OffHand" type="Node2D" parent="Visuals/EquipmentVisuals" unique_id=1844221103]
 
 [node name="VisualController" type="Node" parent="Visuals" unique_id=1929883830]
 script = ExtResource("8_visuals")
@@ -97,5 +105,6 @@ shape = SubResource("RectangleShape2D_melee")
 
 [node name="AttackVisual" type="Polygon2D" parent="MeleeAttack" unique_id=603113246]
 visible = false
+modulate = Color(1, 1, 1, 0)
 color = Color(0.78, 0.58, 0.28, 0.28)
 polygon = PackedVector2Array(12, -20, 25, -17, 42, -8, 50, 0, 42, 8, 25, 17, 12, 20, 22, 9, 36, 4, 41, 0, 36, -4, 22, -9)

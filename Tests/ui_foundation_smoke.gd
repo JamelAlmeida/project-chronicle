@@ -27,9 +27,31 @@ func _run() -> void:
 	var menu := current_scene.get_node("EquipmentDebugPanel")
 	var player := get_first_node_in_group("player")
 	_expect(hud.has_node("BottomHUD"), "Bottom HUD is present")
+	_expect(hud.has_node("ExpeditionReadout"), "Expedition panel is present")
 	_expect(hud.find_child("ActionBar", true, false) != null, "Action bar shell is present")
 	_expect(hud.has_node("QuestTracker"), "Quest tracker is present")
 	_expect(not hud.has_node("ProgressionPanel"), "Old progression debug block is absent")
+	_expect(current_scene.find_children("GameHUD", "", true, false).size() == 1, "Only one GameHUD root is active")
+
+	var player_sprite := player.get_node("Visuals/BaseCharacter") as AnimatedSprite2D
+	_expect(player_sprite != null and player_sprite.visible, "Approved Adventurer sprite is visible")
+	_expect(
+		player_sprite.sprite_frames != null
+		and String(player_sprite.sprite_frames.resource_path).ends_with("adventurer_kit_v1_sprite_frames.tres"),
+		"Player uses Adventurer kit frames"
+	)
+	var ground_shadow := player.get_node_or_null("Visuals/GroundShadow") as CanvasItem
+	_expect(ground_shadow == null or not ground_shadow.visible, "Player GroundShadow is disabled")
+
+	# Empty hotbar slots must not show filler TextureRect content.
+	var action_bar := hud.find_child("ActionBar", true, false)
+	_expect(action_bar != null, "ActionBar node exists")
+	if action_bar != null:
+		var empty_slot := action_bar.get_node_or_null("Slot_hotbar_2") as PanelContainer
+		_expect(empty_slot != null, "Hotbar slot 2 exists as empty shell")
+		if empty_slot != null:
+			var icon := empty_slot.find_child("Icon", true, false) as TextureRect
+			_expect(icon != null and (not icon.visible or icon.texture == null), "Unassigned hotbar slot stays visually empty")
 
 	var stats: StatsComponent = player.get_node("StatsComponent")
 	var baseline_damage := stats.get_attack_damage()

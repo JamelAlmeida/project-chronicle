@@ -160,12 +160,15 @@ func _combat_feedback():
 
 func _activate_hitbox() -> void:
 	_collision_shape.disabled = false
-	_visual.visible = true
+	# Keep legacy AttackVisual polygon hidden — melee reads from Adventurer frames + FX trails.
+	if _visual != null:
+		_visual.visible = false
 
 
 func _deactivate_hitbox() -> void:
 	_collision_shape.disabled = true
-	_visual.visible = false
+	if _visual != null:
+		_visual.visible = false
 
 
 func _on_body_entered(body: Node) -> void:

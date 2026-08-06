@@ -18,6 +18,8 @@ func _run() -> void:
 	var placeholder := player.get_node("Visuals/PlaceholderVisual") as CanvasItem
 	var controller := player.get_node("Visuals/VisualController") as CharacterVisualController
 	var equipment := player.get_node_or_null("Visuals/EquipmentVisuals")
+	var ground_shadow := player.get_node_or_null("Visuals/GroundShadow") as CanvasItem
+	var attack_visual := player.get_node_or_null("MeleeAttack/AttackVisual") as CanvasItem
 
 	_expect(sprite.visible, "Approved kit player sprite is visible")
 	_expect(not placeholder.visible, "Placeholder is hidden while kit art is usable")
@@ -26,7 +28,23 @@ func _run() -> void:
 		"Player sprite uses nearest-neighbor filtering"
 	)
 	_expect(equipment != null, "EquipmentVisuals hook exists for future visible gear")
+	_expect(
+		equipment.get_node_or_null("Legs") != null
+		and equipment.get_node_or_null("Feet") != null
+		and equipment.get_node_or_null("Hands") != null
+		and equipment.get_node_or_null("Cloak") != null
+		and equipment.get_node_or_null("MainHand") != null,
+		"EquipmentVisuals includes future gear layer hooks"
+	)
+	_expect(ground_shadow == null or not ground_shadow.visible, "Programmer GroundShadow is disabled")
+	_expect(attack_visual == null or not attack_visual.visible, "Programmer AttackVisual stays hidden")
+	_expect(is_equal_approx(sprite.scale.x, 1.0) and is_equal_approx(sprite.scale.y, 1.0), "Player sprite scale is 1.0")
 	_expect(sprite.position.y < 0.0, "Player sprite is grounded above feet")
+	_expect(
+		sprite.sprite_frames != null
+		and String(sprite.sprite_frames.resource_path).ends_with("adventurer_kit_v1_sprite_frames.tres"),
+		"Live player uses approved Adventurer kit frames"
+	)
 
 	var idle_animation := &"idle_right"
 	var run_animation := &"run_right"
