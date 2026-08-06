@@ -103,6 +103,21 @@ func spawn_optional_effect(
 
 
 func _spawn_hit_spark(world_position: Vector2) -> Node2D:
+	var tex_root := _spawn_showcase_sprite(
+		world_position,
+		[
+			"res://Project Chronicle/Assets/Showcase/Runtime/Combat/hit_spark_a.png",
+			"res://Project Chronicle/Assets/Showcase/Runtime/Combat/hit_spark_b.png",
+			"res://Project Chronicle/Assets/Showcase/Runtime/Combat/hit_spark_c.png",
+			"res://Project Chronicle/Assets/Showcase/Runtime/Combat/hit_burst.png",
+		],
+		24,
+		Vector2(0.55, 0.55),
+		Vector2(1.15, 1.15),
+		0.18
+	)
+	if tex_root != null:
+		return tex_root
 	var root := _make_effect_root(world_position, 24)
 	if root == null:
 		return null
@@ -139,6 +154,21 @@ func _spawn_hit_spark(world_position: Vector2) -> Node2D:
 
 
 func _spawn_weapon_arc(world_position: Vector2) -> Node2D:
+	var tex_root := _spawn_showcase_sprite(
+		world_position + Vector2(18.0, -22.0),
+		[
+			"res://Project Chronicle/Assets/Showcase/Runtime/Combat/slash_a.png",
+			"res://Project Chronicle/Assets/Showcase/Runtime/Combat/slash_b.png",
+			"res://Project Chronicle/Assets/Showcase/Runtime/Combat/slash_c.png",
+			"res://Project Chronicle/Assets/Showcase/Runtime/Combat/slash_d.png",
+		],
+		18,
+		Vector2(0.42, 0.42),
+		Vector2(0.78, 0.78),
+		0.2
+	)
+	if tex_root != null:
+		return tex_root
 	var root := _make_effect_root(world_position + Vector2(0.0, -22.0), 18)
 	if root == null:
 		return null
@@ -172,6 +202,43 @@ func _spawn_weapon_arc(world_position: Vector2) -> Node2D:
 	return root
 
 
+func _spawn_loot_glint(world_position: Vector2, parent: Node = null) -> Node2D:
+	var tex := _load_showcase_tex(
+		"res://Project Chronicle/Assets/Showcase/Runtime/Combat/loot_sparkle.png"
+	)
+	if tex != null:
+		var sparkle_root := _make_effect_root(world_position, 12, parent)
+		if sparkle_root == null:
+			return null
+		var sprite := Sprite2D.new()
+		sprite.texture = tex
+		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		sprite.centered = true
+		sprite.scale = Vector2(0.35, 0.35)
+		sparkle_root.add_child(sprite)
+		var sparkle_tween := sparkle_root.create_tween()
+		sparkle_tween.set_loops()
+		sparkle_tween.tween_property(sparkle_root, "rotation", TAU, 2.4)
+		sparkle_tween.parallel().tween_property(sprite, "modulate:a", 0.55, 1.2)
+		sparkle_tween.tween_property(sprite, "modulate:a", 1.0, 1.2)
+		return sparkle_root
+	var root := _make_effect_root(world_position, 12, parent)
+	if root == null:
+		return null
+	var ring := Line2D.new()
+	ring.points = PackedVector2Array([
+		Vector2(-10, 0), Vector2(-7, -7), Vector2(0, -10), Vector2(7, -7),
+		Vector2(10, 0), Vector2(7, 7), Vector2(0, 10), Vector2(-7, 7), Vector2(-10, 0),
+	])
+	ring.width = 1.5
+	ring.default_color = Color(0.86, 0.76, 0.47, 0.72)
+	root.add_child(ring)
+	var tween := root.create_tween()
+	tween.set_loops()
+	tween.tween_property(root, "rotation", TAU, 2.8)
+	return root
+
+
 func _spawn_death_wisp(world_position: Vector2) -> Node2D:
 	var root := _make_effect_root(world_position + Vector2(0.0, -12.0), 16)
 	if root == null:
@@ -197,22 +264,45 @@ func _spawn_death_wisp(world_position: Vector2) -> Node2D:
 	return root
 
 
-func _spawn_loot_glint(world_position: Vector2, parent: Node = null) -> Node2D:
-	var root := _make_effect_root(world_position, 12, parent)
+func _spawn_showcase_sprite(
+	world_position: Vector2,
+	paths: Array,
+	z_layer: int,
+	start_scale: Vector2,
+	end_scale: Vector2,
+	life: float
+) -> Node2D:
+	var path: String = paths[randi() % paths.size()]
+	var tex := _load_showcase_tex(path)
+	if tex == null:
+		return null
+	var root := _make_effect_root(world_position, z_layer)
 	if root == null:
 		return null
-	var ring := Line2D.new()
-	ring.points = PackedVector2Array([
-		Vector2(-10, 0), Vector2(-7, -7), Vector2(0, -10), Vector2(7, -7),
-		Vector2(10, 0), Vector2(7, 7), Vector2(0, 10), Vector2(-7, 7), Vector2(-10, 0),
-	])
-	ring.width = 1.5
-	ring.default_color = Color(0.86, 0.76, 0.47, 0.72)
-	root.add_child(ring)
+	var sprite := Sprite2D.new()
+	sprite.texture = tex
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	sprite.centered = true
+	sprite.modulate = Color(1.08, 1.02, 0.88, 1.0)
+	root.add_child(sprite)
+	root.rotation = randf_range(-0.25, 0.25)
+	root.scale = start_scale
 	var tween := root.create_tween()
-	tween.set_loops()
-	tween.tween_property(root, "rotation", TAU, 2.8)
+	tween.set_parallel(true)
+	tween.tween_property(root, "scale", end_scale, life * 0.45)
+	tween.tween_property(root, "modulate:a", 0.0, life).set_delay(life * 0.2)
+	tween.chain().tween_callback(root.queue_free)
 	return root
+
+
+func _load_showcase_tex(path: String) -> Texture2D:
+	if ResourceLoader.exists(path):
+		return load(path) as Texture2D
+	if FileAccess.file_exists(path):
+		var image := Image.load_from_file(path)
+		if image != null and not image.is_empty():
+			return ImageTexture.create_from_image(image)
+	return null
 
 
 func _make_effect_root(

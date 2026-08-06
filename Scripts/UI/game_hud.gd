@@ -174,17 +174,53 @@ func _build_bottom_hud() -> void:
 	root.clip_contents = false
 	add_child(root)
 
+	# Slim XP bar across the lower bottom — separate from the three islands.
+	_build_xp_strip(root)
+
 	var status := _build_status_island()
 	root.add_child(status)
-	_anchor_bottom_left(status, 12.0, 8.0, Vector2(300.0, 102.0))
+	_anchor_bottom_left(status, 14.0, 22.0, Vector2(318.0, 98.0))
 
 	var action := _build_action_island()
 	root.add_child(action)
-	_anchor_bottom_center(action, 8.0, Vector2(420.0, 84.0))
+	_anchor_bottom_center(action, 22.0, Vector2(468.0, 88.0))
 
 	var menu := _build_menu_island()
 	root.add_child(menu)
-	_anchor_bottom_right(menu, 12.0, 8.0, Vector2(178.0, 132.0))
+	_anchor_bottom_right(menu, 14.0, 22.0, Vector2(188.0, 138.0))
+
+
+func _build_xp_strip(root: Control) -> void:
+	var strip := Control.new()
+	strip.name = "XPStrip"
+	strip.anchor_left = 0.0
+	strip.anchor_right = 1.0
+	strip.anchor_top = 1.0
+	strip.anchor_bottom = 1.0
+	strip.offset_left = 14.0
+	strip.offset_right = -14.0
+	strip.offset_top = -18.0
+	strip.offset_bottom = -4.0
+	strip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(strip)
+
+	_xp_bar = ProgressBar.new()
+	_xp_bar.name = "XPBar"
+	_xp_bar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_xp_bar.show_percentage = false
+	_xp_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var xp_bg := UI.textured_style("xp_bar_9.png", 8.0, 1.0)
+	if xp_bg == null:
+		xp_bg = UI.bar_background()
+	_xp_bar.add_theme_stylebox_override("background", xp_bg)
+	_xp_bar.add_theme_stylebox_override("fill", UI.bar_fill(UI.COLOR_XP))
+	strip.add_child(_xp_bar)
+
+	_xp_label = UI.style_label(Label.new(), Color(0.86, 0.92, 0.98), 11, HORIZONTAL_ALIGNMENT_CENTER)
+	_xp_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_xp_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_xp_label.text = "LEVEL 1  ·  XP 0 / 100"
+	strip.add_child(_xp_label)
 
 
 func _anchor_bottom_left(ctrl: Control, margin_left: float, margin_bottom: float, min_size: Vector2) -> void:
@@ -235,53 +271,39 @@ func _build_status_island() -> Control:
 	island.name = "StatusIsland"
 	island.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	island.mouse_filter = Control.MOUSE_FILTER_STOP
-	island.add_theme_stylebox_override("panel", UI.hud_island_style())
+	island.add_theme_stylebox_override("panel", UI.status_island_style())
 
-	var outer := VBoxContainer.new()
-	outer.add_theme_constant_override("separation", 5)
+	# Showcase status chrome already includes the crest shield — keep a spacer so
+	# Godot Labels sit in the text/bar compartments without stacking a second crest.
+	var outer := HBoxContainer.new()
+	outer.add_theme_constant_override("separation", 8)
 	island.add_child(outer)
 
-	var row := HBoxContainer.new()
-	row.name = "Vitals"
-	row.add_theme_constant_override("separation", 8)
-	outer.add_child(row)
-
-	var crest := TextureRect.new()
-	crest.custom_minimum_size = Vector2(52.0, 52.0)
-	crest.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	crest.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	crest.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
-	crest.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var kit_crest := UI.runtime_texture("crest_ring.png")
-	if kit_crest == null:
-		kit_crest = UI.runtime_texture("portrait_ring.png")
-	if kit_crest != null:
-		crest.texture = kit_crest
-		row.add_child(crest)
-	else:
-		var crest_panel := PanelContainer.new()
-		crest_panel.custom_minimum_size = Vector2(52.0, 52.0)
-		crest_panel.add_theme_stylebox_override("panel", UI.action_slot_style(UI.COLOR_BRASS_LIGHT))
-		crest_panel.add_child(Icons.make_rect(Icons.CREST, Vector2(40, 40)))
-		row.add_child(crest_panel)
+	var crest_space := Control.new()
+	crest_space.custom_minimum_size = Vector2(58.0, 56.0)
+	crest_space.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	outer.add_child(crest_space)
 
 	var box := VBoxContainer.new()
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	box.add_theme_constant_override("separation", 3)
-	row.add_child(box)
+	outer.add_child(box)
 
 	_level_label = UI.style_heading(Label.new(), UI.COLOR_GOLD, 14)
 	_level_label.text = "ADVENTURER  ·  LEVEL 1"
 	box.add_child(_level_label)
 
 	var hp_stack := Control.new()
-	hp_stack.custom_minimum_size = Vector2(220.0, 18.0)
+	hp_stack.custom_minimum_size = Vector2(230.0, 20.0)
 	box.add_child(hp_stack)
 	_hp_bar = ProgressBar.new()
 	_hp_bar.name = "HPBar"
 	_hp_bar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_hp_bar.show_percentage = false
-	_hp_bar.add_theme_stylebox_override("background", UI.bar_background())
+	var hp_bg := UI.textured_style("bar_empty_9.png", 8.0, 2.0)
+	if hp_bg == null:
+		hp_bg = UI.bar_background()
+	_hp_bar.add_theme_stylebox_override("background", hp_bg)
 	_hp_bar.add_theme_stylebox_override("fill", UI.bar_fill(UI.COLOR_HEALTH))
 	hp_stack.add_child(_hp_bar)
 	_hp_label = UI.style_label(Label.new(), Color(1.0, 0.95, 0.90), 12, HORIZONTAL_ALIGNMENT_CENTER)
@@ -291,7 +313,7 @@ func _build_status_island() -> Control:
 	hp_stack.add_child(_hp_label)
 
 	var steadfast_stack := Control.new()
-	steadfast_stack.custom_minimum_size = Vector2(220.0, 14.0)
+	steadfast_stack.custom_minimum_size = Vector2(230.0, 14.0)
 	box.add_child(steadfast_stack)
 	_steadfast_bar = ProgressBar.new()
 	_steadfast_bar.name = "SteadfastBar"
@@ -307,22 +329,6 @@ func _build_status_island() -> Control:
 	_resource_label.text = "STEADFAST  100 / 100"
 	_resource_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	steadfast_stack.add_child(_resource_label)
-
-	var xp_row := HBoxContainer.new()
-	xp_row.add_theme_constant_override("separation", 8)
-	outer.add_child(xp_row)
-	_xp_label = UI.style_label(Label.new(), Color(0.82, 0.90, 0.98), 11)
-	_xp_label.custom_minimum_size.x = 128.0
-	xp_row.add_child(_xp_label)
-	_xp_bar = ProgressBar.new()
-	_xp_bar.name = "XPBar"
-	_xp_bar.custom_minimum_size.y = 6.0
-	_xp_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_xp_bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	_xp_bar.show_percentage = false
-	_xp_bar.add_theme_stylebox_override("background", UI.bar_background())
-	_xp_bar.add_theme_stylebox_override("fill", UI.bar_fill(UI.COLOR_XP))
-	xp_row.add_child(_xp_bar)
 	return island
 
 
@@ -331,12 +337,12 @@ func _build_action_island() -> Control:
 	island.name = "ActionIsland"
 	island.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	island.mouse_filter = Control.MOUSE_FILTER_STOP
-	island.add_theme_stylebox_override("panel", UI.hud_island_style())
+	island.add_theme_stylebox_override("panel", UI.action_island_style())
 
 	var center := HBoxContainer.new()
 	center.name = "ActionBar"
 	center.alignment = BoxContainer.ALIGNMENT_CENTER
-	center.add_theme_constant_override("separation", 6)
+	center.add_theme_constant_override("separation", 5)
 	island.add_child(center)
 
 	center.add_child(_make_action_slot(Icons.ATTACK, "Basic Attack", "E", Color(0.82, 0.60, 0.24), true))
@@ -442,11 +448,14 @@ func _kit_action_icon(icon_id: String) -> Texture2D:
 		Icons.DASH:
 			return UI.runtime_texture("icon_shadow.png")
 		Icons.TECHNIQUE:
-			return UI.runtime_texture("icon_mage.png")
+			var mage := UI.runtime_texture("icon_mage.png")
+			return mage if mage != null else UI.runtime_texture("icon_shadow.png")
 		Icons.ARC_SLASH:
-			return UI.runtime_texture("icon_fire.png")
+			var slash := UI.runtime_texture("icon_slash.png")
+			return slash if slash != null else UI.runtime_texture("icon_fire.png")
 		Icons.PULSE_WAVE:
-			return UI.runtime_texture("icon_ice.png")
+			var ice := UI.runtime_texture("icon_ice.png")
+			return ice if ice != null else UI.runtime_texture("icon_nature.png")
 		Icons.VERDANT_BLOOM:
 			return UI.runtime_texture("icon_nature.png")
 		Icons.POTION:
@@ -460,7 +469,7 @@ func _build_menu_island() -> Control:
 	island.name = "MenuIsland"
 	island.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	island.mouse_filter = Control.MOUSE_FILTER_STOP
-	island.add_theme_stylebox_override("panel", UI.hud_island_style())
+	island.add_theme_stylebox_override("panel", UI.menu_island_style())
 
 	var box := VBoxContainer.new()
 	box.name = "MenuAccess"
@@ -492,7 +501,7 @@ func _build_status_message() -> void:
 	_status_label = UI.style_label(Label.new(), Color.WHITE, 15, HORIZONTAL_ALIGNMENT_CENTER)
 	_status_label.name = "StatusMessage"
 	_status_label.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
-	_status_label.position = Vector2(-300.0, -136.0)
+	_status_label.position = Vector2(-300.0, -168.0)
 	_status_label.size = Vector2(600.0, 26.0)
 	_status_label.modulate.a = 0.0
 	add_child(_status_label)

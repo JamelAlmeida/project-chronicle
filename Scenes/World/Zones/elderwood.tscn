@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/World/zone_transition.tscn" id="6_transition"]
 [ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/Characters/Slime.tscn" id="7_slime"]
 [ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/World/loot_pickup.tscn" id="8_loot"]
-[ext_resource type="Script" path="res://Project Chronicle/Scripts/Presentation/elderwood_immersion.gd" id="9_immersion"]
+[ext_resource type="Script" path="res://Project Chronicle/Scripts/Presentation/showcase_immersion.gd" id="9_immersion"]
 
 [sub_resource type="RectangleShape2D" id="GroundShape"]
 size = Vector2(2400, 100)
@@ -38,7 +38,7 @@ offset_left = -400.0
 offset_top = -40.0
 offset_right = 3000.0
 offset_bottom = 760.0
-color = Color(0.14, 0.15, 0.16, 1)
+color = Color(0.42, 0.28, 0.18, 1)
 
 [node name="DistantCanopy" type="Polygon2D" parent="DistantBackground"]
 polygon = PackedVector2Array(-300, 220, 0, 140, 250, 190, 520, 110, 820, 185, 1120, 100, 1410, 180, 1700, 120, 2040, 195, 2360, 110, 2750, 200, 3000, 250, 3000, 720, -300, 720)
@@ -200,10 +200,10 @@ color = Color(0.27, 0.29, 0.24, 1)
 [node name="SpawnPoints" type="Node2D" parent="."]
 
 [node name="default" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(140, 620)
+position = Vector2(920, 620)
 
 [node name="from_hearthvale" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(140, 620)
+position = Vector2(180, 620)
 
 [node name="from_mosscrypt" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(2260, 620)
@@ -211,7 +211,7 @@ position = Vector2(2260, 620)
 [node name="Actors" type="Node2D" parent="GameplayLayer"]
 
 [node name="Player" parent="GameplayLayer/Actors" instance=ExtResource("3_player")]
-position = Vector2(140, 620)
+position = Vector2(920, 620)
 
 [node name="Camera2D" parent="GameplayLayer/Actors/Player" index="2"]
 limit_left = 0
@@ -219,15 +219,16 @@ limit_top = 40
 limit_right = 2400
 limit_bottom = 720
 limit_enabled = true
+gameplay_zoom = Vector2(1.55, 1.55)
 
 [node name="SlimeEntry" parent="GameplayLayer/Actors" instance=ExtResource("7_slime")]
-position = Vector2(760, 620)
+position = Vector2(1080, 620)
 
 [node name="SlimeTrail" parent="GameplayLayer/Actors" instance=ExtResource("7_slime")]
-position = Vector2(1320, 620)
+position = Vector2(1185, 620)
 
 [node name="SlimeDanger" parent="GameplayLayer/Actors" instance=ExtResource("7_slime")]
-position = Vector2(2020, 620)
+position = Vector2(1290, 620)
 
 [node name="ElevatedLoot" parent="GameplayLayer" instance=ExtResource("8_loot")]
 position = Vector2(1410, 420)

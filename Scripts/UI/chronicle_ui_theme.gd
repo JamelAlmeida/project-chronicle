@@ -3,6 +3,8 @@ extends RefCounted
 
 const BODY_FONT_PATH := "res://Project Chronicle/Assets/Fonts/Alegreya-Variable.ttf"
 const HEADING_FONT_PATH := "res://Project Chronicle/Assets/Fonts/Cinzel-Variable.ttf"
+## Showcase Master Pack UI crops are preferred; ChronicleV2 remains the fallback kit.
+const SHOWCASE_UI_ROOT := "res://Project Chronicle/Assets/Showcase/Runtime/UI/"
 const UI_RUNTIME_ROOT := "res://Project Chronicle/Assets/UI/ChronicleV2/Runtime/"
 
 const COLOR_INK := Color(0.028, 0.022, 0.016, 0.98)
@@ -51,18 +53,41 @@ static func _make_font(path: String, weight: int) -> Font:
 static func runtime_texture(name: String) -> Texture2D:
 	if _texture_cache.has(name):
 		return _texture_cache[name] as Texture2D
-	var path := "%s%s" % [UI_RUNTIME_ROOT, name]
-	var tex: Texture2D = null
-	if ResourceLoader.exists(path):
-		tex = load(path) as Texture2D
-	if tex == null and FileAccess.file_exists(path):
-		var image := Image.load_from_file(path)
-		if image != null and not image.is_empty():
-			tex = ImageTexture.create_from_image(image)
+	var tex := _load_texture_from_roots(name, [SHOWCASE_UI_ROOT, UI_RUNTIME_ROOT])
 	if tex == null:
 		return null
 	_texture_cache[name] = tex
 	return tex
+
+
+static func showcase_texture(relative_path: String) -> Texture2D:
+	## Load any Showcase runtime crop: "UI/foo.png", "Environment/bar.png", "Combat/baz.png".
+	if _texture_cache.has(relative_path):
+		return _texture_cache[relative_path] as Texture2D
+	var path := "res://Project Chronicle/Assets/Showcase/Runtime/%s" % relative_path
+	var tex := _load_texture_path(path)
+	if tex == null:
+		return null
+	_texture_cache[relative_path] = tex
+	return tex
+
+
+static func _load_texture_from_roots(name: String, roots: Array) -> Texture2D:
+	for root in roots:
+		var tex := _load_texture_path("%s%s" % [root, name])
+		if tex != null:
+			return tex
+	return null
+
+
+static func _load_texture_path(path: String) -> Texture2D:
+	if ResourceLoader.exists(path):
+		return load(path) as Texture2D
+	if FileAccess.file_exists(path):
+		var image := Image.load_from_file(path)
+		if image != null and not image.is_empty():
+			return ImageTexture.create_from_image(image)
+	return null
 
 
 static func textured_style(
@@ -113,7 +138,27 @@ static func hud_panel_style(background: Color = COLOR_PANEL, border: Color = COL
 
 ## Localized bottom-HUD island — translucent, restrained, not full-width.
 static func hud_island_style() -> StyleBox:
-	var textured := textured_style("panel_compact_9.png", 22.0, 10.0)
+	return _island_style_named("status_island_9.png", "panel_compact_9.png")
+
+
+static func status_island_style() -> StyleBox:
+	return _island_style_named("status_island_9.png", "panel_compact_9.png")
+
+
+static func action_island_style() -> StyleBox:
+	## Prefer compact modular chrome — the sheet's "action strip" includes baked slot cells.
+	return _island_style_named("panel_compact_9.png", "panel_header_9.png")
+
+
+static func menu_island_style() -> StyleBox:
+	## Prefer modular chrome — sheet menu strip includes baked icon cells.
+	return _island_style_named("panel_compact_9.png", "btn_chrome_9.png")
+
+
+static func _island_style_named(primary: String, fallback: String) -> StyleBox:
+	var textured := textured_style(primary, 22.0, 10.0)
+	if textured == null:
+		textured = textured_style(fallback, 22.0, 10.0)
 	if textured != null:
 		var tex_style := textured as StyleBoxTexture
 		tex_style.texture_margin_top = 16.0
@@ -122,7 +167,7 @@ static func hud_island_style() -> StyleBox:
 		tex_style.content_margin_top = 8.0
 		tex_style.content_margin_right = 12.0
 		tex_style.content_margin_bottom = 8.0
-		tex_style.modulate_color = Color(1.0, 1.0, 1.0, 0.92)
+		tex_style.modulate_color = Color(1.0, 1.0, 1.0, 0.96)
 		return tex_style
 	return _flat_panel(
 		Color(0.045, 0.035, 0.025, 0.82),
@@ -148,8 +193,17 @@ static func inset_style(accent: Color = Color(0.22, 0.18, 0.14, 1.0)) -> StyleBo
 	return _flat_panel(COLOR_INSET, accent, 1, 8.0, 6.0, 1)
 
 
-## Light action slot — translucent plate, thin border; emphasis via stronger border.
+## Ornate showcase action slot — selected frame when emphasized, empty frame otherwise.
 static func action_slot_style(accent: Color, emphasized: bool = false) -> StyleBox:
+	var tex_name := "slot_selected_9.png" if emphasized else "slot_empty_9.png"
+	var textured := textured_style(tex_name, 14.0, 6.0)
+	if textured == null:
+		textured = textured_style("slot_square.png", 12.0, 5.0)
+	if textured != null:
+		var tex_style := textured as StyleBoxTexture
+		if emphasized:
+			tex_style.modulate_color = Color(1.06, 1.02, 0.94, 1.0).lerp(accent, 0.08)
+		return tex_style
 	var flat := StyleBoxFlat.new()
 	flat.bg_color = Color(0.018, 0.014, 0.010, 0.78)
 	var border_w := 2 if emphasized else 1

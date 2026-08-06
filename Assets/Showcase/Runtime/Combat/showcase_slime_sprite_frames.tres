@@ -1,0 +1,89 @@
+﻿[gd_resource type="SpriteFrames" load_steps=15 format=3]
+
+[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/Showcase/Runtime/Combat/slime_idle_00.png" id="idle_0"]
+[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/Showcase/Runtime/Combat/slime_idle_01.png" id="idle_1"]
+[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/Showcase/Runtime/Combat/slime_idle_02.png" id="idle_2"]
+[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/Showcase/Runtime/Combat/slime_idle_03.png" id="idle_3"]
+[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/Showcase/Runtime/Combat/slime_idle_04.png" id="idle_4"]
+[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/Showcase/Runtime/Combat/slime_idle_05.png" id="idle_5"]
+[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/Showcase/Runtime/Combat/slime_idle_06.png" id="idle_6"]
+[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/Showcase/Runtime/Combat/slime_hop_00.png" id="hop_0"]
+[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/Showcase/Runtime/Combat/slime_hop_01.png" id="hop_1"]
+[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/Showcase/Runtime/Combat/slime_hop_02.png" id="hop_2"]
+[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/Showcase/Runtime/Combat/slime_hop_03.png" id="hop_3"]
+[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/Showcase/Runtime/Combat/slime_hop_04.png" id="hop_4"]
+[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/Showcase/Runtime/Combat/slime_hop_05.png" id="hop_5"]
+[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/Showcase/Runtime/Combat/slime_hop_06.png" id="hop_6"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("idle_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_3")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 3.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("hop_4")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("hop_3")
+}],
+"loop": false,
+"name": &"hurt",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("idle_6")
+}],
+"loop": false,
+"name": &"death",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("hop_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("hop_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("hop_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("hop_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("hop_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("hop_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("hop_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("hop_2")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 7.0
+}]
