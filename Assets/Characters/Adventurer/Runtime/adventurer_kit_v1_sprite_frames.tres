@@ -1,15 +1,39 @@
-[gd_resource type="SpriteFrames" format=3 uid="uid://cq8advkitv1sf01"]
+[gd_resource type="SpriteFrames" format=3 uid="uid://b5mrwc7p5qmxs"]
 
-[ext_resource type="Texture2D" uid="uid://bq1advidle00001" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_idle.png" id="1_idle"]
-[ext_resource type="Texture2D" uid="uid://bq1advrun000001" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_run.png" id="2_run"]
-[ext_resource type="Texture2D" uid="uid://bq1advwalk00001" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_walk.png" id="3_walk"]
-[ext_resource type="Texture2D" uid="uid://bq1advjump00001" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_jump.png" id="4_jump"]
-[ext_resource type="Texture2D" uid="uid://bq1advfall00001" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_fall.png" id="5_fall"]
-[ext_resource type="Texture2D" uid="uid://bq1advdash00001" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_dash.png" id="6_dash"]
-[ext_resource type="Texture2D" uid="uid://bq1advmelee0001" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_melee_basic.png" id="7_melee"]
+[ext_resource type="Texture2D" uid="uid://qom7gyulwluy" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_idle.png" id="1_idle"]
+[ext_resource type="Texture2D" uid="uid://b1i2ok66sy00d" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_run.png" id="2_run"]
+[ext_resource type="Texture2D" uid="uid://dxffq0v3imbbi" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_walk.png" id="3_walk"]
+[ext_resource type="Texture2D" uid="uid://iiicfs45fwjm" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_jump.png" id="4_jump"]
+[ext_resource type="Texture2D" uid="uid://dvycqch8tkims" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_fall.png" id="5_fall"]
+[ext_resource type="Texture2D" uid="uid://bdw8iwct2j6mu" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_dash.png" id="6_dash"]
+[ext_resource type="Texture2D" uid="uid://dw3ip8a8al22r" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_melee_basic.png" id="7_melee"]
+
+[sub_resource type="AtlasTexture" id="Melee0"]
+atlas = ExtResource("7_melee")
+region = Rect2(0, 0, 96, 112)
+
+[sub_resource type="AtlasTexture" id="Melee1"]
+atlas = ExtResource("7_melee")
+region = Rect2(96, 0, 96, 112)
+
+[sub_resource type="AtlasTexture" id="Dash0"]
+atlas = ExtResource("6_dash")
+region = Rect2(0, 0, 96, 112)
+
+[sub_resource type="AtlasTexture" id="Dash1"]
+atlas = ExtResource("6_dash")
+region = Rect2(96, 0, 96, 112)
+
+[sub_resource type="AtlasTexture" id="Fall0"]
+atlas = ExtResource("5_fall")
+region = Rect2(0, 0, 96, 112)
 
 [sub_resource type="AtlasTexture" id="Idle0"]
 atlas = ExtResource("1_idle")
+region = Rect2(0, 0, 96, 112)
+
+[sub_resource type="AtlasTexture" id="Jump0"]
+atlas = ExtResource("4_jump")
 region = Rect2(0, 0, 96, 112)
 
 [sub_resource type="AtlasTexture" id="Run0"]
@@ -76,37 +100,95 @@ region = Rect2(576, 0, 96, 112)
 atlas = ExtResource("3_walk")
 region = Rect2(672, 0, 96, 112)
 
-[sub_resource type="AtlasTexture" id="Jump0"]
-atlas = ExtResource("4_jump")
-region = Rect2(0, 0, 96, 112)
-
-[sub_resource type="AtlasTexture" id="Fall0"]
-atlas = ExtResource("5_fall")
-region = Rect2(0, 0, 96, 112)
-
-[sub_resource type="AtlasTexture" id="Dash0"]
-atlas = ExtResource("6_dash")
-region = Rect2(0, 0, 96, 112)
-
-[sub_resource type="AtlasTexture" id="Dash1"]
-atlas = ExtResource("6_dash")
-region = Rect2(96, 0, 96, 112)
-
-[sub_resource type="AtlasTexture" id="Melee0"]
-atlas = ExtResource("7_melee")
-region = Rect2(0, 0, 96, 112)
-
-[sub_resource type="AtlasTexture" id="Melee1"]
-atlas = ExtResource("7_melee")
-region = Rect2(96, 0, 96, 112)
-
 [resource]
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("Melee0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Melee1")
+}],
+"loop": 0,
+"name": &"attack",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Melee0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Melee1")
+}],
+"loop": 0,
+"name": &"attack_right",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Dash0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Dash1")
+}],
+"loop": 1,
+"name": &"dash",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Dash0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Dash1")
+}],
+"loop": 1,
+"name": &"dash_right",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Dash0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Dash1")
+}],
+"loop": 1,
+"name": &"dodge",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Dash0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Dash1")
+}],
+"loop": 1,
+"name": &"dodge_right",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Fall0")
+}],
+"loop": 1,
+"name": &"fall",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Fall0")
+}],
+"loop": 1,
+"name": &"fall_right",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("Idle0")
 }],
-"loop": true,
+"loop": 1,
 "name": &"idle",
 "speed": 1.0
 }, {
@@ -114,9 +196,47 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("Idle0")
 }],
-"loop": true,
+"loop": 1,
 "name": &"idle_right",
 "speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Jump0")
+}],
+"loop": 1,
+"name": &"jump",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Jump0")
+}],
+"loop": 1,
+"name": &"jump_right",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Melee0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Melee1")
+}],
+"loop": 0,
+"name": &"melee_attack_right",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Melee0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Melee1")
+}],
+"loop": 0,
+"name": &"melee_basic",
+"speed": 14.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -143,7 +263,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("Run7")
 }],
-"loop": true,
+"loop": 1,
 "name": &"run",
 "speed": 12.0
 }, {
@@ -172,7 +292,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("Run7")
 }],
-"loop": true,
+"loop": 1,
 "name": &"run_right",
 "speed": 12.0
 }, {
@@ -201,7 +321,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("Walk7")
 }],
-"loop": true,
+"loop": 1,
 "name": &"walk",
 "speed": 10.0
 }, {
@@ -230,127 +350,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("Walk7")
 }],
-"loop": true,
+"loop": 1,
 "name": &"walk_right",
 "speed": 10.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("Jump0")
-}],
-"loop": true,
-"name": &"jump",
-"speed": 1.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("Jump0")
-}],
-"loop": true,
-"name": &"jump_right",
-"speed": 1.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("Fall0")
-}],
-"loop": true,
-"name": &"fall",
-"speed": 1.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("Fall0")
-}],
-"loop": true,
-"name": &"fall_right",
-"speed": 1.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("Dash0")
-}, {
-"duration": 1.0,
-"texture": SubResource("Dash1")
-}],
-"loop": true,
-"name": &"dash",
-"speed": 14.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("Dash0")
-}, {
-"duration": 1.0,
-"texture": SubResource("Dash1")
-}],
-"loop": true,
-"name": &"dash_right",
-"speed": 14.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("Dash0")
-}, {
-"duration": 1.0,
-"texture": SubResource("Dash1")
-}],
-"loop": true,
-"name": &"dodge",
-"speed": 14.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("Dash0")
-}, {
-"duration": 1.0,
-"texture": SubResource("Dash1")
-}],
-"loop": true,
-"name": &"dodge_right",
-"speed": 14.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("Melee0")
-}, {
-"duration": 1.0,
-"texture": SubResource("Melee1")
-}],
-"loop": false,
-"name": &"melee_basic",
-"speed": 14.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("Melee0")
-}, {
-"duration": 1.0,
-"texture": SubResource("Melee1")
-}],
-"loop": false,
-"name": &"melee_attack_right",
-"speed": 14.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("Melee0")
-}, {
-"duration": 1.0,
-"texture": SubResource("Melee1")
-}],
-"loop": false,
-"name": &"attack",
-"speed": 14.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("Melee0")
-}, {
-"duration": 1.0,
-"texture": SubResource("Melee1")
-}],
-"loop": false,
-"name": &"attack_right",
-"speed": 14.0
 }]
