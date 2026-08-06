@@ -39,7 +39,6 @@ color = Color(0.9891885, 0.16677955, 0.45810562, 1)
 [node name="BaseCharacter" type="AnimatedSprite2D" parent="Visuals" unique_id=958699716]
 texture_filter = 1
 position = Vector2(0, -52)
-scale = Vector2(1.0, 1.0)
 sprite_frames = ExtResource("10_adventurer")
 animation = &"idle_right"
 

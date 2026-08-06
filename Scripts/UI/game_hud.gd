@@ -187,7 +187,7 @@ func _build_bottom_hud() -> void:
 
 	var menu := _build_menu_island()
 	root.add_child(menu)
-	_anchor_bottom_right(menu, 14.0, 22.0, Vector2(188.0, 138.0))
+	_anchor_bottom_right(menu, 18.0, 24.0, Vector2(188.0, 138.0))
 
 
 func _build_xp_strip(root: Control) -> void:

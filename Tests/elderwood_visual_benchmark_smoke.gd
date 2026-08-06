@@ -46,14 +46,30 @@ func _test_elderwood_dressing() -> void:
 	_expect(current_scene.has_node("GameplayLayer"), "Gameplay layer is present")
 	_expect(current_scene.has_node("ForegroundLayer"), "Foreground layer is present")
 	_expect(current_scene.has_node("AtmosphericOverlays"), "Atmospheric overlay layer is present")
+	_expect(current_scene.has_node("ImmersionDressing"), "Showcase immersion dressing is present")
 	_expect(
 		current_scene.get_node(
 			"GameplayLayer/Terrain/OptionalRoute/LowerOneWay/CollisionShape2D"
 		).one_way_collision,
 		"Optional elevated route uses one-way collision"
 	)
-	_expect(current_scene.has_node("GameplayLayer/Landmarks/AncientTree"), "Ancient tree landmark is present")
-	_expect(current_scene.has_node("GameplayLayer/Landmarks/RuinArch"), "Mosscrypt-side ruin landmark is present")
+	_expect(
+		current_scene.has_node("GameplayLayer/Terrain/OptionalRoute/HighOneWay/CollisionShape2D"),
+		"High elevated platform collision is present"
+	)
+	_expect(
+		current_scene.has_node("GameplayLayer/Terrain/EntryRise/CollisionShape2D"),
+		"Entry rise collision is present"
+	)
+	# Prototype ColorRect platform visuals must stay gone.
+	_expect(
+		current_scene.get_node_or_null("GameplayLayer/Terrain/MainGround/Visual") == null,
+		"Prototype main-ground ColorRect is removed"
+	)
+	_expect(
+		current_scene.get_node_or_null("GameplayLayer/Terrain/OptionalRoute/LowerOneWay/Visual") == null,
+		"Prototype elevated-platform ColorRect is removed"
+	)
 
 
 func _test_enemy_art(expected_name: String) -> void:
