@@ -127,7 +127,7 @@ func take_damage(amount: int, knockback: Vector2 = Vector2.ZERO) -> bool:
 	if knockback.length_squared() > 0.0:
 		_knockback_velocity = knockback
 
-	_combat_feedback().spawn_damage_number(global_position, mitigated_amount, Color(1.0, 0.35, 0.35))
+	_combat_feedback().spawn_damage_number(global_position, mitigated_amount, &"player")
 	_combat_feedback().spawn_damage_particles(global_position)
 	var events := get_node_or_null("/root/GameplayEvents")
 	if events != null:

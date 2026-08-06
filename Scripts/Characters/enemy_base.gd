@@ -96,12 +96,20 @@ func _update_ai(_delta: float) -> void:
 	_try_attack_player()
 
 
-func take_damage(amount: int, knockback: Vector2 = Vector2.ZERO) -> void:
+func take_damage(
+	amount: int,
+	knockback: Vector2 = Vector2.ZERO,
+	is_critical: bool = false
+) -> void:
 	if health <= 0:
 		return
 
 	health -= amount
-	_combat_feedback().spawn_damage_number(global_position, amount, Color(1.0, 0.85, 0.3))
+	_combat_feedback().spawn_damage_number(
+		global_position,
+		amount,
+		&"critical" if is_critical else &"standard"
+	)
 	_combat_feedback().spawn_damage_particles(global_position)
 	_apply_hit_reaction(knockback)
 
@@ -135,6 +143,13 @@ func _apply_hit_reaction(knockback: Vector2) -> void:
 	_knockback_velocity = knockback
 	_hit_stun_remaining = HIT_STUN_DURATION
 	_combat_feedback().flash_node(_get_body_visual())
+	var visuals := get_node_or_null("Visuals") as Node2D
+	if visuals != null:
+		visuals.scale = Vector2(1.12, 0.88)
+		var reaction := visuals.create_tween()
+		reaction.set_trans(Tween.TRANS_BACK)
+		reaction.set_ease(Tween.EASE_OUT)
+		reaction.tween_property(visuals, "scale", Vector2.ONE, HIT_STUN_DURATION)
 
 
 func _on_defeated() -> void:

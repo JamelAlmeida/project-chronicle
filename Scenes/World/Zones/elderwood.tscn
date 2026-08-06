@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://zoneelderwood01"]
+[gd_scene load_steps=14 format=3 uid="uid://zoneelderwood01"]
 
 [ext_resource type="Script" path="res://Project Chronicle/Scripts/World/zone.gd" id="1_zone"]
 [ext_resource type="Resource" path="res://Project Chronicle/Resources/Zones/elderwood.tres" id="2_data"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/World/zone_transition.tscn" id="6_transition"]
 [ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/Characters/Slime.tscn" id="7_slime"]
 [ext_resource type="PackedScene" path="res://Project Chronicle/Scenes/World/loot_pickup.tscn" id="8_loot"]
+[ext_resource type="Script" path="res://Project Chronicle/Scripts/Presentation/elderwood_immersion.gd" id="9_immersion"]
 
 [sub_resource type="RectangleShape2D" id="GroundShape"]
 size = Vector2(2400, 100)
@@ -24,6 +25,9 @@ size = Vector2(32, 760)
 [node name="Elderwood" type="Node2D"]
 script = ExtResource("1_zone")
 zone_data = ExtResource("2_data")
+
+[node name="ImmersionDressing" type="Node2D" parent="."]
+script = ExtResource("9_immersion")
 
 [node name="DistantBackground" type="Parallax2D" parent="."]
 z_index = -40

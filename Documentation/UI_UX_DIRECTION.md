@@ -9,6 +9,14 @@ Chronicle uses an original, desktop-first dark-fantasy interface with MMO-inspir
 - Keep status messages temporary. Keep the active quest tracker compact and unobtrusive.
 - Preserve space for future buffs/debuffs and a target frame without displaying empty systems now.
 
+### Immersion-slice skin
+
+- Use near-black charcoal surfaces, inset iron tones, aged brass borders, restrained gold hierarchy, and deep region-appropriate accents.
+- Use **Cinzel** for major headings, zone names, and limited combat emphasis. Use **Alegreya** for body copy, HUD values, buttons, objectives, and item detail.
+- Keep the top-left expedition ledger and top-right quest tracker compact, framed, and quieter than the world.
+- Keep action slots centered, keybinds visible, and menu access grouped at the bottom. Ornament must clarify hierarchy rather than consume play space.
+- Ordinary damage numbers use warm ivory, criticals use pale copper-gold at a larger scale, and player damage uses muted rose. Motion is short and restrained; Chronicle does not reproduce another game's iconic number palette or stacking behavior.
+
 Current bindings are `E` attack, `Space` dash, `1` or legacy `Q` primary Technique, `C` Character, `I` Inventory, `K` Technique Book, `J` Quest Log, and `F` contextual quest interaction. Number keys `1–5` establish the primary action-bar range. `Tab` is reserved for future target cycling.
 
 ## Character and Inventory
@@ -31,4 +39,4 @@ Combat feedback may later use large readable damage numbers, multi-hit stacking,
 
 ## Scope Discipline
 
-This foundation is structural, not the final art pass. Do not prematurely add full drag-and-drop hotbars, a complete cooldown ecosystem, final tooltip comparisons, titles/badges, crafting, multiplayer UI, or decorative clutter.
+The opening HUD and four major panels now carry the immersion-slice visual language, but they are not final production UI. Do not prematurely add full drag-and-drop hotbars, a complete cooldown ecosystem, final tooltip comparisons, titles/badges, crafting, multiplayer UI, or decorative clutter.

@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 const UI := preload("res://Project Chronicle/Scripts/UI/chronicle_ui_theme.gd")
+const PLAYER_PREVIEW_TEXTURE := preload("res://Project Chronicle/Assets/PixelArt/Characters/Player/adventurer_base_32x48.png")
 const PANEL_TITLES := {
 	&"character": "CHARACTER & EQUIPMENT",
 	&"inventory": "INVENTORY",
@@ -91,23 +92,27 @@ func _build_interface() -> void:
 	_window = PanelContainer.new()
 	_window.name = "RootWindow"
 	_window.set_anchors_preset(Control.PRESET_CENTER)
-	_window.position = Vector2(-520.0, -275.0)
-	_window.size = Vector2(1040.0, 550.0)
+	_window.position = Vector2(-580.0, -290.0)
+	_window.size = Vector2(1160.0, 580.0)
 	_window.mouse_filter = Control.MOUSE_FILTER_STOP
 	_window.add_theme_stylebox_override("panel", UI.panel_style(UI.COLOR_PANEL))
 	_overlay.add_child(_window)
 
 	var root_box := VBoxContainer.new()
-	root_box.add_theme_constant_override("separation", 7)
+	root_box.add_theme_constant_override("separation", 9)
 	_window.add_child(root_box)
 
 	var header := HBoxContainer.new()
 	root_box.add_child(header)
-	_title_label = UI.style_label(Label.new(), UI.COLOR_GOLD, 20)
+	var crest := UI.style_heading(Label.new(), UI.COLOR_BRASS_LIGHT, 18)
+	crest.text = "◆"
+	crest.custom_minimum_size.x = 34.0
+	header.add_child(crest)
+	_title_label = UI.style_heading(Label.new(), UI.COLOR_GOLD, 22)
 	_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(_title_label)
-	var identity := UI.style_label(Label.new(), UI.COLOR_MUTED, 12)
-	identity.text = "THE ADVENTURER"
+	var identity := UI.style_eyebrow(Label.new(), UI.COLOR_MUTED, 11)
+	identity.text = "CHRONICLE OF THE ADVENTURER"
 	header.add_child(identity)
 	var close_button := UI.style_button(Button.new())
 	close_button.text = "×"
@@ -140,7 +145,7 @@ func _build_interface() -> void:
 func _make_tab_button(text: String, panel_id: StringName) -> Button:
 	var button := UI.style_button(Button.new())
 	button.text = text
-	button.custom_minimum_size = Vector2(160.0, 32.0)
+	button.custom_minimum_size = Vector2(184.0, 36.0)
 	button.pressed.connect(open_panel.bind(panel_id))
 	return button
 
@@ -216,17 +221,26 @@ func _build_character_content() -> void:
 
 func _build_identity_column() -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size.x = 215.0
-	panel.add_theme_stylebox_override("panel", UI.inset_style())
+	panel.custom_minimum_size.x = 245.0
+	panel.add_theme_stylebox_override("panel", UI.section_style())
 	var box := VBoxContainer.new()
 	box.add_theme_constant_override("separation", 7)
 	panel.add_child(box)
-	var preview := UI.style_label(Label.new(), Color(0.68, 0.64, 0.54), 18, HORIZONTAL_ALIGNMENT_CENTER)
-	preview.text = "◇\nADVENTURER\nPREVIEW\n◇"
-	preview.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	preview.custom_minimum_size.y = 180.0
-	box.add_child(preview)
-	var name := UI.style_label(Label.new(), UI.COLOR_GOLD, 16, HORIZONTAL_ALIGNMENT_CENTER)
+	var preview_frame := PanelContainer.new()
+	preview_frame.custom_minimum_size.y = 225.0
+	preview_frame.add_theme_stylebox_override("panel", UI.inset_style(Color(0.30, 0.25, 0.16)))
+	box.add_child(preview_frame)
+	var preview := TextureRect.new()
+	var atlas := AtlasTexture.new()
+	atlas.atlas = PLAYER_PREVIEW_TEXTURE
+	atlas.region = Rect2(0.0, 144.0, 32.0, 48.0)
+	preview.texture = atlas
+	preview.custom_minimum_size = Vector2(128.0, 192.0)
+	preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	preview.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	preview_frame.add_child(preview)
+	var name := UI.style_heading(Label.new(), UI.COLOR_GOLD, 16, HORIZONTAL_ALIGNMENT_CENTER)
 	name.text = "THE ADVENTURER"
 	box.add_child(name)
 	var progression: Node = _progression()
@@ -238,7 +252,7 @@ func _build_identity_column() -> Control:
 	]
 	box.add_child(level)
 	var note := UI.style_label(Label.new(), UI.COLOR_MUTED, 11, HORIZONTAL_ALIGNMENT_CENTER)
-	note.text = "Visible equipment preview reserved\nfor the later art integration pass."
+	note.text = "Road-worn wanderer of Hearthvale"
 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	box.add_child(note)
 	return panel
@@ -246,12 +260,12 @@ func _build_identity_column() -> Control:
 
 func _build_equipment_column() -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size.x = 325.0
-	panel.add_theme_stylebox_override("panel", UI.inset_style())
+	panel.custom_minimum_size.x = 350.0
+	panel.add_theme_stylebox_override("panel", UI.section_style())
 	var box := VBoxContainer.new()
 	box.add_theme_constant_override("separation", 4)
 	panel.add_child(box)
-	var heading := UI.style_label(Label.new(), UI.COLOR_GOLD, 15)
+	var heading := UI.style_heading(Label.new(), UI.COLOR_GOLD, 15)
 	heading.text = "EQUIPMENT"
 	box.add_child(heading)
 	for slot_key: String in EquipmentComponent.SLOT_KEYS:
@@ -281,11 +295,11 @@ func _build_equipment_column() -> Control:
 func _build_stats_column() -> Control:
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	panel.add_theme_stylebox_override("panel", UI.inset_style())
+	panel.add_theme_stylebox_override("panel", UI.section_style())
 	var box := VBoxContainer.new()
 	box.add_theme_constant_override("separation", 5)
 	panel.add_child(box)
-	var points := UI.style_label(Label.new(), UI.COLOR_GOLD, 15)
+	var points := UI.style_heading(Label.new(), UI.COLOR_GOLD, 15)
 	points.text = "CORE ATTRIBUTES  ·  %d UNSPENT" % _progression().unspent_stat_points
 	box.add_child(points)
 	var core_grid := GridContainer.new()
@@ -296,7 +310,7 @@ func _build_stats_column() -> Control:
 	for stat_id: StringName in CharacterProgression.CORE_STATS:
 		_add_core_stat_row(core_grid, stat_id)
 	box.add_child(UI.make_separator())
-	var derived_heading := UI.style_label(Label.new(), UI.COLOR_GOLD, 14)
+	var derived_heading := UI.style_heading(Label.new(), UI.COLOR_GOLD, 14)
 	derived_heading.text = "COMBAT STATISTICS"
 	box.add_child(derived_heading)
 	var derived_grid := GridContainer.new()
@@ -367,15 +381,24 @@ func _build_inventory_content() -> void:
 		if item == null:
 			continue
 		var row_panel := PanelContainer.new()
-		row_panel.add_theme_stylebox_override("panel", UI.inset_style())
+		row_panel.add_theme_stylebox_override("panel", UI.section_style())
 		_content.add_child(row_panel)
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override("separation", 10)
 		row_panel.add_child(row)
-		var icon := UI.style_label(Label.new(), UI.COLOR_GOLD, 18, HORIZONTAL_ALIGNMENT_CENTER)
-		icon.text = "◆"
-		icon.custom_minimum_size.x = 40.0
-		row.add_child(icon)
+		if item.icon != null:
+			var icon := TextureRect.new()
+			icon.texture = item.icon
+			icon.custom_minimum_size = Vector2(46.0, 46.0)
+			icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+			row.add_child(icon)
+		else:
+			var icon_fallback := UI.style_heading(Label.new(), UI.COLOR_GOLD, 18, HORIZONTAL_ALIGNMENT_CENTER)
+			icon_fallback.text = "◆"
+			icon_fallback.custom_minimum_size.x = 46.0
+			row.add_child(icon_fallback)
 		var description := VBoxContainer.new()
 		description.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		row.add_child(description)
@@ -410,7 +433,7 @@ func _build_technique_content() -> void:
 	for technique: TechniqueData in techniques:
 		var panel := PanelContainer.new()
 		var accent := UI.COLOR_TECHNIQUE if technique.is_active() else Color(0.40, 0.46, 0.32)
-		panel.add_theme_stylebox_override("panel", UI.inset_style(accent))
+		panel.add_theme_stylebox_override("panel", UI.section_style(accent))
 		_content.add_child(panel)
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override("separation", 10)
@@ -422,7 +445,7 @@ func _build_technique_content() -> void:
 		var text_box := VBoxContainer.new()
 		text_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		row.add_child(text_box)
-		var name := UI.style_label(Label.new(), UI.COLOR_GOLD, 15)
+		var name := UI.style_heading(Label.new(), UI.COLOR_GOLD, 15)
 		name.text = "%s  ·  %s" % [
 			technique.display_name,
 			"ACTIVE" if technique.is_active() else "PASSIVE",
@@ -458,12 +481,12 @@ func _build_quest_content() -> void:
 		if quest == null:
 			continue
 		var panel := PanelContainer.new()
-		panel.add_theme_stylebox_override("panel", UI.inset_style(UI.COLOR_QUEST))
+		panel.add_theme_stylebox_override("panel", UI.section_style(UI.COLOR_QUEST))
 		_content.add_child(panel)
 		var box := VBoxContainer.new()
 		box.add_theme_constant_override("separation", 4)
 		panel.add_child(box)
-		var heading := UI.style_label(Label.new(), Color(0.74, 0.88, 0.66), 15)
+		var heading := UI.style_heading(Label.new(), Color(0.74, 0.88, 0.66), 15)
 		heading.text = "%s  ·  %s" % [quest.title, _quests().get_state_name(quest_id).to_upper()]
 		box.add_child(heading)
 		var description := UI.style_label(Label.new(), UI.COLOR_TEXT, 12)

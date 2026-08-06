@@ -14,6 +14,11 @@ script = ExtResource("1_goblin")
 
 [node name="Visuals" type="Node2D" parent="."]
 
+[node name="GroundShadow" type="Polygon2D" parent="Visuals"]
+z_index = -2
+polygon = PackedVector2Array(-13, -3, -8, -5, 8, -5, 13, -3, 8, 0, -8, 0)
+color = Color(0.015, 0.022, 0.016, 0.42)
+
 [node name="PlaceholderVisual" type="ColorRect" parent="Visuals"]
 offset_left = -11.0
 offset_top = -13.0

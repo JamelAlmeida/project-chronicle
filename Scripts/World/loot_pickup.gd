@@ -2,6 +2,7 @@ class_name LootPickup
 extends Area2D
 
 const LOOT_PICKUP_SCENE_PATH: String = "res://Project Chronicle/Scenes/World/loot_pickup.tscn"
+const UI := preload("res://Project Chronicle/Scripts/UI/chronicle_ui_theme.gd")
 
 @export var item_id: String = "slime_gel"
 @export var quantity: int = 1
@@ -13,6 +14,7 @@ var _hover_time := 0.0
 @onready var _icon: Sprite2D = $Icon
 @onready var _fallback_visual: ColorRect = $ColorRect
 @onready var _sparkle: Polygon2D = $Sparkle
+@onready var _halo: Polygon2D = $Halo
 
 
 static func spawn(parent: Node, world_position: Vector2, item_id: String, quantity: int = 1) -> void:
@@ -48,6 +50,7 @@ func setup(item_id: String, quantity: int = 1) -> void:
 
 func _ready() -> void:
 	add_to_group("loot_pickups")
+	UI.style_label($Label, Color(0.92, 0.90, 0.80), 12, HORIZONTAL_ALIGNMENT_CENTER)
 	body_entered.connect(_on_body_entered)
 	monitoring = true
 	monitorable = false
@@ -63,6 +66,8 @@ func _process(delta: float) -> void:
 	_fallback_visual.position.y = hover_offset
 	_sparkle.rotation = _hover_time * 0.8
 	_sparkle.modulate.a = 0.45 + sin(_hover_time * 4.0) * 0.25
+	_halo.scale = Vector2.ONE * (0.92 + sin(_hover_time * 2.1) * 0.08)
+	_halo.modulate.a = 0.72 + sin(_hover_time * 2.1) * 0.20
 
 
 func _on_body_entered(body: Node) -> void:

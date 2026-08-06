@@ -15,6 +15,7 @@ var _is_attacking := false
 var _hit_targets: Array[Node] = []
 var _damage_multiplier := 1.0
 var _active_technique_id := ""
+var _last_hit_was_critical := false
 
 @onready var _collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var _visual: CanvasItem = $AttackVisual
@@ -110,10 +111,12 @@ func _get_attack_cooldown() -> float:
 func _calculate_damage() -> int:
 	var stats: StatsComponent = _get_stats_component()
 	if stats == null:
+		_last_hit_was_critical = false
 		return 10
 
 	var damage: float = stats.get_attack_damage() * _damage_multiplier
-	if randf() < stats.get_crit_chance():
+	_last_hit_was_critical = randf() < stats.get_crit_chance()
+	if _last_hit_was_critical:
 		damage *= 2.0
 
 	return maxi(int(round(damage)), 1)
@@ -182,8 +185,19 @@ func _on_body_entered(body: Node) -> void:
 	var knockback_direction := Vector2(signf(horizontal_delta), 0.0)
 	if is_zero_approx(knockback_direction.x):
 		knockback_direction = Vector2.RIGHT if rotation == 0.0 else Vector2.LEFT
-	body.take_damage(damage_dealt, knockback_direction * knockback_force)
+	if body is EnemyBase:
+		body.take_damage(
+			damage_dealt,
+			knockback_direction * knockback_force,
+			_last_hit_was_critical
+		)
+	else:
+		body.take_damage(damage_dealt, knockback_direction * knockback_force)
 	_apply_lifesteal(damage_dealt)
+	_combat_feedback().request_camera_impact(
+		2.4 if _last_hit_was_critical or not _active_technique_id.is_empty() else 1.1,
+		0.09
+	)
 	var events := get_node_or_null("/root/GameplayEvents")
 	if events != null:
 		events.damage_dealt.emit(damage_dealt, body, _active_technique_id if not _active_technique_id.is_empty() else "melee")

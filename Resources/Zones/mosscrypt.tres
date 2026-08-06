@@ -14,4 +14,4 @@ recommended_threat = 2
 possible_enemy_groups = PackedStringArray("crypt_slimes", "goblin_scouts", "crypt_guardian")
 possible_loot_groups = PackedStringArray("crypt_relics", "rare_gear")
 seed_value = 3003
-scene_path = "res://Project Chronicle/Scenes/World/Zones/mosscrypt.tscn"
+scene_path = "res://Project Chronicle/Scenes/World/Zones/mosscrypt_sideview_entry.tscn"

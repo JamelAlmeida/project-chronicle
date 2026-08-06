@@ -14,4 +14,4 @@ recommended_threat = 0
 possible_enemy_groups = PackedStringArray()
 possible_loot_groups = PackedStringArray("settlement_goods")
 seed_value = 1001
-scene_path = "res://Project Chronicle/Scenes/World/Zones/hearthvale.tscn"
+scene_path = "res://Project Chronicle/Scenes/World/Zones/hearthvale_sideview_entry.tscn"
