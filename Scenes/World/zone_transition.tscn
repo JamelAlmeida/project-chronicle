@@ -11,6 +11,7 @@ collision_mask = 1
 script = ExtResource("1_transition")
 
 [node name="Marker" type="ColorRect" parent="."]
+visible = false
 offset_left = -24.0
 offset_top = -40.0
 offset_right = 24.0

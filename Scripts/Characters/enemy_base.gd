@@ -104,10 +104,12 @@ func take_damage(
 	if health <= 0:
 		return
 
-	health -= amount
+	# Authoritative HP change — floating text must use this same amount.
+	var resolved_damage := amount
+	health -= resolved_damage
 	_combat_feedback().spawn_damage_number(
 		global_position,
-		amount,
+		resolved_damage,
 		&"critical" if is_critical else &"standard"
 	)
 	_combat_feedback().spawn_damage_particles(global_position)

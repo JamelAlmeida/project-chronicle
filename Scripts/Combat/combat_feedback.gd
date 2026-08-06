@@ -11,23 +11,77 @@ const DAMAGE_STANDARD: StringName = &"standard"
 const DAMAGE_CRITICAL: StringName = &"critical"
 const DAMAGE_PLAYER: StringName = &"player"
 
+## Mirrors FloatingCombatText.DamageType for callers that prefer ints/kinds.
+const TYPE_PHYSICAL := 0
+const TYPE_FIRE := 1
+const TYPE_FROST := 2
+const TYPE_ARCANE := 3
+const TYPE_POISON := 4
+const TYPE_BLEED := 5
+const TYPE_HEALING := 6
+const TYPE_SHIELD := 7
+const TYPE_LIFESTEAL := 8
+const TYPE_PLAYER_INCOMING := 9
+
 var _effect_scenes: Dictionary[StringName, PackedScene] = {}
 
 
+## Spawns FloatingCombatText for the ACTUAL resolved combat amount.
+## Never invents values — callers must pass the same integer applied to HP.
 func spawn_damage_number(
 	world_position: Vector2,
 	amount: int,
 	kind: StringName = DAMAGE_STANDARD
 ) -> void:
+	spawn_floating_combat_text(
+		world_position,
+		amount,
+		kind == DAMAGE_CRITICAL,
+		_damage_type_from_kind(kind)
+	)
+
+
+func spawn_floating_combat_text(
+	world_position: Vector2,
+	amount: int,
+	is_critical: bool = false,
+	damage_type: int = TYPE_PHYSICAL
+) -> void:
 	var scene_root := get_tree().current_scene
 	if scene_root == null:
 		return
 
-	var damage_number: Node2D = DAMAGE_NUMBER_SCENE.instantiate()
-	scene_root.add_child(damage_number)
-	damage_number.global_position = world_position + Vector2(0.0, -24.0)
-	if damage_number.has_method("setup"):
-		damage_number.setup(str(amount), kind)
+	var floating: Node2D = DAMAGE_NUMBER_SCENE.instantiate() as Node2D
+	if floating == null:
+		return
+	scene_root.add_child(floating)
+	floating.global_position = world_position + Vector2(0.0, -24.0)
+	if floating.has_method("show_damage"):
+		floating.call("show_damage", amount, is_critical, damage_type)
+
+
+func _damage_type_from_kind(kind: StringName) -> int:
+	match kind:
+		DAMAGE_PLAYER:
+			return TYPE_PLAYER_INCOMING
+		&"healing":
+			return TYPE_HEALING
+		&"fire":
+			return TYPE_FIRE
+		&"frost":
+			return TYPE_FROST
+		&"arcane":
+			return TYPE_ARCANE
+		&"poison":
+			return TYPE_POISON
+		&"bleed":
+			return TYPE_BLEED
+		&"shield":
+			return TYPE_SHIELD
+		&"lifesteal":
+			return TYPE_LIFESTEAL
+		_:
+			return TYPE_PHYSICAL
 
 
 func flash_node(node: CanvasItem, flash_color: Color = Color(2.5, 2.5, 2.5, 1.0), duration: float = 0.12) -> void:

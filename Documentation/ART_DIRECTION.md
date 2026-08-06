@@ -2,6 +2,8 @@
 
 > **Visual north star.** This document defines Project Chronicle's visual identity and should be used to judge environments, characters, creatures, equipment, effects, UI, and generated zones.
 
+> **Hard visual reset:** From this milestone onward, see [APPROVED_ART_ONLY.md](APPROVED_ART_ONLY.md). Cursor does not invent final environment or UI ornament; approved Chronicle asset packs are the visual source of truth.
+
 This direction supports the principles in [PROJECT_VISION.md](PROJECT_VISION.md) and [GameRules.md](GameRules.md): exploration must be inviting, wilderness must feel dangerous, returning home must feel relieving, loot must enable memorable builds, and quality takes priority over quantity.
 
 ---

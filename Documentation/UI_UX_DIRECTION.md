@@ -11,16 +11,16 @@ Chronicle uses an original, desktop-first dark-fantasy interface with MMO-inspir
 
 ### Immersion-slice skin
 
-- Prefer a cozy dark-fantasy look: dark stone bottom chrome, warm gold edging, readable red HP and blue Steadfast bars, and colorful centered action slots.
+> **Hard visual reset:** Obsolete ornament UI skins (Showcase Runtime UI, ChronicleV2, older Runtime kits) are archived under `LegacyVisuals/UI/`. The HUD currently uses minimal flat StyleBox chrome with native Godot text while bindings remain intact. Re-skin only from an **approved** Chronicle UI pack — see [APPROVED_ART_ONLY.md](APPROVED_ART_ONLY.md).
+
+- Prefer a cozy dark-fantasy look once approved UI art returns: dark stone bottom chrome, warm gold edging, readable red HP and blue Steadfast bars, and colorful centered action slots.
 - Use **Cinzel** (weighted) for major headings, zone names, and limited combat emphasis. Use **Alegreya** (weighted) for body copy, HUD values, buttons, objectives, and item detail. Primary text is warm ivory; headings use muted gold; secondary text uses subdued gray. Dark outline/shadow keeps type readable over panels and the world.
 - Keep the top-left expedition ledger and top-right quest tracker compact, framed, and quieter than the world.
 - Segment the bottom adventure chrome into three islands with visible world gaps between them: left player status (crest, name/level, HP, secondary resource), center action bar, and right menu access. Place a slim XP bar across the lower bottom region beneath the islands. Do not reconnect islands with a full-width background slab.
-- Keep action slots centered with distinct icons, Cinzel keybind labels under each slot, and menu access grouped at the bottom-right island. Prefer ornate Showcase Master Pack slot frames; strengthen borders only for ready/selected/hover emphasis. Locked slots use darkening plus a small lock overlay.
-- Action and menu icons live in `Assets/Showcase/Runtime/UI` (preferred) with `Assets/UI/ChronicleV2/Runtime` and `Assets/UI/Icons` as fallbacks. They should read clearly at HUD scale without copying another game's icon language.
-- Showcase Master Pack source sheets live under `Assets/Showcase/Source`. Clean isolated runtime crops live in `Assets/Showcase/Runtime/{UI,Environment,Combat}`. UI Rescue V2 remains under `Assets/UI/ChronicleV2`. Godot Labels remain authoritative for all dynamic text, keybinds, and damage numbers. Do not stack decorative frames or use baked sheet text.
+- Keep action slots centered with distinct icons, Cinzel keybind labels under each slot, and menu access grouped at the bottom-right island. Locked slots use darkening. Functional icons live in `Assets/UI/Icons/`.
+- Godot Labels remain authoritative for all dynamic text, keybinds, and damage numbers. Do not stack decorative frames or use baked sheet text.
 - Ordinary damage numbers use warm ivory at a larger MMO-readable scale, criticals use pale copper-gold with a CRIT callout, and player damage uses muted rose. Chronicle does not reproduce another game's iconic number palette or stacking behavior.
-- The Elderwood showcase benchmark should read as warm Hearthvale-edge into Elderwood combat depth, matching `chronicle_master_visual_target.png` composition as closely as practical.
-- World framing should feel intimate and golden-hour dense: closer camera, filled canopy, warm entry light into cooler wilderness depth.
+- World framing and environment presentation await approved Chronicle environment packs mounted under `ApprovedEnvironmentArt`.
 
 Current bindings are `E` attack, `Space` dash, `1` or legacy `Q` primary Technique, `C` Character, `I` Inventory, `K` Technique Book, `J` Quest Log, and `F` contextual quest interaction. Number keys `1–5` establish the primary action-bar range. `Tab` is reserved for future target cycling.
 

@@ -21,11 +21,13 @@ color = Color(0.45, 0.85, 1, 1)
 visible = false
 
 [node name="Halo" type="Polygon2D" parent="."]
+visible = false
 z_index = -1
 polygon = PackedVector2Array(0, -16, 11, -11, 16, 0, 11, 11, 0, 16, -11, 11, -16, 0, -11, -11)
 color = Color(0.72, 0.57, 0.28, 0.16)
 
 [node name="Sparkle" type="Polygon2D" parent="."]
+visible = false
 position = Vector2(11, -11)
 polygon = PackedVector2Array(0, -5, 1.5, -1.5, 5, 0, 1.5, 1.5, 0, 5, -1.5, 1.5, -5, 0, -1.5, -1.5)
 color = Color(1, 0.9, 0.55, 0.8)

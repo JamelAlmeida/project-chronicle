@@ -68,7 +68,7 @@ func _run() -> void:
 	player = await _settle_player()
 	_expect(player != null and player.is_on_floor(), "Elderwood player lands")
 	_expect(
-		current_scene.get_node("GameplayLayer/Terrain/OptionalRoute/LowerOneWay/CollisionShape2D").one_way_collision,
+		current_scene.get_node("Gameplay/Collision/OptionalRoute/LowerOneWay/CollisionShape2D").one_way_collision,
 		"Elderwood includes a one-way platform"
 	)
 	player.global_position = Vector2(980.0, 620.0)

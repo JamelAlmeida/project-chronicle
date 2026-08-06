@@ -13,10 +13,10 @@ func _run() -> void:
 	await _load_scene(ELDERWOOD)
 	_expect(current_scene != null and current_scene.name == "Elderwood", "Elderwood loads")
 	if current_scene != null:
-		_test_elderwood_dressing()
+		_test_elderwood_foundation()
 		_test_enemy_art("Slime")
 		_test_player_attack_art()
-		_test_hud_skin()
+		_test_hud_shell()
 		_test_loot_pickup()
 
 	_test_item_icons()
@@ -40,35 +40,43 @@ func _load_scene(path: String) -> void:
 			await process_frame
 
 
-func _test_elderwood_dressing() -> void:
-	_expect(current_scene.has_node("DistantBackground"), "Distant parallax background is present")
-	_expect(current_scene.has_node("MidBackground"), "Mid-background parallax is present")
-	_expect(current_scene.has_node("GameplayLayer"), "Gameplay layer is present")
-	_expect(current_scene.has_node("ForegroundLayer"), "Foreground layer is present")
-	_expect(current_scene.has_node("AtmosphericOverlays"), "Atmospheric overlay layer is present")
-	_expect(current_scene.has_node("ImmersionDressing"), "Showcase immersion dressing is present")
+func _test_elderwood_foundation() -> void:
+	_expect(current_scene.has_node("Background"), "Background layer is present")
+	_expect(current_scene.has_node("Midground"), "Midground layer is present")
+	_expect(current_scene.has_node("Gameplay"), "Gameplay layer is present")
+	_expect(current_scene.has_node("Gameplay/Collision"), "Collision is separated under Gameplay")
+	_expect(current_scene.has_node("ApprovedEnvironmentArt"), "Approved art mount point is present")
+	_expect(current_scene.has_node("Foreground"), "Foreground layer is present")
+	_expect(not current_scene.has_node("ImmersionDressing"), "Legacy immersion dressing is retired")
 	_expect(
 		current_scene.get_node(
-			"GameplayLayer/Terrain/OptionalRoute/LowerOneWay/CollisionShape2D"
+			"Gameplay/Collision/OptionalRoute/LowerOneWay/CollisionShape2D"
 		).one_way_collision,
 		"Optional elevated route uses one-way collision"
 	)
 	_expect(
-		current_scene.has_node("GameplayLayer/Terrain/OptionalRoute/HighOneWay/CollisionShape2D"),
+		current_scene.has_node("Gameplay/Collision/OptionalRoute/HighOneWay/CollisionShape2D"),
 		"High elevated platform collision is present"
 	)
 	_expect(
-		current_scene.has_node("GameplayLayer/Terrain/EntryRise/CollisionShape2D"),
+		current_scene.has_node("Gameplay/Collision/EntryRise/CollisionShape2D"),
 		"Entry rise collision is present"
 	)
-	# Prototype ColorRect platform visuals must stay gone.
 	_expect(
-		current_scene.get_node_or_null("GameplayLayer/Terrain/MainGround/Visual") == null,
+		current_scene.get_node_or_null("Gameplay/Collision/MainGround/Visual") == null,
 		"Prototype main-ground ColorRect is removed"
 	)
 	_expect(
-		current_scene.get_node_or_null("GameplayLayer/Terrain/OptionalRoute/LowerOneWay/Visual") == null,
+		current_scene.get_node_or_null("Gameplay/Collision/OptionalRoute/LowerOneWay/Visual") == null,
 		"Prototype elevated-platform ColorRect is removed"
+	)
+	_expect(
+		current_scene.get_node_or_null("DistantBackground/DistantCanopy") == null,
+		"Primitive distant canopy is removed"
+	)
+	_expect(
+		current_scene.get_node_or_null("MidBackground/ForestDepth") == null,
+		"Primitive forest depth wedges are removed"
 	)
 
 
@@ -102,12 +110,12 @@ func _test_player_attack_art() -> void:
 	_expect(attack_visual is Polygon2D, "Melee prototype rectangle is replaced by a shaped slash")
 
 
-func _test_hud_skin() -> void:
+func _test_hud_shell() -> void:
 	var hud := get_first_node_in_group("game_hud")
 	_expect(hud != null, "HUD is present")
 	if hud != null:
-		_expect(hud.has_node("BottomHUD"), "Charcoal and brass bottom HUD is present")
-		_expect(hud.has_node("ZoneBanner"), "Zone banner skin is present")
+		_expect(hud.has_node("BottomHUD"), "Functional bottom HUD shell is present")
+		_expect(hud.has_node("ZoneBanner"), "Zone banner shell is present")
 
 
 func _test_loot_pickup() -> void:
@@ -123,7 +131,6 @@ func _test_loot_pickup() -> void:
 	if pickup != null:
 		_expect(pickup.get_node("Icon").visible, "Loot pickup uses item icon")
 		_expect(not pickup.get_node("ColorRect").visible, "Loot fallback hides when icon is usable")
-		_expect(pickup.has_node("Sparkle"), "Loot pickup has restrained sparkle")
 
 
 func _test_item_icons() -> void:
