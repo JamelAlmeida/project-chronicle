@@ -2,14 +2,14 @@ class_name CameraPresentation
 extends Camera2D
 
 ## Side-view framing for Chronicle's action-RPG presentation.
-## Zoom and vertical offset keep the Adventurer readable above the bottom HUD.
+## Closer zoom and vertical bias keep the Adventurer present above the bottom HUD.
 
 @export var enable_smoothing := false
 @export_range(0.1, 20.0, 0.1) var smoothing_speed := 6.0
-@export_range(0.0, 160.0, 1.0) var look_ahead_distance := 56.0
-@export_range(1.0, 20.0, 0.5) var look_ahead_speed := 7.0
-@export var vertical_offset := -18.0
-@export var gameplay_zoom := Vector2(1.62, 1.62)
+@export_range(0.0, 160.0, 1.0) var look_ahead_distance := 42.0
+@export_range(1.0, 20.0, 0.5) var look_ahead_speed := 7.5
+@export var vertical_offset := -8.0
+@export var gameplay_zoom := Vector2(1.92, 1.92)
 @export_range(0.0, 12.0, 0.25) var maximum_shake_pixels := 4.0
 
 var _rest_offset := Vector2.ZERO

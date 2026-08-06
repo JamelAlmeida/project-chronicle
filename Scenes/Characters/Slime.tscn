@@ -17,8 +17,8 @@ script = ExtResource("1_slime")
 
 [node name="GroundShadow" type="Polygon2D" parent="Visuals"]
 z_index = -2
-polygon = PackedVector2Array(-16, -3, -10, -6, 10, -6, 16, -3, 10, 0, -10, 0)
-color = Color(0.015, 0.025, 0.018, 0.42)
+polygon = PackedVector2Array(-18, -3, -12, -7, 12, -7, 18, -3, 12, 1, -12, 1)
+color = Color(0.01, 0.02, 0.015, 0.5)
 
 [node name="PlaceholderVisual" type="ColorRect" parent="Visuals"]
 offset_left = -14.0
@@ -29,7 +29,9 @@ color = Color(0.2, 0.75, 0.25, 1)
 
 [node name="CharacterSprite" type="AnimatedSprite2D" parent="Visuals"]
 visible = false
-position = Vector2(0, -20)
+position = Vector2(0, -22)
+scale = Vector2(1.15, 1.15)
+modulate = Color(0.92, 1.0, 0.9, 1)
 sprite_frames = ExtResource("3_slime_art")
 animation = &"idle"
 

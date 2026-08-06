@@ -27,7 +27,7 @@ offset_left = -300.0
 offset_top = -40.0
 offset_right = 2300.0
 offset_bottom = 720.0
-color = Color(0.22, 0.18, 0.14, 1)
+color = Color(0.28, 0.20, 0.14, 1)
 
 [node name="VillageSilhouette" type="Polygon2D" parent="DistantBackground"]
 polygon = PackedVector2Array(-100, 620, -100, 390, 30, 390, 70, 300, 110, 390, 240, 390, 240, 345, 380, 345, 430, 265, 480, 345, 650, 345, 650, 410, 800, 410, 850, 320, 900, 410, 1100, 410, 1100, 620)

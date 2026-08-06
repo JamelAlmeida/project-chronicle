@@ -326,14 +326,14 @@ These advanced combat visuals are a later target and are **not part of the curre
 
 The Hearthvale and Elderwood opening establishes Chronicle's first in-game presentation benchmark:
 
-- **Framing:** Camera presentation favors a closer side-scrolling action-RPG view. The Adventurer should feel present and readable above the bottom HUD, with less empty sky dominating the frame.
+- **Framing:** Camera presentation favors a close side-scrolling action-RPG view (~1.9× zoom with modest vertical bias). The Adventurer should feel present and readable above the bottom HUD, with less empty sky dominating the frame.
 - **Atmosphere:** Prefer cozy dark-fantasy golden-hour density—warm entry light, cooler deep-forest shade, filled canopy, and intentional midground shapes—without copying another game's exact look.
-- **Hearthvale:** warm timber and stone, amber windows, restrained lantern flicker, chimney smoke, settlement silhouettes, and a clear gate toward the wilderness. It must read as safety and home at a glance.
-- **Elderwood:** layered ancient trees, moss-dark ground, reclaimed stone, authored foliage clusters, drifting leaves, low mist, soft light shafts, and sparse firefly-like motes. It must feel beautiful, old, melancholy, and increasingly uncertain while keeping the route and enemies clear.
+- **Hearthvale:** warm timber and stone, amber windows with mullions, lantern pools, chimney smoke, market stalls, gardens, settlement silhouettes, and a clear gate toward the wilderness. It must read as safety and home at a glance.
+- **Elderwood:** layered ancient trees, moss-dark ground with roots, reclaimed stone ruins, authored foliage clusters, drifting leaves, low mist, soft light shafts, warm-to-cool regional lighting, and sparse firefly-like motes. It must feel beautiful, old, melancholy, and increasingly uncertain while keeping the route and enemies clear.
 - **Typography:** Cinzel is reserved for major headings and combat emphasis; Alegreya provides readable body, HUD, and control text. Both are OFL-licensed and stored with their license in `Assets/Fonts`.
 - **Combat feedback:** ordinary hits use warm ivory, critical hits use luminous pale copper, and damage to the player uses muted rose. Short weapon arcs, shaped hit sparks, restrained camera impact, enemy compression/flash, death wisps, and loot glints communicate force without turning routine attacks into fireworks.
 - **Living-world motion:** ambient movement is low-density, slow, and region-specific. It frames play instead of competing with hazards, enemies, loot, or traversal.
-- **HUD proportion:** the bottom adventure bar uses dark-stone/gold chrome with crest, HP, Steadfast, colorful action slots, menu access, and a thin XP strip. Top trackers stay compact so the world remains primary.
+- **HUD proportion:** the bottom adventure bar uses dark-stone/gold chrome with crest, HP, Steadfast, colorful action slots with keybind badges, menu access, and a thin XP strip. Top trackers stay compact so the world remains primary.
 
 This is a representative opening-slice standard, not authorization to apply final art or advanced effects to every zone.
 

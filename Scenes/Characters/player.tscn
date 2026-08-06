@@ -26,8 +26,8 @@ script = ExtResource("1_5py17")
 
 [node name="GroundShadow" type="Polygon2D" parent="Visuals" unique_id=1765845558]
 z_index = -2
-color = Color(0.02, 0.025, 0.022, 0.46)
-polygon = PackedVector2Array(-15, -3, -10, -6, 10, -6, 15, -3, 10, 0, -10, 0)
+color = Color(0.015, 0.02, 0.018, 0.55)
+polygon = PackedVector2Array(-18, -3, -12, -7, 12, -7, 18, -3, 12, 1, -12, 1)
 
 [node name="PlaceholderVisual" type="ColorRect" parent="Visuals" unique_id=377743816]
 offset_left = -12.0
@@ -37,7 +37,8 @@ color = Color(0.9891885, 0.16677955, 0.45810562, 1)
 
 [node name="PlayerSprite" type="AnimatedSprite2D" parent="Visuals" unique_id=958699716]
 visible = false
-position = Vector2(0, -24)
+position = Vector2(0, -26)
+scale = Vector2(1.18, 1.18)
 sprite_frames = ExtResource("10_adventurer")
 animation = &"idle_right"
 

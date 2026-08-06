@@ -27,11 +27,10 @@ static func texture(icon_id: String) -> Texture2D:
 	if _cache.has(icon_id):
 		return _cache[icon_id] as Texture2D
 	var path := "%s%s.png" % [ICON_ROOT, icon_id]
-	var image := Image.new()
-	if image.load(path) != OK:
+	var tex := load(path) as Texture2D
+	if tex == null:
 		push_warning("Missing HUD icon: %s" % path)
 		return null
-	var tex := ImageTexture.create_from_image(image)
 	_cache[icon_id] = tex
 	return tex
 

@@ -15,7 +15,7 @@ Chronicle uses an original, desktop-first dark-fantasy interface with MMO-inspir
 - Use **Cinzel** for major headings, zone names, and limited combat emphasis. Use **Alegreya** for body copy, HUD values, buttons, objectives, and item detail.
 - Keep the top-left expedition ledger and top-right quest tracker compact, framed, and quieter than the world.
 - Keep the bottom adventure bar full-width and ornate, but still secondary to the playfield. Include crest/identity, vitals, action bar, menu access, and a thin XP strip.
-- Keep action slots centered with distinct pixel icons, keybinds visible, and menu access grouped at the bottom. Ornament must clarify hierarchy rather than consume play space.
+- Keep action slots centered with distinct pixel icons, Cinzel keybind labels under each slot, and menu access grouped at the bottom. Ornament must clarify hierarchy rather than consume play space.
 - Action and menu icons live in `Assets/UI/Icons` as 32×32 nearest-neighbor pixel art. They should read clearly at HUD scale without copying another game's icon language.
 - Ordinary damage numbers use warm ivory, criticals use pale copper-gold at a larger scale, and player damage uses muted rose. Motion is short and restrained; Chronicle does not reproduce another game's iconic number palette or stacking behavior.
 - World framing should feel intimate and golden-hour dense: closer camera, filled canopy, warm entry light into cooler wilderness depth.

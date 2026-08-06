@@ -108,23 +108,32 @@ func _spawn_hit_spark(world_position: Vector2) -> Node2D:
 		return null
 	var core := Polygon2D.new()
 	core.polygon = PackedVector2Array([
-		Vector2(-14, 0), Vector2(-3, -3), Vector2(0, -12), Vector2(3, -3),
-		Vector2(14, 0), Vector2(3, 3), Vector2(0, 12), Vector2(-3, 3),
+		Vector2(-16, 0), Vector2(-4, -4), Vector2(0, -14), Vector2(4, -4),
+		Vector2(16, 0), Vector2(4, 4), Vector2(0, 14), Vector2(-4, 4),
 	])
-	core.color = Color(0.93, 0.77, 0.48, 0.94)
+	# Ember-gold spark — Chronicle hit language.
+	core.color = Color(0.95, 0.72, 0.38, 0.96)
 	root.add_child(core)
 	var inner := Polygon2D.new()
 	inner.polygon = PackedVector2Array([
-		Vector2(-7, 0), Vector2(0, -3), Vector2(7, 0), Vector2(0, 3),
+		Vector2(-8, 0), Vector2(0, -4), Vector2(8, 0), Vector2(0, 4),
 	])
-	inner.color = Color(1.0, 0.95, 0.78, 1.0)
+	inner.color = Color(1.0, 0.96, 0.82, 1.0)
 	root.add_child(inner)
-	root.rotation = randf_range(-0.25, 0.25)
-	root.scale = Vector2(0.45, 0.45)
+	for angle in [-0.7, 0.0, 0.7]:
+		var flake := Polygon2D.new()
+		flake.polygon = PackedVector2Array([
+			Vector2(0, -2), Vector2(10, 0), Vector2(0, 2),
+		])
+		flake.rotation = angle
+		flake.color = Color(0.98, 0.82, 0.48, 0.75)
+		root.add_child(flake)
+	root.rotation = randf_range(-0.3, 0.3)
+	root.scale = Vector2(0.4, 0.4)
 	var tween := root.create_tween()
 	tween.set_parallel(true)
-	tween.tween_property(root, "scale", Vector2(1.15, 1.15), 0.10)
-	tween.tween_property(root, "modulate:a", 0.0, 0.16).set_delay(0.04)
+	tween.tween_property(root, "scale", Vector2(1.25, 1.25), 0.09)
+	tween.tween_property(root, "modulate:a", 0.0, 0.15).set_delay(0.04)
 	tween.chain().tween_callback(root.queue_free)
 	return root
 
@@ -135,24 +144,30 @@ func _spawn_weapon_arc(world_position: Vector2) -> Node2D:
 		return null
 	var outer := Line2D.new()
 	outer.points = PackedVector2Array([
-		Vector2(10, -24), Vector2(25, -20), Vector2(40, -10),
-		Vector2(49, 0), Vector2(40, 10), Vector2(25, 20), Vector2(10, 24),
+		Vector2(8, -28), Vector2(28, -22), Vector2(46, -10),
+		Vector2(56, 0), Vector2(46, 10), Vector2(28, 22), Vector2(8, 28),
 	])
-	outer.width = 5.0
-	outer.default_color = Color(0.82, 0.64, 0.34, 0.72)
+	outer.width = 6.0
+	outer.default_color = Color(0.78, 0.58, 0.28, 0.78)
 	outer.antialiased = true
 	root.add_child(outer)
+	var mid := Line2D.new()
+	mid.points = outer.points
+	mid.width = 3.0
+	mid.default_color = Color(0.96, 0.82, 0.48, 0.88)
+	mid.antialiased = true
+	root.add_child(mid)
 	var edge := Line2D.new()
 	edge.points = outer.points
-	edge.width = 1.5
-	edge.default_color = Color(1.0, 0.91, 0.68, 0.95)
+	edge.width = 1.4
+	edge.default_color = Color(1.0, 0.94, 0.78, 0.98)
 	edge.antialiased = true
 	root.add_child(edge)
-	root.scale = Vector2(0.72, 0.72)
+	root.scale = Vector2(0.68, 0.68)
 	var tween := root.create_tween()
 	tween.set_parallel(true)
-	tween.tween_property(root, "scale", Vector2.ONE, 0.09)
-	tween.tween_property(root, "modulate:a", 0.0, 0.18).set_delay(0.04)
+	tween.tween_property(root, "scale", Vector2(1.05, 1.05), 0.08)
+	tween.tween_property(root, "modulate:a", 0.0, 0.16).set_delay(0.035)
 	tween.chain().tween_callback(root.queue_free)
 	return root
 
