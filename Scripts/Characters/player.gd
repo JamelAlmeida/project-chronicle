@@ -1,7 +1,19 @@
 extends CharacterBody2D
 
 const KNOCKBACK_DECAY := 900.0
-const HURT_PRESENTATION_DURATION := 0.18
+## Matches 3-frame hurt clip at 12 fps (~0.25s). Presentation only; does not lock controls.
+const HURT_PRESENTATION_DURATION := 0.25
+const JUMP_TAKEOFF_DURATION := 0.06
+
+const STANDING_COLLISION_SIZE := Vector2(22, 38)
+const STANDING_COLLISION_OFFSET := Vector2(0, -19)
+const PRONE_COLLISION_SIZE := Vector2(34, 12)
+const PRONE_COLLISION_OFFSET := Vector2(0, -6)
+
+const STANDING_HURTBOX_SIZE := Vector2(20, 36)
+const STANDING_HURTBOX_OFFSET := Vector2(0, -20)
+const PRONE_HURTBOX_SIZE := Vector2(32, 10)
+const PRONE_HURTBOX_OFFSET := Vector2(0, -5)
 
 @export_category("Side-view movement")
 @export var move_acceleration := 1500.0
@@ -13,7 +25,7 @@ const HURT_PRESENTATION_DURATION := 0.18
 @export_range(0.0, 0.3, 0.01) var coyote_time := 0.12
 @export_range(0.0, 0.3, 0.01) var jump_buffer_time := 0.12
 @export_range(0.1, 1.0, 0.05) var jump_release_multiplier := 0.45
-@export_range(0.0, 3.0, 0.05) var death_presentation_delay := 0.0
+@export_range(0.0, 3.0, 0.05) var death_presentation_delay := 0.9
 
 @onready var _melee_attack: MeleeAttack = $MeleeAttack
 @onready var _health: HealthComponent = $HealthComponent
@@ -24,12 +36,20 @@ const HURT_PRESENTATION_DURATION := 0.18
 @onready var _placeholder_visual: CanvasItem = $Visuals/PlaceholderVisual
 @onready var _player_sprite: AnimatedSprite2D = $Visuals/BaseCharacter
 @onready var _visual_controller: CharacterVisualController = $Visuals/VisualController
+@onready var _body_collision: CollisionShape2D = $CollisionShape2D
+@onready var _hurtbox_shape: CollisionShape2D = $Hurtbox/CollisionShape2D
 
 var _knockback_velocity := Vector2.ZERO
 var _is_dead := false
 var _hurt_presentation_remaining := 0.0
 var _coyote_remaining := 0.0
 var _jump_buffer_remaining := 0.0
+var _jump_takeoff_remaining := 0.0
+var _is_prone := false
+var _standing_collision_shape: RectangleShape2D
+var _prone_collision_shape: RectangleShape2D
+var _standing_hurtbox_shape: RectangleShape2D
+var _prone_hurtbox_shape: RectangleShape2D
 
 
 func _ready() -> void:
@@ -38,6 +58,8 @@ func _ready() -> void:
 	_health.died.connect(_on_died)
 	_stats.stats_changed.connect(_on_stats_changed)
 	_sync_health_from_stats()
+	_setup_collision_profiles()
+	_apply_collision_profile(false)
 	_visual_controller.refresh_art_assignment()
 
 
@@ -58,13 +80,16 @@ func _physics_process(delta: float) -> void:
 
 	_health.set_external_invulnerability(_dodge.get_iframes_active())
 	_update_jump_timers(delta)
+	_jump_takeoff_remaining = maxf(_jump_takeoff_remaining - delta, 0.0)
 
 	var input_axis := Input.get_axis("move_left", "move_right")
 	var horizontal_direction := Vector2(input_axis, 0.0)
-	if not is_zero_approx(input_axis) and not _melee_attack.is_attacking():
+	if not is_zero_approx(input_axis) and not _melee_attack.is_attacking() and not _is_prone:
 		_facing.update_from_movement(horizontal_direction)
 
-	if Input.is_action_just_pressed("jump"):
+	_update_prone_state()
+
+	if Input.is_action_just_pressed("jump") and not _is_prone:
 		_jump_buffer_remaining = jump_buffer_time
 	if Input.is_action_just_released("jump") and velocity.y < 0.0:
 		velocity.y *= jump_release_multiplier
@@ -83,6 +108,7 @@ func _physics_process(delta: float) -> void:
 		Input.is_action_just_pressed("dodge")
 		and not _dodge.is_dodging()
 		and not _melee_attack.is_attacking()
+		and not _is_prone
 		and is_on_floor()
 	):
 		var dodge_direction := horizontal_direction
@@ -93,6 +119,9 @@ func _physics_process(delta: float) -> void:
 	if _dodge.is_dodging():
 		velocity.x = _dodge.get_dodge_velocity().x
 		_apply_gravity(delta)
+	elif _is_prone:
+		velocity.x = move_toward(velocity.x, 0.0, move_deceleration * delta)
+		_apply_gravity(delta)
 	else:
 		_update_horizontal_velocity(input_axis, delta)
 		_apply_gravity(delta)
@@ -100,15 +129,16 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
-	if (
-		Input.is_action_just_pressed("technique_primary")
-		or Input.is_action_just_pressed("action_slot_1")
-	) and not _dodge.is_dodging():
-		var technique_id: String = _technique_manager().get_equipped_active(0)
-		if not technique_id.is_empty():
-			_melee_attack.try_technique(technique_id, _facing.get_direction())
-	if Input.is_action_just_pressed("attack") and not _dodge.is_dodging():
-		_melee_attack.try_attack(_facing.get_direction())
+	if not _is_prone and not _dodge.is_dodging():
+		if (
+			Input.is_action_just_pressed("technique_primary")
+			or Input.is_action_just_pressed("action_slot_1")
+		):
+			var technique_id: String = _technique_manager().get_equipped_active(0)
+			if not technique_id.is_empty():
+				_melee_attack.try_technique(technique_id, _facing.get_direction())
+		if Input.is_action_just_pressed("attack"):
+			_melee_attack.try_attack(_facing.get_direction())
 	_update_presentation(delta)
 
 
@@ -143,6 +173,81 @@ func get_equipment_component() -> EquipmentComponent:
 	return _equipment
 
 
+func is_prone() -> bool:
+	return _is_prone
+
+
+func get_hurtbox_global_rect() -> Rect2:
+	var shape := _hurtbox_shape.shape as RectangleShape2D
+	if shape == null:
+		return Rect2(global_position, Vector2.ZERO)
+	var size := shape.size
+	var top_left := _hurtbox_shape.global_position - size * 0.5
+	return Rect2(top_left, size)
+
+
+func is_hurtbox_hit_by_point(world_point: Vector2) -> bool:
+	return get_hurtbox_global_rect().has_point(world_point)
+
+
+func _setup_collision_profiles() -> void:
+	_standing_collision_shape = RectangleShape2D.new()
+	_standing_collision_shape.size = STANDING_COLLISION_SIZE
+	_prone_collision_shape = RectangleShape2D.new()
+	_prone_collision_shape.size = PRONE_COLLISION_SIZE
+	_standing_hurtbox_shape = RectangleShape2D.new()
+	_standing_hurtbox_shape.size = STANDING_HURTBOX_SIZE
+	_prone_hurtbox_shape = RectangleShape2D.new()
+	_prone_hurtbox_shape.size = PRONE_HURTBOX_SIZE
+
+
+func _apply_collision_profile(prone: bool) -> void:
+	if prone:
+		_body_collision.shape = _prone_collision_shape
+		_body_collision.position = PRONE_COLLISION_OFFSET
+		_hurtbox_shape.shape = _prone_hurtbox_shape
+		_hurtbox_shape.position = PRONE_HURTBOX_OFFSET
+	else:
+		_body_collision.shape = _standing_collision_shape
+		_body_collision.position = STANDING_COLLISION_OFFSET
+		_hurtbox_shape.shape = _standing_hurtbox_shape
+		_hurtbox_shape.position = STANDING_HURTBOX_OFFSET
+
+
+func _update_prone_state() -> void:
+	if not is_on_floor() or _dodge.is_dodging() or _is_dead:
+		if _is_prone:
+			_try_stand_from_prone(true)
+		return
+
+	var wants_prone := Input.is_action_pressed("move_down")
+	if wants_prone and not _is_prone:
+		_is_prone = true
+		_jump_buffer_remaining = 0.0
+		_apply_collision_profile(true)
+	elif not wants_prone and _is_prone:
+		_try_stand_from_prone(false)
+
+
+func _try_stand_from_prone(force: bool) -> void:
+	if not _is_prone:
+		return
+	if force or _has_stand_clearance():
+		_is_prone = false
+		_apply_collision_profile(false)
+
+
+func _has_stand_clearance() -> bool:
+	var previous_shape := _body_collision.shape
+	var previous_offset := _body_collision.position
+	_body_collision.shape = _standing_collision_shape
+	_body_collision.position = STANDING_COLLISION_OFFSET
+	var blocked := test_move(global_transform, Vector2.ZERO)
+	_body_collision.shape = previous_shape
+	_body_collision.position = previous_offset
+	return not blocked
+
+
 func _is_gameplay_input_blocked() -> bool:
 	var menu := get_tree().get_first_node_in_group("chronicle_menu")
 	return menu != null and bool(menu.call("is_panel_open"))
@@ -172,11 +277,14 @@ func _update_jump_timers(delta: float) -> void:
 
 
 func _try_consume_buffered_jump() -> void:
+	if _is_prone:
+		return
 	if _jump_buffer_remaining <= 0.0 or _coyote_remaining <= 0.0:
 		return
 	velocity.y = -jump_velocity
 	_jump_buffer_remaining = 0.0
 	_coyote_remaining = 0.0
+	_jump_takeoff_remaining = JUMP_TAKEOFF_DURATION
 
 
 func _on_damaged(_amount: int, _remaining: int) -> void:
@@ -188,6 +296,8 @@ func _on_died() -> void:
 	if _is_dead:
 		return
 	_is_dead = true
+	_is_prone = false
+	_apply_collision_profile(false)
 	_update_presentation(0.0)
 	if death_presentation_delay > 0.0:
 		await get_tree().create_timer(death_presentation_delay).timeout
@@ -219,7 +329,9 @@ func _update_presentation(delta: float) -> void:
 		_melee_attack.is_attacking(),
 		velocity,
 		_facing.get_direction(),
-		is_on_floor()
+		is_on_floor(),
+		_is_prone,
+		_jump_takeoff_remaining > 0.0
 	)
 
 

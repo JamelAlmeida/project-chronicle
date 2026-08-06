@@ -10,9 +10,26 @@ func _initialize() -> void:
 
 
 func _run() -> void:
+	var floor_body := StaticBody2D.new()
+	floor_body.collision_layer = 2
+	floor_body.collision_mask = 0
+	var floor_shape := CollisionShape2D.new()
+	var floor_rect := RectangleShape2D.new()
+	floor_rect.size = Vector2(400, 20)
+	floor_shape.shape = floor_rect
+	floor_shape.position = Vector2(0, 10)
+	floor_body.add_child(floor_shape)
+	root.add_child(floor_body)
+
 	var player := PLAYER_SCENE.instantiate()
 	root.add_child(player)
+	player.global_position = Vector2(0, -40)
+	player.collision_mask = 2
 	await process_frame
+	for _settle in range(20):
+		await physics_frame
+		if player.is_on_floor():
+			break
 
 	var sprite := player.get_node("Visuals/BaseCharacter") as AnimatedSprite2D
 	var placeholder := player.get_node("Visuals/PlaceholderVisual") as CanvasItem
@@ -63,7 +80,13 @@ func _run() -> void:
 	_expect(sprite.sprite_frames.has_animation(idle_animation), "Side-view idle exists")
 	_expect(sprite.sprite_frames.has_animation(run_animation), "Side-view run exists")
 	_expect(sprite.sprite_frames.has_animation(&"jump_right"), "Side-view jump exists")
+	_expect(sprite.sprite_frames.has_animation(&"jump_takeoff"), "Jump takeoff exists")
+	_expect(sprite.sprite_frames.has_animation(&"jump_rise"), "Jump rise exists")
+	_expect(sprite.sprite_frames.has_animation(&"jump_apex"), "Jump apex exists")
 	_expect(sprite.sprite_frames.has_animation(&"fall_right"), "Side-view fall exists")
+	_expect(sprite.sprite_frames.has_animation(&"prone"), "Prone animation exists")
+	_expect(sprite.sprite_frames.has_animation(&"hurt"), "Universal hurt exists")
+	_expect(sprite.sprite_frames.has_animation(&"death"), "Defeated pose exists")
 	_expect(sprite.sprite_frames.has_animation(&"dash_right"), "Side-view dash exists")
 	_expect(sprite.sprite_frames.has_animation(attack_animation), "Side-view melee attack exists")
 
@@ -73,11 +96,32 @@ func _run() -> void:
 	controller.update_presentation(false, false, false, false, Vector2.RIGHT * 100.0, Vector2.RIGHT, true)
 	_expect(sprite.animation == run_animation and not sprite.flip_h, "Right run is selected")
 
+	controller.update_presentation(false, false, false, false, Vector2(0.0, -120.0), Vector2.RIGHT, false, false, true)
+	_expect(sprite.animation == &"jump_takeoff_right" or sprite.animation == &"jump_takeoff", "Takeoff uses jump_takeoff")
+
 	controller.update_presentation(false, false, false, false, Vector2(0.0, -120.0), Vector2.RIGHT, false)
-	_expect(sprite.animation == &"jump_right" and not sprite.flip_h, "Rising uses jump")
+	_expect(
+		sprite.animation == &"jump_rise_right" or sprite.animation == &"jump_rise" or sprite.animation == &"jump_right",
+		"Rising uses jump rise"
+	)
+
+	controller.update_presentation(false, false, false, false, Vector2(0.0, 0.0), Vector2.RIGHT, false)
+	_expect(
+		sprite.animation == &"jump_apex_right" or sprite.animation == &"jump_apex" or sprite.animation == &"jump_right",
+		"Apex uses jump apex"
+	)
 
 	controller.update_presentation(false, false, false, false, Vector2(0.0, 120.0), Vector2.RIGHT, false)
 	_expect(sprite.animation == &"fall_right" and not sprite.flip_h, "Descending uses fall")
+
+	controller.update_presentation(false, false, false, false, Vector2.ZERO, Vector2.RIGHT, true, true)
+	_expect(sprite.animation == &"prone_right" or sprite.animation == &"prone", "Prone pose selected")
+
+	controller.update_presentation(false, true, false, false, Vector2.ZERO, Vector2.RIGHT, true)
+	_expect(sprite.animation == &"hurt" or sprite.animation == &"hurt_right", "Universal hurt selected")
+
+	controller.update_presentation(true, false, false, false, Vector2.ZERO, Vector2.RIGHT, true)
+	_expect(sprite.animation == &"death" or sprite.animation == &"death_right", "Defeated pose selected")
 
 	controller.update_presentation(false, false, true, false, Vector2.RIGHT * 100.0, Vector2.RIGHT, true)
 	_expect(
@@ -92,6 +136,26 @@ func _run() -> void:
 	_expect(sprite.animation == idle_animation and sprite.flip_h, "Left idle mirrors side-view art")
 	controller.update_presentation(false, false, false, true, Vector2.ZERO, Vector2.LEFT, true)
 	_expect(sprite.animation == attack_animation and sprite.flip_h, "Left attack mirrors side-view art")
+
+	var hurtbox := player.get_node_or_null("Hurtbox/CollisionShape2D") as CollisionShape2D
+	_expect(hurtbox != null, "Player hurtbox exists")
+	_expect(player.has_method("get_hurtbox_global_rect"), "Hurtbox rect helper exists")
+	_expect(player.has_method("is_prone"), "Prone query exists")
+
+	# Standing vs prone height: high aim should clear prone.
+	var standing_rect: Rect2 = player.get_hurtbox_global_rect()
+	Input.action_press("move_down")
+	for _i in range(4):
+		await physics_frame
+	_expect(player.is_prone(), "S enters prone while grounded")
+	var prone_rect: Rect2 = player.get_hurtbox_global_rect()
+	_expect(prone_rect.size.y < standing_rect.size.y, "Prone hurtbox is shorter than standing")
+	var high_aim := Vector2(player.global_position.x, player.global_position.y - 22.0)
+	_expect(not player.is_hurtbox_hit_by_point(high_aim), "High attack aim clears prone hurtbox")
+	Input.action_release("move_down")
+	for _i in range(4):
+		await physics_frame
+	_expect(not player.is_prone(), "Releasing S stands when clear")
 
 	player.queue_free()
 	await process_frame

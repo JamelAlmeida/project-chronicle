@@ -16,6 +16,8 @@ const ATTACK_PRESENTATION_DURATION := 0.2
 @export var attack_cooldown := 1.0
 @export var detection_range := 250.0
 @export var attack_vertical_tolerance := 40.0
+## World-space aim height above the enemy origin. High enough that prone hurtboxes can duck under.
+@export var attack_hit_height := 22.0
 @export var loot_item_id := ""
 @export var loot_quantity := 1
 @export var knockback_force_on_hit := 140.0
@@ -129,6 +131,12 @@ func _try_attack_player() -> bool:
 
 	if not _player.has_method("take_damage"):
 		return false
+
+	# Prefer hurtbox overlap so high attacks can clear a prone player.
+	if _player.has_method("is_hurtbox_hit_by_point"):
+		var aim := Vector2(_player.global_position.x, global_position.y - attack_hit_height)
+		if not bool(_player.call("is_hurtbox_hit_by_point", aim)):
+			return false
 
 	var knockback := Vector2.ZERO
 	if knockback_force_on_hit > 0.0:

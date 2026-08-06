@@ -96,6 +96,12 @@ func _perform_guardian_strike(to_player: Vector2) -> void:
 		_attack_cooldown_remaining = attack_cooldown * 0.5
 		return
 
+	if _player.has_method("is_hurtbox_hit_by_point"):
+		var aim := Vector2(_player.global_position.x, global_position.y - attack_hit_height)
+		if not bool(_player.call("is_hurtbox_hit_by_point", aim)):
+			_attack_cooldown_remaining = attack_cooldown * 0.35
+			return
+
 	var knockback := to_player.normalized() * knockback_force_on_hit
 	if _player.take_damage(attack_damage, knockback):
 		_attack_cooldown_remaining = attack_cooldown

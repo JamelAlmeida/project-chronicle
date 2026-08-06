@@ -13,6 +13,8 @@ func _initialize() -> void:
 
 func _run() -> void:
 	_expect(InputMap.has_action("jump"), "Jump input action exists")
+	_expect(_action_has_physical_key("jump", KEY_W), "W is bound to jump action")
+	_expect(_action_has_physical_key("move_down", KEY_S), "S remains move_down for prone")
 	_expect(_action_has_physical_key("attack", KEY_E), "E remains melee attack")
 	_expect(_action_has_physical_key("dodge", KEY_SPACE), "Space remains dodge")
 	_expect(_action_has_physical_key("toggle_character", KEY_C), "C opens Character UI")

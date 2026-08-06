@@ -10,6 +10,7 @@ extends Node
 @export var placeholder_path: NodePath = ^"../PlaceholderVisual"
 @export var locomotion_animation: StringName = &"walk"
 @export var mirror_left_from_right := false
+@export var jump_apex_speed_threshold := 60.0
 
 var _current_state: StringName = &"idle"
 var _current_direction: StringName = &"down"
@@ -31,7 +32,9 @@ func update_presentation(
 	is_attacking: bool,
 	motion: Vector2,
 	facing: Vector2,
-	is_on_floor: bool = true
+	is_on_floor: bool = true,
+	is_prone: bool = false,
+	jump_takeoff_active: bool = false
 ) -> void:
 	if facing.length_squared() > 0.001:
 		_current_direction = _direction_name(facing)
@@ -45,8 +48,10 @@ func update_presentation(
 		next_state = &"dodge"
 	elif is_attacking:
 		next_state = &"attack"
+	elif is_prone and is_on_floor:
+		next_state = &"prone"
 	elif not is_on_floor:
-		next_state = &"jump" if motion.y < 0.0 else &"fall"
+		next_state = _airborne_state(motion.y, jump_takeoff_active)
 	elif absf(motion.x) > 1.0:
 		next_state = locomotion_animation
 
@@ -85,11 +90,6 @@ func spawn_detached_death_animation(parent: Node = null) -> AnimatedSprite2D:
 	death_sprite.global_transform = _sprite.global_transform
 	death_sprite.z_index = _sprite.z_index
 	death_sprite.play(animation)
-
-	var frame_count := _sprite.sprite_frames.get_frame_count(animation)
-	var frames_per_second := _sprite.sprite_frames.get_animation_speed(animation)
-	var duration := maxf(float(frame_count) / maxf(frames_per_second, 0.01), 0.05)
-	death_sprite.get_tree().create_timer(duration).timeout.connect(death_sprite.queue_free)
 	return death_sprite
 
 
@@ -98,14 +98,31 @@ func get_supported_animation_names() -> PackedStringArray:
 		"idle", "idle_down", "idle_up", "idle_left", "idle_right",
 		"walk", "walk_down", "walk_up", "walk_left", "walk_right",
 		"run", "run_down", "run_up", "run_left", "run_right",
-		"jump", "jump_right", "fall", "fall_right",
+		"jump", "jump_right", "jump_takeoff", "jump_takeoff_right",
+		"jump_rise", "jump_rise_right", "jump_apex", "jump_apex_right",
+		"fall", "fall_right",
+		"prone", "prone_right",
 		"dash", "dash_right",
 		"attack", "attack_down", "attack_up", "attack_left", "attack_right",
 		"melee_basic", "melee_attack_down", "melee_attack_up", "melee_attack_left", "melee_attack_right",
 		"dodge", "dodge_down", "dodge_up", "dodge_left", "dodge_right",
-		"hurt_down", "hurt_up", "hurt_left", "hurt_right",
-		"death_down", "death_up", "death_left", "death_right",
+		"hurt", "hurt_right", "hurt_down", "hurt_up", "hurt_left",
+		"death", "death_right", "death_down", "death_up", "death_left",
 	])
+
+
+func _airborne_state(vertical_velocity: float, jump_takeoff_active: bool) -> StringName:
+	if jump_takeoff_active:
+		return &"jump_takeoff"
+	if vertical_velocity < -jump_apex_speed_threshold:
+		if _has_animation(&"jump_rise") or _has_animation(&"jump_rise_right"):
+			return &"jump_rise"
+		return &"jump"
+	if vertical_velocity > jump_apex_speed_threshold:
+		return &"fall"
+	if _has_animation(&"jump_apex") or _has_animation(&"jump_apex_right"):
+		return &"jump_apex"
+	return &"jump"
 
 
 func _refresh_animation(restart: bool) -> void:
@@ -126,6 +143,7 @@ func _refresh_animation(restart: bool) -> void:
 	if not has_usable_art:
 		return
 
+	# Hurt is intentionally non-directional for knockback semantics: still mirror by facing only.
 	_sprite.flip_h = (
 		mirror_left_from_right
 		and _current_direction == &"left"
@@ -167,13 +185,40 @@ func _find_state_animation(state: StringName, direction: StringName) -> StringNa
 			candidates.append(&"dash_right")
 		candidates.append(&"dodge")
 		candidates.append(&"dash")
-	elif state == &"jump" or state == &"fall":
+	elif (
+		state == &"jump"
+		or state == &"fall"
+		or state == &"jump_takeoff"
+		or state == &"jump_rise"
+		or state == &"jump_apex"
+	):
 		candidates.append(StringName("%s_%s" % [state, direction]))
 		if mirror_left_from_right and direction == &"left":
 			candidates.append(StringName("%s_right" % state))
 		candidates.append(state)
-		if state == &"fall":
+		if state == &"jump_rise":
+			candidates.append(&"jump_right")
 			candidates.append(&"jump")
+		elif state == &"jump_apex":
+			candidates.append(&"jump_right")
+			candidates.append(&"jump")
+		elif state == &"jump_takeoff":
+			candidates.append(&"jump_right")
+			candidates.append(&"jump")
+		elif state == &"fall":
+			candidates.append(&"jump")
+	elif state == &"hurt":
+		# Universal / non-directional flinch — prefer plain `hurt` over directional variants.
+		candidates.append(&"hurt")
+		candidates.append(&"hurt_right")
+		candidates.append(StringName("hurt_%s" % direction))
+		if mirror_left_from_right and direction == &"left":
+			candidates.append(&"hurt_right")
+	elif state == &"prone":
+		candidates.append(StringName("prone_%s" % direction))
+		if mirror_left_from_right and direction == &"left":
+			candidates.append(&"prone_right")
+		candidates.append(&"prone")
 	else:
 		candidates.append(StringName("%s_%s" % [state, direction]))
 		if mirror_left_from_right and direction == &"left":
