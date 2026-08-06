@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bdw8iwct2j6mu"
-path="res://.godot/imported/runtime_dash.png-699b4f7d8bbb76cad4304efd483df398.ctex"
+uid="uid://b1i2ok66sy00d"
+path="res://.godot/imported/runtime_run.png-5dec6ea5c93e51c35ecb5e6a4a06dd57.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_dash.png"
-dest_files=["res://.godot/imported/runtime_dash.png-699b4f7d8bbb76cad4304efd483df398.ctex"]
+source_file="res://Project Chronicle/LegacyVisuals/Characters/AdventurerKit_Cloaked_v1/runtime_run.png"
+dest_files=["res://.godot/imported/runtime_run.png-5dec6ea5c93e51c35ecb5e6a4a06dd57.ctex"]
 
 [params]
 

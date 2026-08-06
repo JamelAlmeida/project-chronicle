@@ -80,13 +80,11 @@ mirror_left_from_right = true
 position = Vector2(0, -19)
 shape = SubResource("RectangleShape2D_5nclj")
 
-[node name="Hurtbox" type="Area2D" parent="."]
-collision_layer = 1
+[node name="Hurtbox" type="Area2D" parent="." unique_id=395548101]
 collision_mask = 0
 monitoring = false
-monitorable = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1625184759]
 position = Vector2(0, -20)
 shape = SubResource("RectangleShape2D_hurtbox")
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dxiwqpcu67eqc"
-path="res://.godot/imported/runtime_idle.png-7fecda62cc6d477312276cb672e4de42.ctex"
+uid="uid://bjeo8hijd5lg"
+path="res://.godot/imported/02_prone.png-932de1292c7a1d3145028f663a02ccca.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_idle.png"
-dest_files=["res://.godot/imported/runtime_idle.png-7fecda62cc6d477312276cb672e4de42.ctex"]
+source_file="res://Project Chronicle/ValidationCaptures/PlayerUpdate02/02_prone.png"
+dest_files=["res://.godot/imported/02_prone.png-932de1292c7a1d3145028f663a02ccca.ctex"]
 
 [params]
 

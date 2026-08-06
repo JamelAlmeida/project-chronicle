@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dxiwqpcu67eqc"
-path="res://.godot/imported/runtime_idle.png-7fecda62cc6d477312276cb672e4de42.ctex"
+uid="uid://b3egwvs2qenyw"
+path="res://.godot/imported/03_airborne.png-79233c0b53ae48237ed394fde49e1fab.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_idle.png"
-dest_files=["res://.godot/imported/runtime_idle.png-7fecda62cc6d477312276cb672e4de42.ctex"]
+source_file="res://Project Chronicle/ValidationCaptures/PlayerUpdate02/03_airborne.png"
+dest_files=["res://.godot/imported/03_airborne.png-79233c0b53ae48237ed394fde49e1fab.ctex"]
 
 [params]
 

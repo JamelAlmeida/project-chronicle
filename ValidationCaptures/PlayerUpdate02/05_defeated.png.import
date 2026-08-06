@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dxffq0v3imbbi"
-path="res://.godot/imported/runtime_walk.png-3e8962ccf33b832f056e4e18ad78952a.ctex"
+uid="uid://c238kdgmdjb6e"
+path="res://.godot/imported/05_defeated.png-dcb240fb24d2fdbff1a6b2218a49fba7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_walk.png"
-dest_files=["res://.godot/imported/runtime_walk.png-3e8962ccf33b832f056e4e18ad78952a.ctex"]
+source_file="res://Project Chronicle/ValidationCaptures/PlayerUpdate02/05_defeated.png"
+dest_files=["res://.godot/imported/05_defeated.png-dcb240fb24d2fdbff1a6b2218a49fba7.ctex"]
 
 [params]
 

@@ -1,10 +1,7 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://b5mrwc7p5qmxs"]
 
-[ext_resource type="Texture2D" uid="uid://qom7gyulwluy" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_idle.png" id="1_idle"]
-[ext_resource type="Texture2D" uid="uid://b1i2ok66sy00d" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_run.png" id="2_run"]
-[ext_resource type="Texture2D" uid="uid://dxffq0v3imbbi" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_walk.png" id="3_walk"]
-[ext_resource type="Texture2D" uid="uid://bdw8iwct2j6mu" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_dash.png" id="6_dash"]
-[ext_resource type="Texture2D" uid="uid://dw3ip8a8al22r" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_melee_basic.png" id="7_melee"]
+[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_idle.png" id="1_idle"]
+[ext_resource type="Texture2D" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_run.png" id="2_run"]
 [ext_resource type="Texture2D" uid="uid://cjra8u28lqqls" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/Jump/adventurer_jump_00.png" id="8_j0"]
 [ext_resource type="Texture2D" uid="uid://de16mkuj63do4" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/Jump/adventurer_jump_01.png" id="9_j1"]
 [ext_resource type="Texture2D" uid="uid://c8rhr02whp3dq" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/Jump/adventurer_jump_02.png" id="10_j2"]
@@ -18,22 +15,6 @@
 [ext_resource type="Texture2D" uid="uid://wp18oy4tyovk" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/Hurt/adventurer_hurt_02.png" id="18_h2"]
 [ext_resource type="Texture2D" uid="uid://cwsjf0jgghyq2" path="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/Death/adventurer_defeated_00.png" id="19_d0"]
 
-[sub_resource type="AtlasTexture" id="Melee0"]
-atlas = ExtResource("7_melee")
-region = Rect2(0, 0, 96, 112)
-
-[sub_resource type="AtlasTexture" id="Melee1"]
-atlas = ExtResource("7_melee")
-region = Rect2(96, 0, 96, 112)
-
-[sub_resource type="AtlasTexture" id="Dash0"]
-atlas = ExtResource("6_dash")
-region = Rect2(0, 0, 96, 112)
-
-[sub_resource type="AtlasTexture" id="Dash1"]
-atlas = ExtResource("6_dash")
-region = Rect2(96, 0, 96, 112)
-
 [sub_resource type="AtlasTexture" id="Idle0"]
 atlas = ExtResource("1_idle")
 region = Rect2(0, 0, 96, 112)
@@ -46,92 +27,30 @@ region = Rect2(0, 0, 96, 112)
 atlas = ExtResource("2_run")
 region = Rect2(96, 0, 96, 112)
 
-[sub_resource type="AtlasTexture" id="Run2"]
-atlas = ExtResource("2_run")
-region = Rect2(192, 0, 96, 112)
-
-[sub_resource type="AtlasTexture" id="Run3"]
-atlas = ExtResource("2_run")
-region = Rect2(288, 0, 96, 112)
-
-[sub_resource type="AtlasTexture" id="Run4"]
-atlas = ExtResource("2_run")
-region = Rect2(384, 0, 96, 112)
-
-[sub_resource type="AtlasTexture" id="Run5"]
-atlas = ExtResource("2_run")
-region = Rect2(480, 0, 96, 112)
-
-[sub_resource type="AtlasTexture" id="Run6"]
-atlas = ExtResource("2_run")
-region = Rect2(576, 0, 96, 112)
-
-[sub_resource type="AtlasTexture" id="Run7"]
-atlas = ExtResource("2_run")
-region = Rect2(672, 0, 96, 112)
-
-[sub_resource type="AtlasTexture" id="Walk0"]
-atlas = ExtResource("3_walk")
-region = Rect2(0, 0, 96, 112)
-
-[sub_resource type="AtlasTexture" id="Walk1"]
-atlas = ExtResource("3_walk")
-region = Rect2(96, 0, 96, 112)
-
-[sub_resource type="AtlasTexture" id="Walk2"]
-atlas = ExtResource("3_walk")
-region = Rect2(192, 0, 96, 112)
-
-[sub_resource type="AtlasTexture" id="Walk3"]
-atlas = ExtResource("3_walk")
-region = Rect2(288, 0, 96, 112)
-
-[sub_resource type="AtlasTexture" id="Walk4"]
-atlas = ExtResource("3_walk")
-region = Rect2(384, 0, 96, 112)
-
-[sub_resource type="AtlasTexture" id="Walk5"]
-atlas = ExtResource("3_walk")
-region = Rect2(480, 0, 96, 112)
-
-[sub_resource type="AtlasTexture" id="Walk6"]
-atlas = ExtResource("3_walk")
-region = Rect2(576, 0, 96, 112)
-
-[sub_resource type="AtlasTexture" id="Walk7"]
-atlas = ExtResource("3_walk")
-region = Rect2(672, 0, 96, 112)
-
 [resource]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("Melee0")
-}, {
-"duration": 1.0,
-"texture": SubResource("Melee1")
+"texture": SubResource("Idle0")
 }],
 "loop": false,
 "name": &"attack",
-"speed": 14.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("Melee0")
-}, {
-"duration": 1.0,
-"texture": SubResource("Melee1")
+"texture": SubResource("Idle0")
 }],
 "loop": false,
 "name": &"attack_right",
-"speed": 14.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("Dash0")
+"texture": SubResource("Run0")
 }, {
 "duration": 1.0,
-"texture": SubResource("Dash1")
+"texture": SubResource("Run1")
 }],
 "loop": true,
 "name": &"dash",
@@ -139,10 +58,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("Dash0")
+"texture": SubResource("Run0")
 }, {
 "duration": 1.0,
-"texture": SubResource("Dash1")
+"texture": SubResource("Run1")
 }],
 "loop": true,
 "name": &"dash_right",
@@ -166,10 +85,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("Dash0")
+"texture": SubResource("Run0")
 }, {
 "duration": 1.0,
-"texture": SubResource("Dash1")
+"texture": SubResource("Run1")
 }],
 "loop": true,
 "name": &"dodge",
@@ -177,10 +96,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("Dash0")
+"texture": SubResource("Run0")
 }, {
 "duration": 1.0,
-"texture": SubResource("Dash1")
+"texture": SubResource("Run1")
 }],
 "loop": true,
 "name": &"dodge_right",
@@ -312,25 +231,19 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("Melee0")
-}, {
-"duration": 1.0,
-"texture": SubResource("Melee1")
+"texture": SubResource("Idle0")
 }],
 "loop": false,
 "name": &"melee_attack_right",
-"speed": 14.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("Melee0")
-}, {
-"duration": 1.0,
-"texture": SubResource("Melee1")
+"texture": SubResource("Idle0")
 }],
 "loop": false,
 "name": &"melee_basic",
-"speed": 14.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -366,24 +279,6 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("Run1")
-}, {
-"duration": 1.0,
-"texture": SubResource("Run2")
-}, {
-"duration": 1.0,
-"texture": SubResource("Run3")
-}, {
-"duration": 1.0,
-"texture": SubResource("Run4")
-}, {
-"duration": 1.0,
-"texture": SubResource("Run5")
-}, {
-"duration": 1.0,
-"texture": SubResource("Run6")
-}, {
-"duration": 1.0,
-"texture": SubResource("Run7")
 }],
 "loop": true,
 "name": &"run",
@@ -395,24 +290,6 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("Run1")
-}, {
-"duration": 1.0,
-"texture": SubResource("Run2")
-}, {
-"duration": 1.0,
-"texture": SubResource("Run3")
-}, {
-"duration": 1.0,
-"texture": SubResource("Run4")
-}, {
-"duration": 1.0,
-"texture": SubResource("Run5")
-}, {
-"duration": 1.0,
-"texture": SubResource("Run6")
-}, {
-"duration": 1.0,
-"texture": SubResource("Run7")
 }],
 "loop": true,
 "name": &"run_right",
@@ -420,28 +297,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("Walk0")
+"texture": SubResource("Run0")
 }, {
 "duration": 1.0,
-"texture": SubResource("Walk1")
-}, {
-"duration": 1.0,
-"texture": SubResource("Walk2")
-}, {
-"duration": 1.0,
-"texture": SubResource("Walk3")
-}, {
-"duration": 1.0,
-"texture": SubResource("Walk4")
-}, {
-"duration": 1.0,
-"texture": SubResource("Walk5")
-}, {
-"duration": 1.0,
-"texture": SubResource("Walk6")
-}, {
-"duration": 1.0,
-"texture": SubResource("Walk7")
+"texture": SubResource("Run1")
 }],
 "loop": true,
 "name": &"walk",
@@ -449,28 +308,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("Walk0")
+"texture": SubResource("Run0")
 }, {
 "duration": 1.0,
-"texture": SubResource("Walk1")
-}, {
-"duration": 1.0,
-"texture": SubResource("Walk2")
-}, {
-"duration": 1.0,
-"texture": SubResource("Walk3")
-}, {
-"duration": 1.0,
-"texture": SubResource("Walk4")
-}, {
-"duration": 1.0,
-"texture": SubResource("Walk5")
-}, {
-"duration": 1.0,
-"texture": SubResource("Walk6")
-}, {
-"duration": 1.0,
-"texture": SubResource("Walk7")
+"texture": SubResource("Run1")
 }],
 "loop": true,
 "name": &"walk_right",

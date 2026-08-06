@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://iiicfs45fwjm"
-path="res://.godot/imported/runtime_jump.png-7fe9a39248682429304451c43cb9791a.ctex"
+uid="uid://dvycqch8tkims"
+path="res://.godot/imported/runtime_fall.png-57a91d726bc6a5a4b278bd33af46416f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Project Chronicle/Assets/Characters/Adventurer/Runtime/runtime_jump.png"
-dest_files=["res://.godot/imported/runtime_jump.png-7fe9a39248682429304451c43cb9791a.ctex"]
+source_file="res://Project Chronicle/LegacyVisuals/Characters/AdventurerKit_Cloaked_v1/runtime_fall.png"
+dest_files=["res://.godot/imported/runtime_fall.png-57a91d726bc6a5a4b278bd33af46416f.ctex"]
 
 [params]
 
